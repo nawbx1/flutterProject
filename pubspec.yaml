@@ -39,6 +39,8 @@ dependencies:
   image_picker: ^0.6.7+22
   http:
   group_list_view: ^1.1.1
+  toggle_bar:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

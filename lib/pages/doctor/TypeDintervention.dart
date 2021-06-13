@@ -94,8 +94,9 @@ class _TypeDinterventionState extends State<TypeDintervention> {
                     PageTransition(
                       duration: Duration(milliseconds: 800),
                       type: PageTransitionType.fade,
-                      child: ArtisanList(
+                      child: gouvernorat(
                         speciality: widget.speciality ,
+                        intervention: item['name']
                       ),
                     ),
                   );
