@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/pages/doctor/TypeDintervention.dart';
@@ -21,7 +22,8 @@ class _SpecialityState extends State<Speciality> {
 
   void fetchSpeciality() async {
 
-    var result = await http.get(Uri.parse(apiUrl+'user-service/region/speciality/all'));
+    var result = await http.get(Uri.parse(apiUrl+'user-service/speciality/all'),headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
+
     if(result.statusCode==200){
       setState(() {
         specialityList= json.decode(result.body);
@@ -109,8 +111,9 @@ class _SpecialityState extends State<Speciality> {
                     PageTransition(
                       duration: Duration(milliseconds: 800),
                       type: PageTransitionType.fade,
-                      child: ArtisanList(
-                        speciality: item['name'],
+                      child: TypeDintervention(
+                        interventions: item['interventionTypes'],
+                        speciality : item['name'],
                       ),
                     ),
                   );

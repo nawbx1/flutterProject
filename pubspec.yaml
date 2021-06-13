@@ -38,6 +38,7 @@ dependencies:
   horizontal_calendar_widget: ^1.0.0+1
   image_picker: ^0.6.7+22
   http:
+  group_list_view: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
