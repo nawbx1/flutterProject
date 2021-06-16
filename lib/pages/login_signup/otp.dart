@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:doctor_pro/pages/login_signup/profil/profilclientmoral.dart';
+import 'package:doctor_pro/pages/login_signup/profil/profilpage.dart';
 import 'package:http/http.dart' as http;
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/pages/login_signup/signup.dart';
@@ -342,22 +344,44 @@ class _OTPScreenState extends State<OTPScreen> {
 
         headers: {'Content-Type': 'application/json'})
         .then((response) {
-        res=response.statusCode;
-        print(response.body);
-        if(res.statusCode==200) {
-          if (response.body !="") {
+      res = response.statusCode;
+      print(response.body);
+      if (res.statusCode == 200) {
+        if (response.body != "") {
+          if (widget.user['role'] == "CLIENT_PHYSIQUE") {
             Navigator.push(
                 context,
                 PageTransition(
                     duration: Duration(milliseconds: 600),
                     type: PageTransitionType.fade,
-                    child: Speciality()));
+                    child: ProfilePage()));
+          } if(widget.user['role'] == "CLIENT_MORALE"){
+            Navigator.push(
+                context,
+                PageTransition(
+                    duration: Duration(milliseconds: 600),
+                    type: PageTransitionType.fade,
+                    child: Profileclientmorale()));
+
+          }if (widget.user['role']=="PROFESSIONNEL_PHYSIQUE"){
+            Navigator.push(
+                context,
+                PageTransition(
+                    duration: Duration(milliseconds: 600),
+                    type: PageTransitionType.fade,
+                    child: Profileclientmorale()));
+
+          }if(widget.user['role']=="PROFESSIONNEL_MORALE"){
+
+
           }
         }
+      }
     }
     );
 
     }
+
 
 
   }
