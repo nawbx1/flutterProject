@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:doctor_pro/constant/constant.dart';
-import 'package:doctor_pro/pages/doctor/TypeDintervention.dart';
+import 'package:doctor_pro/pages/artisan/TypeDintervention.dart';
+import 'package:doctor_pro/pages/artisan/drawer_1.dart';
+
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -36,29 +38,21 @@ class _SpecialityState extends State<Speciality> {
     fetchSpeciality() ;
     print(specialityList);
   }
-
-
   @override
   Widget build(BuildContext context) {
      return Scaffold(
+       drawer: Drawer1().build(context),
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: blackColor),
         titleSpacing: 0.0,
         elevation: 0.0,
         title: Text(
           'spécialité',
           style: appBarTitleTextStyle,
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: blackColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(65.0),
           child: Container(
@@ -94,7 +88,10 @@ class _SpecialityState extends State<Speciality> {
             ),
           ),
         ),
+
       ),
+
+
       body: Container(
         padding: EdgeInsets.all(fixPadding),
         child: GridView.builder(

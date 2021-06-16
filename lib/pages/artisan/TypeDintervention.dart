@@ -1,12 +1,16 @@
 import 'dart:convert';
 
 import 'package:doctor_pro/constant/constant.dart';
-import 'package:doctor_pro/pages/doctor/TypeDintervention.dart';
-import 'package:doctor_pro/pages/doctor/gouvernorat.dart';
+import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/pages/artisan/gouvernorat.dart';
+
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
+
+import 'drawer_1.dart';
 
 
 class TypeDintervention extends StatefulWidget {
@@ -22,24 +26,26 @@ class _TypeDinterventionState extends State<TypeDintervention> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer1().build(context),
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
+        iconTheme: IconThemeData(color: blackColor),
         titleSpacing: 0.0,
         elevation: 0.0,
         title: Text(
          widget.speciality ,
           style: appBarTitleTextStyle,
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: blackColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     color: blackColor,
+        //   ),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(65.0),
           child: Container(
@@ -78,8 +84,10 @@ class _TypeDinterventionState extends State<TypeDintervention> {
         ),
       ),
       body: Container(
+        color: Colors.white ,
         padding: EdgeInsets.all(fixPadding),
         child: GridView.builder(
+
           itemCount: widget.interventions.length,
           gridDelegate:
           SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
@@ -105,13 +113,14 @@ class _TypeDinterventionState extends State<TypeDintervention> {
                   tag: item['name'],
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color:Colors.white,
                       borderRadius: BorderRadius.circular(17.0),
+
                       boxShadow: <BoxShadow>[
                         BoxShadow(
                             blurRadius: 1.0,
                             spreadRadius: 1.5,
-                            color: Colors.grey[300]),
+                            color: primaryColor),
                       ],
                     ),
                     child: Column(

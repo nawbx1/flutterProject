@@ -1,7 +1,11 @@
 import 'dart:convert';
 
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/pages/artisan/ArtisanTimeSlot.dart';
+import 'package:doctor_pro/pages/artisan/Artisan_profile.dart';
+import 'package:doctor_pro/pages/artisan/drawer_1.dart';
 import 'package:doctor_pro/pages/screens.dart';
+import 'package:doctor_pro/constant/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -44,7 +48,8 @@ class _ArtisanListState extends State<ArtisanList> {
   }
   @override
   Widget build(BuildContext context) {
-
+    drawer: Drawer1().build(context);
+    iconTheme: IconThemeData(color: blackColor);
     getbyRegions(item)  async  {
       print(item);
         var result = await http.get(Uri.parse(apiUrl+"user-service/user/speciality/"+widget.speciality)); // get userr by region algo system
@@ -64,23 +69,17 @@ class _ArtisanListState extends State<ArtisanList> {
     return Hero(
       tag: widget.speciality,
       child: Scaffold(
+        drawer: Drawer1().build(context),
         backgroundColor: whiteColor,
+
         appBar: AppBar(
+          iconTheme: IconThemeData(color: blackColor),
           backgroundColor: whiteColor,
           titleSpacing: 0.0,
           elevation: 0.0,
           title: Text(
             widget.speciality,
             style: appBarTitleTextStyle,
-          ),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: blackColor,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(65.0),
@@ -120,33 +119,6 @@ class _ArtisanListState extends State<ArtisanList> {
         ),
         body:Column(
           children: <Widget>[
-         /*   Stack(
-                children: [
-
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-
-                /*
-                  ToggleBar(
-                        labels: labels,
-                        backgroundColor: Colors.grey.withOpacity(0.1),
-                        textColor:darkBlueColor ,
-                        selectedTabColor:primaryColor  ,
-                        selectedTextColor:Colors.white  ,
-                        onSelectionUpdated: (index) =>
-                            setState(() => currentIndex = index),
-                      ),
-                      Text(
-                        labels[currentIndex],
-                        style: Theme.of(context).textTheme.display1,
-                      )*/
-                    ]
-                  )
-                  ],
-        ),
-        */
-
         Stack(
         children: [
         Container(
@@ -301,7 +273,7 @@ class _ArtisanListState extends State<ArtisanList> {
                                   PageTransition(
                                     duration: Duration(milliseconds: 600),
                                     type: PageTransitionType.fade,
-                                    child:  ArtisanTimeSlot(
+                                    child:  artisanProfile(
                                       artisanImage: item['username'],
                                       artisanName: item['username'],
                                       artisanType: widget.speciality,

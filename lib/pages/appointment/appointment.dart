@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -7,68 +9,34 @@ class Appointment extends StatefulWidget {
 }
 
 class _AppointmentState extends State<Appointment> {
-  final activeAppoinmentList = [
-    {
-      'doctorName': 'Ronan Peiterson',
-      'date': '15 Oct 2020',
-      'time': '10:00 AM',
-      'doctorType': 'General Physician',
-    },
-    {
-      'doctorName': 'Brayden Trump',
-      'date': '18 Oct 2020',
-      'time': '12:30 PM',
-      'doctorType': 'Cardiologist',
-    },
-    {
-      'doctorName': 'Apollonia Ellison',
-      'date': '22 Oct 2020',
-      'time': '6:00 PM',
-      'doctorType': 'Dentist',
-    }
-  ];
+  final String Url = apiUrl+"rendez-vous-service/rdv/all";
 
-  final pastAppoinmentList = [
-    {
-      'doctorName': 'Beatriz Watson',
-      'date': '2 Oct 2020',
-      'time': '10:30 AM',
-      'doctorType': 'Dentist',
-    },
-    {
-      'doctorName': 'Beatriz Watson',
-      'date': '25 Sept 2020',
-      'time': '5:30 PM',
-      'doctorType': 'Dentist',
-    },
-    {
-      'doctorName': 'Diego Williams',
-      'date': '20 Aug 2020',
-      'time': '10:00 AM',
-      'doctorType': 'General Physician',
-    },
-    {
-      'doctorName': 'Shira Gates',
-      'date': '10 July 2020',
-      'time': '11:00 AM',
-      'doctorType': 'Nutritian',
-    }
-  ];
+  List<dynamic> RDVList=[];
+  List<dynamic> enattentelist=[];
 
-  final cancelledAppoinmentList = [
-    {
-      'doctorName': 'Shira Gates',
-      'date': '9 July 2020',
-      'time': '5:00 PM',
-      'doctorType': 'Nutritian',
-    },
-    {
-      'doctorName': 'Linnea Bezos',
-      'date': '15 June 2020',
-      'time': '1:30 PM',
-      'doctorType': 'Cough & Fever',
+  List<String> labels = [];
+  int currentIndex = 0;
+
+  void fetchRDV() async {
+
+    var result = await http.get(Uri.parse(Url));
+    if(result.statusCode==200){
+      setState(() {
+        RDVList= json.decode(result.body);
+        RDVList.forEach((element) =>{
+          print(element),
+          if (element['status'].toString()=='en_attente')
+            enattentelist.add(element)
+        });
+      });
     }
-  ];
+  }
+  @override
+  void initState(){
+    super.initState();
+    fetchRDV() ;
+
+  }
 
   deleteAppointmentDialog(index) {
     showDialog(
@@ -120,7 +88,7 @@ class _AppointmentState extends State<Appointment> {
                         InkWell(
                           onTap: () {
                             setState(() {
-                              activeAppoinmentList.removeAt(index);
+                              RDVList.removeAt(index);
                             });
                             Navigator.pop(context);
                           },
@@ -161,19 +129,21 @@ class _AppointmentState extends State<Appointment> {
           elevation: 1.0,
           automaticallyImplyLeading: false,
           title: Text(
-            'Appointments',
+            'Rendez-vous',
             style: appBarTitleTextStyle,
           ),
           bottom: TabBar(
+            // isScrollable: true,
             tabs: [
+
               Tab(
-                child: tabItem('Active', activeAppoinmentList.length),
+                child: tabItem('en attente ', enattentelist.length),
               ),
               Tab(
-                child: tabItem('Past', pastAppoinmentList.length),
+                child: tabItem(' accepté', RDVList.length),
               ),
               Tab(
-                child: tabItem('Cancelled', cancelledAppoinmentList.length),
+                child: tabItem('terminé', RDVList.length),
               ),
             ],
           ),
@@ -220,7 +190,7 @@ class _AppointmentState extends State<Appointment> {
   }
 
   activeAppointment() {
-    return (activeAppoinmentList.length == 0)
+    return (enattentelist.length == 0)
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -233,16 +203,16 @@ class _AppointmentState extends State<Appointment> {
                 ),
                 heightSpace,
                 Text(
-                  'No Active Appointments',
+                  'AUCUN RENDEZ-VOUS EN ATTENTE ',
                   style: greyNormalTextStyle,
                 ),
               ],
             ),
           )
         : ListView.builder(
-            itemCount: activeAppoinmentList.length,
+            itemCount: enattentelist.length,
             itemBuilder: (context, index) {
-              final item = activeAppoinmentList[index];
+              final item = enattentelist[index];
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +250,7 @@ class _AppointmentState extends State<Appointment> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    item['time'],
+                                    item['startDate'],
                                     style: blackHeadingTextStyle,
                                   ),
                                   InkWell(
@@ -294,13 +264,13 @@ class _AppointmentState extends State<Appointment> {
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                'Dr. ${item['doctorName']}',
+                                '${item['client']['username']}',
                                 style: blackNormalTextStyle,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                '${item['doctorType']}',
+                                '${item['client']['phone']}',
                                 style: primaryColorsmallTextStyle,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -318,7 +288,7 @@ class _AppointmentState extends State<Appointment> {
   }
 
   pastAppointment() {
-    return (pastAppoinmentList.length == 0)
+    return (RDVList.length == 0)
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -331,16 +301,16 @@ class _AppointmentState extends State<Appointment> {
                 ),
                 heightSpace,
                 Text(
-                  'No Past Appointments',
+                  'AUCUN RENDEZ-VOUS ACCEPTÉ',
                   style: greyNormalTextStyle,
                 ),
               ],
             ),
           )
         : ListView.builder(
-            itemCount: pastAppoinmentList.length,
+            itemCount: RDVList.length,
             itemBuilder: (context, index) {
-              final item = pastAppoinmentList[index];
+              final item = RDVList[index];
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,7 +373,7 @@ class _AppointmentState extends State<Appointment> {
   }
 
   cancelledAppointment() {
-    return (cancelledAppoinmentList.length == 0)
+    return (RDVList.length == 0)
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -416,16 +386,16 @@ class _AppointmentState extends State<Appointment> {
                 ),
                 heightSpace,
                 Text(
-                  'No Cancelled Appointments',
+                  'AUCUN RENDEZ-VOUS TERMINÉ',
                   style: greyNormalTextStyle,
                 ),
               ],
             ),
           )
         : ListView.builder(
-            itemCount: cancelledAppoinmentList.length,
+            itemCount: RDVList.length,
             itemBuilder: (context, index) {
-              final item = cancelledAppoinmentList[index];
+              final item = RDVList[index];
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

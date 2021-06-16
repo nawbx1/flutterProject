@@ -3,7 +3,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:doctor_pro/constant/constant.dart';
-import 'package:doctor_pro/pages/doctor/artisan_list.dart';
+import 'package:doctor_pro/pages/artisan/artisan_list.dart';
+
 import 'package:flutter/material.dart';
 
 

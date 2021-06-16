@@ -9,23 +9,30 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   String name = 'Ellison Perry';
   String phone = '123456789';
+  String cin = '09891577';
   String email = 'test@abc.com';
+  String gouvernorat = 'Nabeul';
+  String region = 'Korba ';
+
   var nameController = TextEditingController();
   var phoneController = TextEditingController();
   var emailController = TextEditingController();
-
+  var CinController = TextEditingController();
+  var GouvernoratController = TextEditingController();
+  var RegionController = TextEditingController();
   @override
   void initState() {
     super.initState();
     nameController.text = name;
     phoneController.text = phone;
     emailController.text = email;
+    CinController.text = cin;
+    GouvernoratController.text=gouvernorat ;
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
     changeFullName() {
       showDialog(
         context: context,
@@ -99,6 +106,182 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                               child: Text(
                                 'Okay',
+                                style: whiteColorButtonTextStyle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+    changegouvernorat() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return Dialog(
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Wrap(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Changer gouvernorat",
+                        style: blackHeadingTextStyle,
+                      ),
+                      SizedBox(
+                        height: 25.0,
+                      ),
+                      TextField(
+                        controller: GouvernoratController,
+                        style: blackColorButtonTextStyle,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: 'entrer gouvernorat',
+                          hintStyle: greySmallTextStyle,
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: (width / 3.5),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                'Annuler ',
+                                style: blackColorButtonTextStyle,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                gouvernorat = GouvernoratController.text;
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Container(
+                              width: (width / 3.5),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                'Ok',
+                                style: whiteColorButtonTextStyle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+    changeRegion() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return Dialog(
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Wrap(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Changer gouvernorat",
+                        style: blackHeadingTextStyle,
+                      ),
+                      SizedBox(
+                        height: 25.0,
+                      ),
+                      TextField(
+                        controller: RegionController,
+                        style: blackColorButtonTextStyle,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: 'entrer gouvernorat',
+                          hintStyle: greySmallTextStyle,
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: (width / 3.5),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                'Annuler ',
+                                style: blackColorButtonTextStyle,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                region = RegionController.text;
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Container(
+                              width: (width / 3.5),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                'Ok',
                                 style: whiteColorButtonTextStyle,
                               ),
                             ),
@@ -215,6 +398,94 @@ class _EditProfileState extends State<EditProfile> {
         },
       );
     }
+    changecin() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return Dialog(
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Wrap(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "changer num Cin",
+                        style: blackHeadingTextStyle,
+                      ),
+                      SizedBox(
+                        height: 25.0,
+                      ),
+                      TextField(
+                        controller: CinController,
+                        style: blackColorButtonTextStyle,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: 'Entrer Numero de CIN',
+                          hintStyle: greySmallTextStyle,
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: (width / 3.5),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                'Annuler ',
+                                style: blackColorButtonTextStyle,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                cin = CinController.text;
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Container(
+                              width: (width / 3.5),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                'Ok',
+                                style: whiteColorButtonTextStyle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
 
     changePhoneNumber() {
       showDialog(
@@ -304,7 +575,6 @@ class _EditProfileState extends State<EditProfile> {
         },
       );
     }
-
     changeEmail() {
       showDialog(
         context: context,
@@ -458,20 +728,18 @@ class _EditProfileState extends State<EditProfile> {
               // Profile Image End
               // Full Name Start
               InkWell(
+                onTap: changecin,
+                child: getTile('CIN', cin),
+              ),
+              InkWell(
                 onTap: changeFullName,
-                child: getTile('Full Name', name),
+                child: getTile('Nom/Prénom', name),
               ),
               // Full Name End
-              // Password Start
-              InkWell(
-                onTap: changePassword,
-                child: getTile('Password', '******'),
-              ),
-              // Password End
               // Phone Start
               InkWell(
                 onTap: changePhoneNumber,
-                child: getTile('Phone', phone),
+                child: getTile('Téléphone', phone),
               ),
               // Phone End
               // Email Start
@@ -480,6 +748,16 @@ class _EditProfileState extends State<EditProfile> {
                 child: getTile('Email', email),
               ),
               // Email End
+              InkWell(
+                onTap: changegouvernorat,
+                child:
+                getTile('gouvernorat', gouvernorat),
+              ),
+              InkWell(
+                onTap: changeRegion,
+                child:
+                getTile('Région', region),
+              ),
             ],
           ),
         ],

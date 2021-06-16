@@ -5,6 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:doctor_pro/pages/screens.dart';
 
+import 'drawer_1.dart';
+
 class artisanProfile extends StatefulWidget {
   final String artisanImage, artisanName, artisanType, experience;
 
@@ -79,17 +81,18 @@ class _artisanProfileState extends State<artisanProfile> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      drawer: Drawer1().build(context),
       backgroundColor: darkBlueColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: whiteColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     color: whiteColor,
+        //   ),
+        //   onPressed: () => Navigator.pop(context),
+        // ),
       ),
       body: Stack(
         children: [
