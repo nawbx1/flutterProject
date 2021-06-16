@@ -1,4 +1,6 @@
 import 'package:doctor_pro/appBehaviour/my_behaviour.dart';
+import 'package:doctor_pro/pages/login_signup/log.dart';
+import 'package:doctor_pro/pages/login_signup/myapp.dart';
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Doctor Pro',
+      title: 'artisan',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: primaryColor,
@@ -37,7 +39,10 @@ class MyApp extends StatelessWidget {
           child: child,
         );
       },
-      home: Appointment (),
+
+
+      home: signup12 (),
+
     );
   }
 }
