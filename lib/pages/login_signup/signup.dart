@@ -25,7 +25,8 @@ class signup1 extends StatefulWidget {
     "verified":"",
     "matricule_fiscale":"",
     "speciality_id":"",
-    "otp":""
+    "otp":"",
+    "cin":""
 
   };
 

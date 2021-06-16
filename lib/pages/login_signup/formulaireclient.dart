@@ -24,7 +24,7 @@ class _clientState extends State<client> {
   static TextEditingController emailController = new  TextEditingController();
   static TextEditingController fullnameController = TextEditingController();
   static TextEditingController phoneController = TextEditingController();
-
+  static TextEditingController cinController = TextEditingController();
   static TextEditingController matriculeController = TextEditingController();
 
 
@@ -57,7 +57,7 @@ class _clientState extends State<client> {
   bool verifName = true;
   bool verifEmail = true;
   bool verifPhone = true;
-
+  bool verifCin = true;
   bool isRequest = false;
   bool visible = true;
   String passwordVerification = "";
@@ -95,6 +95,27 @@ class _clientState extends State<client> {
       else
         setState(() {
           verifPhone = false;
+          passwordVerification =
+          'Mot de passe faible, il faut au moins 8 caractères';
+          ErrorMessage1 = passwordVerification;
+        });
+    }
+  }
+  void checkCin(String v) {
+    if (v == '')
+      setState(() {
+        verifCin = false;
+      });
+    else {
+      if (v.length >= 8)
+        setState(() {
+          verifCin = true;
+          passwordVerification = "";
+          ErrorMessage = "";
+        });
+      else
+        setState(() {
+          verifCin = false;
           passwordVerification =
           'Mot de passe faible, il faut au moins 8 caractères';
           ErrorMessage1 = passwordVerification;
@@ -233,6 +254,9 @@ void initState(){
 
       ),
 
+
+
+
       SizedBox(height: 20),
       TextFormField(
           onChanged: (value) {
@@ -328,6 +352,8 @@ void initState(){
   formclientphysique(){
     return Column(
       children: [
+
+
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
@@ -354,6 +380,43 @@ void initState(){
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.0),
               borderSide: BorderSide(color:verifPhone ? Colors.black : Colors.red, width: 1.5),
+            ),
+          ),
+
+
+        ),
+        SizedBox(height: 20),
+        TextFormField(
+          onChanged: (value) {
+            checkPhone(value)
+            ;verif();
+            signup1.user['cin']=cinController.text;
+          },
+          onEditingComplete:() {
+
+
+          },
+          textInputAction: TextInputAction.next,
+          maxLines: 1,
+          keyboardType: TextInputType.number,
+          controller: cinController,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.person,
+              color: Colors.grey,
+            ),
+            hintText: 'CIN',
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderSide: BorderSide(color:verifCin ? Colors.black : Colors.red, width: 1.5),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color:verifCin ? Colors.black : Colors.red, width: 1.5),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color:verifCin ? Colors.black : Colors.red, width: 1.5),
             ),
           ),
 
@@ -588,8 +651,77 @@ void initState(){
   formprofessionnel(){
     return Column(
       children: [
+        TextFormField(
+          onChanged: (value) {
+            checkPhone(value)
+            ;verif();signup1.user['phone']=phoneController.text;
+          },
+          textInputAction: TextInputAction.next,
+          maxLines: 1,
+          keyboardType: TextInputType.number,
+          controller: phoneController,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.phone,
+              color: Colors.grey,
+            ),
+            hintText: 'Tel',
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderSide: BorderSide(color:verifPhone ? Colors.black : Colors.red, width: 1.5),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color:verifPhone ? Colors.black : Colors.red, width: 1.5),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color:verifPhone ? Colors.black : Colors.red, width: 1.5),
+            ),
+          ),
 
 
+        ),
+
+        SizedBox(height: 20),
+
+
+        TextFormField(
+          onChanged: (value) {
+            checkPhone(value)
+            ;verif();
+            signup1.user['cin']=cinController.text;
+          },
+          onEditingComplete:() {
+
+
+          },
+          textInputAction: TextInputAction.next,
+          maxLines: 1,
+          keyboardType: TextInputType.number,
+          controller: cinController,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(
+              Icons.person,
+              color: Colors.grey,
+            ),
+            hintText: 'CIN',
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderSide: BorderSide(color:verifCin ? Colors.black : Colors.red, width: 1.5),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color:verifCin ? Colors.black : Colors.red, width: 1.5),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color:verifCin ? Colors.black : Colors.red, width: 1.5),
+            ),
+          ),
+
+
+        ),
         SizedBox(height: 20),
         TextFormField(
             onChanged: (value) {
@@ -619,6 +751,7 @@ void initState(){
             controller: fullnameController),
         SizedBox(height: 20),
 
+
         TextFormField(
             onChanged: (value) {
               verif(); checkEmail(value);
@@ -645,7 +778,42 @@ void initState(){
               ),
             ),
             controller: emailController),
+
         SizedBox(height: 20),
+        SearchableDropdown.single(
+
+          items:_dropdownMenuItems ,
+          label: Padding(
+            padding: EdgeInsets.only(left: 15, top: 5),
+            child: Text(
+              "Specialité",
+              // style: AppTheme.dropdownTitleStyle,
+            ),
+          ),
+          hint: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text("Choisissez le type de votre specialité"),
+          ),
+          clearIcon: Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
+          searchHint: "Choisissez le type de Specialite",
+          onChanged: (value) {
+            //signup1.user['speciality_id']=selectedSpeciality.id;
+            setState(() {
+              selectedSpeciality=value;
+            });
+
+          },
+          onClear: (){
+            setState(() {
+              selectedSpeciality = null;
+            });
+          },
+          isExpanded: true,
+        ),
+
 
       ],
     );
@@ -758,7 +926,7 @@ void initState(){
 
   void fetchSpeciality() async {
 
-    var result = await http.get(Uri.parse(apiUrl+'user-service/speciality/all'),headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
+    var result = await http.get(Uri.parse('http://192.168.1.102:9089/user-service/speciality/all'),headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
     print('dddd');
     if(result.statusCode==200){
       setState(() {
