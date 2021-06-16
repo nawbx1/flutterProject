@@ -1,9 +1,7 @@
 export 'speciality/speciality.dart';
-export 'doctor/artisan_list.dart';
-export 'doctor/ArtisanTimeSlot.dart';
-export 'doctor/Artisan_profile.dart';
+
 export 'review/review.dart';
-export 'doctor/consultation_detail.dart';
+
 // export 'payment/payment.dart';
 // export 'lab/lab_list.dart';
 // export 'lab/lab.dart';

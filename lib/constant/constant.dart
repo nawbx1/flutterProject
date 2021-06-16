@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-String  apiUrl='http://192.168.1.9:9089/';
+String  apiUrl='http://192.168.43.33:9089/';
 Color scaffoldBgColor = Color(0xFFFAF9F7);
 Color primaryColor = Color(0xFF6979F8);
 Color greyColor = Colors.grey;
 Color whiteColor = Colors.white;
 Color blackColor = Colors.black;
 Color lightPrimaryColor = primaryColor.withOpacity(0.2);
-Color darkBlueColor = Color(0xFF151C48);
+Color darkBlueColor = Color(0xFF3D296F);
 
 double fixPadding = 10.0;
 

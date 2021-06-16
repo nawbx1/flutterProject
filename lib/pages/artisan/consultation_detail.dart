@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/pages/artisan/Artisan_profile.dart';
+import 'package:doctor_pro/pages/artisan/drawer_1.dart';
+
 import 'package:doctor_pro/pages/key/key.dart';
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:flutter/material.dart';
@@ -59,24 +62,26 @@ class _ConsultationDetailState extends State<ConsultationDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer1().build(context),
       backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
+        iconTheme: IconThemeData(color: blackColor),
         titleSpacing: 0.0,
         elevation: 0.0,
         title: Text(
           'Détails de rendez-vous ',
           style: appBarTitleTextStyle,
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: blackColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     color: blackColor,
+        //   ),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
       ),
       floatingActionButton: Wrap( //will break to another line on overflow
         direction: Axis.horizontal, //use vertical to show  on vertical axis

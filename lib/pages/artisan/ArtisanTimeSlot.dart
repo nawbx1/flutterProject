@@ -1,10 +1,12 @@
 import 'package:doctor_pro/constant/constant.dart';
-import 'package:doctor_pro/pages/googlemap/google_map_place_picker.dart';
-import 'package:doctor_pro/pages/screens.dart';
+import 'package:doctor_pro/pages/artisan/Artisan_profile.dart';
+import 'package:doctor_pro/pages/artisan/consultation_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_calendar_widget/date_helper.dart';
 import 'package:horizontal_calendar_widget/horizontal_calendar.dart';
 import 'package:page_transition/page_transition.dart';
+
+import 'drawer_1.dart';
 
 const labelMonth = 'Month';
 const labelDate = 'Date';
@@ -155,24 +157,20 @@ class ArtisanTimeSlotState extends State<ArtisanTimeSlot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer1().build(context),
       backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: whiteColor,
+        iconTheme: IconThemeData(color: blackColor),
         titleSpacing: 0.0,
         elevation: 0.0,
         title: Text(
           'Rendez-vous ',
           style: appBarTitleTextStyle,
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: blackColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+
+
+
       ),
       bottomNavigationBar: (selectedTime== '')
           ? Container(
