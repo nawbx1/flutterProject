@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
 import 'package:http/http.dart' as http;
 import 'package:doctor_pro/constant/constant.dart';
@@ -12,7 +13,7 @@ import 'package:page_transition/page_transition.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({Key key , @required this.user }) : super(key: key);
-  final Map<String,dynamic> user;
+  final User user;
 
 
   @override
@@ -348,7 +349,7 @@ class _OTPScreenState extends State<OTPScreen> {
   }
   Future<dynamic> verif() async{
     print(widget.user);
-    String myurl = "http://192.168.1.102:9089/user-service/keycloak/verifOtp/"+widget.user['id']+"/"+OTPText;
+    String myurl = "http://192.168.1.102:9089/user-service/keycloak/verifOtp/"+widget.user.id.toString()+"/"+OTPText;
     var res ;
     http.get(Uri.parse(myurl),
 
@@ -358,7 +359,7 @@ class _OTPScreenState extends State<OTPScreen> {
       print(response.body);
       if (res.statusCode == 200) {
         if (response.body != "") {
-          if (widget.user['role']['name'] == "CLIENT_PHYSIQUE") {
+          if (widget.user.role[0].name == "CLIENT_PHYSIQUE") {
             Navigator.push(
                 context,
                 PageTransition(
