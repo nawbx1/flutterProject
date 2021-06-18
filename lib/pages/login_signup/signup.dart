@@ -16,17 +16,17 @@ import 'formulaireclient.dart';
 
 class signup1 extends StatefulWidget {
   const signup1({Key key}) : super(key: key);
-  static Map<String,dynamic> user={
+  static dynamic user={
     "id":"",
     "username":"",
     "email":"",
     "password":"",
-    "role":"",
-    "verified":"",
-    "matricule_fiscale":"",
-    "speciality_id":"",
-    "otp":"",
-    "cin":""
+    "role":[],
+    "verified":false,
+    "matriculeFiscale":"",
+    "speciality":[],
+    "cin":"",
+    "phone":""
 
   };
 
@@ -161,10 +161,8 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
                   currentStep = currentStep + 1;
                 }
               } else {
-
-
                 doRegister();
-               Navigator.push(context,MaterialPageRoute(builder: (context)=>OTPScreen(user: signup1.user,)));
+
               }
             });
           },
@@ -184,7 +182,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
 
   Future<dynamic> doRegister() async {
     String myurl = "http://192.168.1.102:9089/user-service/keycloak/save";
-
+  print("do register " + signup1.user.toString());
     var res ,resOTP;
     var bodyUser ;
     await http.post(Uri.parse(myurl),
@@ -192,20 +190,25 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
         headers: {'Content-Type': 'application/json'})
         .then((response) {
       print(response.statusCode);
-      print(response.body);
+
       res =response.statusCode ;
-      signup1.user=jsonDecode(response.body);
-      bodyUser = response.body ;
-      http.post(Uri.parse("http://192.168.1.102:9089/user-service/keycloak/sendOtpSms"),
+
+      print('user saved  ==>   '+ response.body);
+      http.post(
+          Uri.parse("http://192.168.1.102:9089/user-service/keycloak/sendOtpSms"),
           body: response.body,
-          headers: {'Content-Type': 'application/json'})
-          .then((response) {
+          headers: {'Content-Type': 'application/json'}).then((response) {
         print(response.statusCode);
         print(response.body);
-        resOTP =response.statusCode ;
+        resOTP = response.statusCode;
+        setState(() {
+          signup1.user = response.body ;
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>OTPScreen(user: signup1.user,)));
+        });
+
+        print("fakri"+ signup1.user);
+
       });
-
-
     });
 
 
@@ -216,5 +219,6 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
     else return null ;
 
   }
+
 
 }
