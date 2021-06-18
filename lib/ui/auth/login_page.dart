@@ -1,4 +1,5 @@
 import 'package:doctor_pro/pages/login_signup/signup.dart';
+import 'package:doctor_pro/ui/auth/sign_up_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget  {
@@ -297,7 +298,7 @@ class LoginPageState extends State<LoginPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => signup1()),
+                      MaterialPageRoute(builder: (context) => SignupPage()),
                     );
                   },
                   child: Text(
