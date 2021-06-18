@@ -43,7 +43,8 @@ class _clientState extends State<client> {
     setState(() {
       _radioValue2 = value;
       _radioValue3=-1;
-      client.role="professionnel";
+
+      signup1.user['role']=[{"name": _radioValue1==0?value==0?"CLIENT_PHYSIQUE" : "ClIENT_MORALE":null}];
     });
   }
 
@@ -51,6 +52,7 @@ class _clientState extends State<client> {
     setState(() {
       _radioValue3 = value;
       _radioValue2=-1;
+      signup1.user['role']=[{"name": _radioValue1==1?value==0?"PROFESSIONNEL" : "GESTIONNAIRE":null}];
     });
   }
   String selectedCountry = 'CA';
@@ -149,7 +151,7 @@ class _clientState extends State<client> {
 void initState(){
     print('rrr');
   fetchSpeciality();
-  signup1.user['role']=[_radioValue2==0?"CLIENT_PHYSIQUE":_radioValue2==1?"ClIENT_MORALE":_radioValue3==0?"PROFESSIONNEL_PHYSIQUE":_radioValue3==1?"PROFESSIONNEL_MORALE":null];
+  //signup1.user['role']=[_radioValue2==0?"CLIENT_PHYSIQUE":_radioValue2==1?"ClIENT_MORALE":_radioValue3==0?"PROFESSIONNEL_PHYSIQUE":_radioValue3==1?"PROFESSIONNEL_MORALE":null];
 }
 
   @override
@@ -389,7 +391,7 @@ void initState(){
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();
+            ;verif();signup1.user['cin']=cinController.text;
             signup1.user['cin']=cinController.text;
           },
           onEditingComplete:() {
@@ -554,7 +556,7 @@ void initState(){
         TextFormField(
             onChanged: (value) {
 
-              verif();signup1.user['matricule_fiscale']=matriculeController.text;
+              verif();signup1.user['matriculeFiscale']=matriculeController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -800,7 +802,7 @@ void initState(){
           ),
           searchHint: "Choisissez le type de Specialite",
           onChanged: (value) {
-            //signup1.user['speciality_id']=selectedSpeciality.id;
+            signup1.user['speciality']=selectedSpeciality.id;
             setState(() {
               selectedSpeciality=value;
             });

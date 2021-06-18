@@ -29,6 +29,7 @@ class _OTPScreenState extends State<OTPScreen> {
   FocusNode thirdFocusNode = FocusNode();
   FocusNode fourthFocusNode = FocusNode();
   FocusNode fivethFocusNode = FocusNode();
+  String OTPText = '';
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -161,6 +162,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               border: InputBorder.none,
                             ),
                             onChanged: (v) {
+                              OTPText = v ;
                               FocusScope.of(context)
                                   .requestFocus(secondFocusNode);
                             },
@@ -187,6 +189,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               border: InputBorder.none,
                             ),
                             onChanged: (v) {
+                              OTPText += v ;
                               FocusScope.of(context)
                                   .requestFocus(thirdFocusNode);
                             },
@@ -213,6 +216,8 @@ class _OTPScreenState extends State<OTPScreen> {
                               border: InputBorder.none,
                             ),
                             onChanged: (v) {
+                              OTPText += v ;
+
                               FocusScope.of(context)
                                   .requestFocus(fourthFocusNode);
                             },
@@ -239,6 +244,8 @@ class _OTPScreenState extends State<OTPScreen> {
                               border: InputBorder.none,
                             ),
                             onChanged: (v) {
+                              OTPText += v ;
+
                               FocusScope.of(context)
                                   .requestFocus(fivethFocusNode);
 
@@ -264,6 +271,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               border: InputBorder.none,
                             ),
                             onChanged: (v) {
+                              OTPText += v ;
 
 
                             },
@@ -302,6 +310,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(30.0),
                       onTap: () {
+
                         verif();
 
                       },
@@ -338,7 +347,8 @@ class _OTPScreenState extends State<OTPScreen> {
     );
   }
   Future<dynamic> verif() async{
-    String myurl = "http://192.168.1.102:9089/user-service/keycloak/verifOtp/"+signup1.user["id"]+"/"+thirdController.text;
+    print(widget.user);
+    String myurl = "http://192.168.1.102:9089/user-service/keycloak/verifOtp/"+widget.user['id']+"/"+OTPText;
     var res ;
     http.get(Uri.parse(myurl),
 
@@ -348,14 +358,14 @@ class _OTPScreenState extends State<OTPScreen> {
       print(response.body);
       if (res.statusCode == 200) {
         if (response.body != "") {
-          if (widget.user['role'] == "CLIENT_PHYSIQUE") {
+          if (widget.user['role']['name'] == "CLIENT_PHYSIQUE") {
             Navigator.push(
                 context,
                 PageTransition(
                     duration: Duration(milliseconds: 600),
                     type: PageTransitionType.fade,
                     child: ProfilePage()));
-          } if(widget.user['role'] == "CLIENT_MORALE"){
+          } /*if(widget.user['role'] == "CLIENT_MORALE"){
             Navigator.push(
                 context,
                 PageTransition(
@@ -374,7 +384,7 @@ class _OTPScreenState extends State<OTPScreen> {
           }if(widget.user['role']=="PROFESSIONNEL_MORALE"){
 
 
-          }
+          }*/
         }
       }
     }

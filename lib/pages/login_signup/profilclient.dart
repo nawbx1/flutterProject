@@ -1,3 +1,4 @@
+import 'package:doctor_pro/pages/login_signup/signup.dart';
 import 'package:flutter/material.dart';
 
 class profil extends StatefulWidget {
@@ -64,7 +65,7 @@ class _profilState extends State<profil> {
             TextFormField(
                 obscureText: showPassword,
                 onChanged: (value) {
-                  checkPassword(value); verif();
+                  checkPassword(value); verif();signup1.user['password']=passwordController.text;
                 },
                 textInputAction: TextInputAction.next,
                 maxLines: 1,

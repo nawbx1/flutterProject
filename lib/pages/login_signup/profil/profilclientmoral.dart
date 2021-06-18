@@ -26,8 +26,7 @@ class ProfileclientmoraleState extends State<Profileclientmorale>
   @override
   void initState() {
     fullnameController.text=widget.user['username'];
-    matriculeController.text=widget.user['matricule_fiscale'];
-
+    matriculeController.text=widget.user['matriculeFiscale'];
     phoneController.text=widget.user['phone'];
     emailController.text=widget.user['email'];
     super.initState();
