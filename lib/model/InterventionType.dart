@@ -5,15 +5,15 @@ class InterventionType {
 
   final String name ;
 
-  final Speciality speciality ;
+ // final Speciality speciality ;
 
 
-  InterventionType({this.id, this.name, this.speciality});
+  InterventionType({this.id, this.name});
   factory InterventionType.fromJson(Map<String, dynamic> jsonMap) {
     return InterventionType(
         id: jsonMap['id'],
-        name: jsonMap['name'],
-        speciality: jsonMap['speciality']
+        name: jsonMap['name']
+
     );
   }
 

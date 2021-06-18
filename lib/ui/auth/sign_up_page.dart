@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/auth/confirmer.dart';
 import 'package:doctor_pro/ui/auth/otp.dart';
 import 'package:doctor_pro/ui/auth/password_form.dart';
@@ -12,19 +14,7 @@ import 'formulaireclient.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key key}) : super(key: key);
-  static dynamic user={
-    "id":"",
-    "username":"",
-    "email":"",
-    "password":"",
-    "role":[],
-    "verified":false,
-    "matriculeFiscale":"",
-    "speciality":[],
-    "cin":"",
-    "phone":""
 
-  };
 
 
   @override
@@ -83,10 +73,10 @@ class _SignupPageState extends State<SignupPage> {
 }
 
 class FlutterStepperPage extends StatefulWidget {
-  FlutterStepperPage({Key key, this.title}) : super(key: key);
+  FlutterStepperPage({Key key,  this.title}) : super(key: key);
 
   final String title;
-
+  static User user =new User();
   @override
   _FlutterStepperPageState createState() => _FlutterStepperPageState();
 }
@@ -148,16 +138,13 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
                     currentStep = currentStep + 1;
                   else{
 
-
-
-
                   }
                 } else if (currentStep == 1) {
                   if(PassowrdForm.verif )
                     currentStep = currentStep + 1;
                 }
               } else {
-                doRegister();
+                doRegister(FlutterStepperPage.user);
 
               }
             });
@@ -176,13 +163,17 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
     );
   }
 
-  Future<dynamic> doRegister() async {
-    String myurl = "http://192.168.1.102:9089/user-service/keycloak/save";
-    print("do register " + SignupPage.user.toString());
+
+  Future<dynamic> doRegister(User user) async {
+    print("user doregister");
+print(user);
+    //User user =new User();
+    String myurl = apiUrl+"user-service/keycloak/save";
+    print("do register " + user.toString());
     var res ,resOTP;
     var bodyUser ;
     await http.post(Uri.parse(myurl),
-        body: json.encode(SignupPage.user),
+        body: json.encode(user),
         headers: {'Content-Type': 'application/json'})
         .then((response) {
       print(response.statusCode);
@@ -191,18 +182,18 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
 
       print('user saved  ==>   '+ response.body);
       http.post(
-          Uri.parse("http://192.168.1.102:9089/user-service/keycloak/sendOtpSms"),
+          Uri.parse(apiUrl+"user-service/keycloak/sendOtpSms"),
           body: response.body,
           headers: {'Content-Type': 'application/json'}).then((response) {
         print(response.statusCode);
         print(response.body);
         resOTP = response.statusCode;
         setState(() {
-          SignupPage.user = response.body ;
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>OTPScreen(user: SignupPage.user,)));
+          user = User.fromJson(response.body.toString() as Map ) ;
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>OTPScreen( user: user, )));
         });
 
-        print("fakri"+ SignupPage.user);
+        print("fakri"+ user.toString());
 
       });
     });

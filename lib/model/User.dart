@@ -9,25 +9,25 @@ import 'package:doctor_pro/model/Speciality.dart';
 
 class User{
 
-  final int  id ;
-  final  String keycloak;
-  final String username;
+   int  id ;
+    String keycloak;
+   String username;
 
-  final String password;
-  final String email;
-  final int phone;
-  final int cin;
-  final String name;
-  final bool verified;
-  final String matriculeFiscale;
-  final int OTP;
+   String password;
+   String email;
+   int phone;
+   int cin;
+   String name;
+   bool verified;
+   String matriculeFiscale;
+   int OTP;
 
-  final List<Speciality> speciality;
+   List<Speciality> speciality;
 
-  final Profile profile;
+   Profile profile;
 
-  final List<Role> role;
-  final Address address;
+   List<Role> role;
+   Address address;
 
   User({
       this.id,
@@ -64,6 +64,29 @@ class User{
       address: jsonMap['address'],
     );
   }
+
+
+
+
+
+Map<String, dynamic> toJson(User u) {
+  Map<String, dynamic> json = {
+    'id': u.id,
+    'keycloak': u.keycloak,
+    'username': u.username,
+    'password': u.password,
+    'email': u.email,
+    'phone': u.phone,
+    'cin': u.cin,
+    'name': u.name,
+    'verified': u.verified,
+    'matriculeFiscale': u.matriculeFiscale,
+    'speciality': u.speciality,
+    'profile': u.profile,
+    'role': u.role,
+    'address': u.address
+  }; return json;
+}
 }
 
 

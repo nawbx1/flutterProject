@@ -3,12 +3,13 @@ import 'dart:io';
 
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/User.dart';
+import 'package:http/http.dart' ;
 import 'package:http/http.dart' as http;
 class UserRepository{
 
-  Future<http.Response>  fetchSpeciality() async {
+  Future<Response>  fetchSpeciality() async {
 print("fetchSpeciality  ..... ");
-    return await http.get(Uri.parse(apiUrl+'user-service/speciality/all'),
+    return await http.get(Uri.parse('http://192.168.1.13:9089/user-service/speciality/all'),
         headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
 
   }

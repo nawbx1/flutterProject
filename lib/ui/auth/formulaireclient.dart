@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/Role.dart';
 import 'package:doctor_pro/model/Speciality.dart';
 import 'package:doctor_pro/pages/login_signup/profilclient.dart';
 import 'package:doctor_pro/repository/UserRepository.dart';
+
 import 'package:doctor_pro/ui/auth/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -48,7 +50,7 @@ class _clientState extends State<client> {
       _radioValue2 = value;
       _radioValue3=-1;
 
-      SignupPage.user['role']=[{"name": _radioValue1==0?value==0?"CLIENT_PHYSIQUE" : "ClIENT_MORALE":null}];
+      FlutterStepperPage.user.role =[new Role.name(_radioValue1==0?value==0?"CLIENT_PHYSIQUE" : "ClIENT_MORALE":null)];//=[ {"id":null, "name": _radioValue1==0?value==0?"CLIENT_PHYSIQUE" : "ClIENT_MORALE":null}] as List<Role>;
     });
   }
 
@@ -56,7 +58,7 @@ class _clientState extends State<client> {
     setState(() {
       _radioValue3 = value;
       _radioValue2=-1;
-      SignupPage.user['role']=[{"name": _radioValue1==1?value==0?"PROFESSIONNEL" : "GESTIONNAIRE":null}];
+      FlutterStepperPage.user.role=[new Role.name(_radioValue1==1?value==0?"PROFESSIONNEL" : "GESTIONNAIRE":null)];
     });
   }
   String selectedCountry = 'CA';
@@ -157,7 +159,7 @@ void initState() {
      userBloc.fetchSpeciality();
      fetchSpeciality();
     print('oooo');
-  //SignupPage.user['role']=[_radioValue2==0?"CLIENT_PHYSIQUE":_radioValue2==1?"ClIENT_MORALE":_radioValue3==0?"PROFESSIONNEL_PHYSIQUE":_radioValue3==1?"PROFESSIONNEL_MORALE":null];
+  //FlutterStepperPage.user['role']=[_radioValue2==0?"CLIENT_PHYSIQUE":_radioValue2==1?"ClIENT_MORALE":_radioValue3==0?"PROFESSIONNEL_PHYSIQUE":_radioValue3==1?"PROFESSIONNEL_MORALE":null];
 }
 
   @override
@@ -229,7 +231,7 @@ void initState() {
         onChanged: (value) {
           checkPhone(value)
           ;verif();
-          SignupPage.user['phone']=phoneController.text;
+          FlutterStepperPage.user.phone= int.parse(phoneController.text);
         },
         onEditingComplete:() {
 
@@ -269,7 +271,7 @@ void initState() {
       TextFormField(
           onChanged: (value) {
 
-            verif();SignupPage.user['username']=fullnameController.text;
+            verif();FlutterStepperPage.user.username=fullnameController.text;
           },
 
           textInputAction: TextInputAction.next,
@@ -297,7 +299,7 @@ void initState() {
       TextFormField(
           onChanged: (value) {
 
-           verif();SignupPage.user['matricule_fiscale']=matriculeController.text;
+           verif();FlutterStepperPage.user.matriculeFiscale =matriculeController.text;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -323,7 +325,7 @@ void initState() {
       SizedBox(height: 20),
       TextFormField(
           onChanged: (value) {
-            verif(); checkEmail(value);SignupPage.user['email']=emailController.text;
+            verif(); checkEmail(value);FlutterStepperPage.user.email=emailController.text;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -365,7 +367,7 @@ void initState() {
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();SignupPage.user['phone']=phoneController.text;
+            ;verif();FlutterStepperPage.user.phone= int.parse(phoneController.text) ;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -397,8 +399,8 @@ void initState() {
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();SignupPage.user['cin']=cinController.text;
-            SignupPage.user['cin']=cinController.text;
+            ;verif();FlutterStepperPage.user.cin= int.parse(cinController.text) ;
+            FlutterStepperPage.user.cin=int.parse(cinController.text);
           },
           onEditingComplete:() {
 
@@ -435,7 +437,7 @@ void initState() {
         TextFormField(
             onChanged: (value) {
 
-              verif();SignupPage.user['username']=fullnameController.text;
+              verif();FlutterStepperPage.user.username=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -461,7 +463,7 @@ void initState() {
         SizedBox(height: 20),
         TextFormField(
             onChanged: (value) {
-              verif(); checkEmail(value);SignupPage.user['email']=emailController.text;
+              verif(); checkEmail(value);FlutterStepperPage.user.email=emailController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -501,7 +503,7 @@ void initState() {
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();SignupPage.user['phone']=phoneController.text;
+            ;verif();FlutterStepperPage.user.phone= int.parse(phoneController.text);
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -535,7 +537,7 @@ void initState() {
         TextFormField(
             onChanged: (value) {
 
-              verif();SignupPage.user['username']=fullnameController.text;
+              verif();FlutterStepperPage.user.username=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -562,7 +564,7 @@ void initState() {
         TextFormField(
             onChanged: (value) {
 
-              verif();SignupPage.user['matriculeFiscale']=matriculeController.text;
+              verif();FlutterStepperPage.user.matriculeFiscale=matriculeController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -588,7 +590,7 @@ void initState() {
         SizedBox(height: 20),
         TextFormField(
             onChanged: (value) {
-              verif(); checkEmail(value);SignupPage.user['email']=emailController.text;
+              verif(); checkEmail(value);FlutterStepperPage.user.email=emailController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -633,7 +635,7 @@ void initState() {
     ),
     searchHint: "Choisissez le type de Specialite",
     onChanged: (value) {
-      //SignupPage.user['speciality_id']=selectedSpeciality.id;
+      FlutterStepperPage.user.speciality=selectedSpeciality;
     setState(() {
     selectedSpeciality=value;
     });
@@ -662,7 +664,7 @@ void initState() {
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();SignupPage.user['phone']=phoneController.text;
+            ;verif();FlutterStepperPage.user.phone= int.parse(phoneController.text);
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -698,7 +700,7 @@ void initState() {
           onChanged: (value) {
             checkPhone(value)
             ;verif();
-            SignupPage.user['cin']=cinController.text;
+            FlutterStepperPage.user.cin= int.parse(cinController.text);
           },
           onEditingComplete:() {
 
@@ -734,7 +736,7 @@ void initState() {
         TextFormField(
             onChanged: (value) {
 
-              verif();checkEmail(value);SignupPage.user['username']=fullnameController.text;
+              verif();checkEmail(value);FlutterStepperPage.user.username=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -808,7 +810,7 @@ void initState() {
           ),
           searchHint: "Choisissez le type de Specialite",
           onChanged: (value) {
-            SignupPage.user['speciality']=selectedSpeciality.id;
+            FlutterStepperPage.user.speciality.add(selectedSpeciality);
             setState(() {
               selectedSpeciality=value;
             });
@@ -821,14 +823,8 @@ void initState() {
           },
           isExpanded: true,
         ),
-
-
       ],
     );
-
-
-
-
 
   }
   value2(){
@@ -909,14 +905,10 @@ void initState() {
             ),
           ),
         ],
-
       ),
       _radioValue3==0?formprofessionnel():_radioValue3==1?formprofessionnelmoral():Container(),
-
     ],
-
   );
-
   }
 
 
@@ -933,11 +925,9 @@ void initState() {
   List<Speciality> specialityList2 ;
   List<Speciality> specialityList ;
   void fetchSpeciality() async {
-    print('mmmmm');
     specialityList2 =  await userBloc.fetchSpeciality();
       setState(()  {
         specialityList =  specialityList2;
-        print("specialityList "+specialityList.toString());
       });
       specialityList.forEach((element) {
         print(element);

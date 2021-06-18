@@ -66,7 +66,7 @@ class _PassowrdFormState extends State<PassowrdForm> {
             TextFormField(
                 obscureText: showPassword,
                 onChanged: (value) {
-                  checkPassword(value); verif();SignupPage.user['password']=passwordController.text;
+                  checkPassword(value); verif();FlutterStepperPage.user.password=passwordController.text;
                 },
                 textInputAction: TextInputAction.next,
                 maxLines: 1,
