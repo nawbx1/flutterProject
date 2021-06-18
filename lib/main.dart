@@ -3,6 +3,7 @@ import 'package:doctor_pro/pages/login_signup/log.dart';
 import 'package:doctor_pro/pages/login_signup/myapp.dart';
 import 'package:doctor_pro/pages/login_signup/profil/profilpage.dart';
 import 'package:doctor_pro/pages/screens.dart';
+import 'package:doctor_pro/ui/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,6 +18,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
       },
 
 
-      home: signup12 (),
+      home: LoginPage (),
 
     );
   }

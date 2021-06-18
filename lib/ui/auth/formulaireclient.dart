@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/Speciality.dart';
 import 'package:doctor_pro/pages/login_signup/profilclient.dart';
-import 'package:doctor_pro/pages/login_signup/signup.dart';
-import 'package:doctor_pro/pages/speciality/speciality.dart';
+import 'package:doctor_pro/repository/UserRepository.dart';
+import 'package:doctor_pro/ui/auth/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:searchable_dropdown/searchable_dropdown.dart';
@@ -20,6 +22,8 @@ class client extends StatefulWidget {
 
 
 class _clientState extends State<client> {
+
+  UserBloc userBloc =new UserBloc();
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   static TextEditingController emailController = new  TextEditingController();
   static TextEditingController fullnameController = TextEditingController();
@@ -44,7 +48,7 @@ class _clientState extends State<client> {
       _radioValue2 = value;
       _radioValue3=-1;
 
-      signup1.user['role']=[{"name": _radioValue1==0?value==0?"CLIENT_PHYSIQUE" : "ClIENT_MORALE":null}];
+      SignupPage.user['role']=[{"name": _radioValue1==0?value==0?"CLIENT_PHYSIQUE" : "ClIENT_MORALE":null}];
     });
   }
 
@@ -52,7 +56,7 @@ class _clientState extends State<client> {
     setState(() {
       _radioValue3 = value;
       _radioValue2=-1;
-      signup1.user['role']=[{"name": _radioValue1==1?value==0?"PROFESSIONNEL" : "GESTIONNAIRE":null}];
+      SignupPage.user['role']=[{"name": _radioValue1==1?value==0?"PROFESSIONNEL" : "GESTIONNAIRE":null}];
     });
   }
   String selectedCountry = 'CA';
@@ -148,10 +152,12 @@ class _clientState extends State<client> {
 
 
 @override
-void initState(){
+void initState() {
     print('rrr');
-  fetchSpeciality();
-  //signup1.user['role']=[_radioValue2==0?"CLIENT_PHYSIQUE":_radioValue2==1?"ClIENT_MORALE":_radioValue3==0?"PROFESSIONNEL_PHYSIQUE":_radioValue3==1?"PROFESSIONNEL_MORALE":null];
+     userBloc.fetchSpeciality();
+     fetchSpeciality();
+    print('oooo');
+  //SignupPage.user['role']=[_radioValue2==0?"CLIENT_PHYSIQUE":_radioValue2==1?"ClIENT_MORALE":_radioValue3==0?"PROFESSIONNEL_PHYSIQUE":_radioValue3==1?"PROFESSIONNEL_MORALE":null];
 }
 
   @override
@@ -223,7 +229,7 @@ void initState(){
         onChanged: (value) {
           checkPhone(value)
           ;verif();
-          signup1.user['phone']=phoneController.text;
+          SignupPage.user['phone']=phoneController.text;
         },
         onEditingComplete:() {
 
@@ -263,7 +269,7 @@ void initState(){
       TextFormField(
           onChanged: (value) {
 
-            verif();signup1.user['username']=fullnameController.text;
+            verif();SignupPage.user['username']=fullnameController.text;
           },
 
           textInputAction: TextInputAction.next,
@@ -291,7 +297,7 @@ void initState(){
       TextFormField(
           onChanged: (value) {
 
-           verif();signup1.user['matricule_fiscale']=matriculeController.text;
+           verif();SignupPage.user['matricule_fiscale']=matriculeController.text;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -317,7 +323,7 @@ void initState(){
       SizedBox(height: 20),
       TextFormField(
           onChanged: (value) {
-            verif(); checkEmail(value);signup1.user['email']=emailController.text;
+            verif(); checkEmail(value);SignupPage.user['email']=emailController.text;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -359,7 +365,7 @@ void initState(){
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();signup1.user['phone']=phoneController.text;
+            ;verif();SignupPage.user['phone']=phoneController.text;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -391,8 +397,8 @@ void initState(){
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();signup1.user['cin']=cinController.text;
-            signup1.user['cin']=cinController.text;
+            ;verif();SignupPage.user['cin']=cinController.text;
+            SignupPage.user['cin']=cinController.text;
           },
           onEditingComplete:() {
 
@@ -429,7 +435,7 @@ void initState(){
         TextFormField(
             onChanged: (value) {
 
-              verif();signup1.user['username']=fullnameController.text;
+              verif();SignupPage.user['username']=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -455,7 +461,7 @@ void initState(){
         SizedBox(height: 20),
         TextFormField(
             onChanged: (value) {
-              verif(); checkEmail(value);signup1.user['email']=emailController.text;
+              verif(); checkEmail(value);SignupPage.user['email']=emailController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -495,7 +501,7 @@ void initState(){
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();signup1.user['phone']=phoneController.text;
+            ;verif();SignupPage.user['phone']=phoneController.text;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -529,7 +535,7 @@ void initState(){
         TextFormField(
             onChanged: (value) {
 
-              verif();signup1.user['username']=fullnameController.text;
+              verif();SignupPage.user['username']=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -556,7 +562,7 @@ void initState(){
         TextFormField(
             onChanged: (value) {
 
-              verif();signup1.user['matriculeFiscale']=matriculeController.text;
+              verif();SignupPage.user['matriculeFiscale']=matriculeController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -582,7 +588,7 @@ void initState(){
         SizedBox(height: 20),
         TextFormField(
             onChanged: (value) {
-              verif(); checkEmail(value);signup1.user['email']=emailController.text;
+              verif(); checkEmail(value);SignupPage.user['email']=emailController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -627,7 +633,7 @@ void initState(){
     ),
     searchHint: "Choisissez le type de Specialite",
     onChanged: (value) {
-      //signup1.user['speciality_id']=selectedSpeciality.id;
+      //SignupPage.user['speciality_id']=selectedSpeciality.id;
     setState(() {
     selectedSpeciality=value;
     });
@@ -656,7 +662,7 @@ void initState(){
         TextFormField(
           onChanged: (value) {
             checkPhone(value)
-            ;verif();signup1.user['phone']=phoneController.text;
+            ;verif();SignupPage.user['phone']=phoneController.text;
           },
           textInputAction: TextInputAction.next,
           maxLines: 1,
@@ -692,7 +698,7 @@ void initState(){
           onChanged: (value) {
             checkPhone(value)
             ;verif();
-            signup1.user['cin']=cinController.text;
+            SignupPage.user['cin']=cinController.text;
           },
           onEditingComplete:() {
 
@@ -728,7 +734,7 @@ void initState(){
         TextFormField(
             onChanged: (value) {
 
-              verif();checkEmail(value);signup1.user['username']=fullnameController.text;
+              verif();checkEmail(value);SignupPage.user['username']=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -802,7 +808,7 @@ void initState(){
           ),
           searchHint: "Choisissez le type de Specialite",
           onChanged: (value) {
-            signup1.user['speciality']=selectedSpeciality.id;
+            SignupPage.user['speciality']=selectedSpeciality.id;
             setState(() {
               selectedSpeciality=value;
             });
@@ -924,26 +930,22 @@ void initState(){
   }
 
 
-  List<dynamic> specialityList=[];
-
+  List<Speciality> specialityList2 ;
+  List<Speciality> specialityList ;
   void fetchSpeciality() async {
-
-    var result = await http.get(Uri.parse('http://192.168.1.102:9089/user-service/speciality/all'),headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
-    print('dddd');
-    if(result.statusCode==200){
-      setState(() {
-        specialityList= json.decode(result.body);
+    print('mmmmm');
+    specialityList2 =  await userBloc.fetchSpeciality();
+      setState(()  {
+        specialityList =  specialityList2;
+        print("specialityList "+specialityList.toString());
       });
       specialityList.forEach((element) {
         print(element);
         _dropdownMenuItems.add(
-          DropdownMenuItem(child: Text(element['name']),value: element,),
+          DropdownMenuItem(child: Text(element.name),value: element,),
         );
       });
 
-    }
-
-    print(result.body);
   }
   dynamic  selectedSpeciality ;
   List<DropdownMenuItem> _dropdownMenuItems=[];

@@ -1,4 +1,5 @@
-import 'package:doctor_pro/pages/login_signup/signup.dart';
+
+import 'package:doctor_pro/ui/auth/sign_up_page.dart';
 import 'package:flutter/material.dart';
 
 class PassowrdForm extends StatefulWidget {
@@ -65,7 +66,7 @@ class _PassowrdFormState extends State<PassowrdForm> {
             TextFormField(
                 obscureText: showPassword,
                 onChanged: (value) {
-                  checkPassword(value); verif();signup1.user['password']=passwordController.text;
+                  checkPassword(value); verif();SignupPage.user['password']=passwordController.text;
                 },
                 textInputAction: TextInputAction.next,
                 maxLines: 1,
