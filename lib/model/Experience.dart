@@ -20,5 +20,25 @@ class Experience {
         media: jsonMap['media']
     );
   }
+  Map<String, dynamic> toJson(Experience e) {
+    var medi=[];
+    if(e.media!=null)
+      for(int i=0;i<e.media.length;i++) {
+        medi.add(Media().toJson(e.media[i]));
+
+    }
+
+
+    Map<String, dynamic> json = {
+
+
+      'id':e.id,
+      'name': e.name,
+
+      'media':medi,
+
+    };return json ;
+  }
+
 
 }

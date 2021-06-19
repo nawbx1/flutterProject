@@ -29,7 +29,7 @@ class Address {
     );
   }
 
-  Map<String, dynamic> toJsonNew(Address a) {
+  Map<String, dynamic> toJson(Address a) {
     Map<String, dynamic> json = {
 
       'street': a.street,
@@ -39,6 +39,6 @@ class Address {
       'region': a.region
 
 
-    };
+    };return json ;
   }
 }

@@ -6,7 +6,7 @@ import 'package:doctor_pro/model/Address.dart';
 import 'package:doctor_pro/model/Profile.dart';
 import 'package:doctor_pro/model/Role.dart';
 import 'package:doctor_pro/model/Speciality.dart';
-
+import 'dart:convert' as Json;
 class User{
 
    int  id ;
@@ -47,6 +47,21 @@ class User{
       this.address});
 
   factory User.fromJson(Map<String, dynamic> jsonMap) {
+    List<Speciality>s =[];
+
+    if(jsonMap['speciality']!=null){
+      for(int i=0;i<jsonMap['speciality'].length;i++){
+        s.add(new Speciality.fromJson(jsonMap['speciality'][i]));
+      }
+    }
+
+
+    List<Role>r =[];
+    if(jsonMap['role']!=null){
+      for(int i=0;i<jsonMap['role'].length;i++){
+        r.add(new Role.fromJson(jsonMap['role'][i]));
+      }
+    }
     return User(
       id: jsonMap['id'],
       keycloak: jsonMap['keycloak'],
@@ -58,9 +73,9 @@ class User{
       name: jsonMap['name'],
       verified: jsonMap['verified'],
       matriculeFiscale: jsonMap['matriculeFiscale'],
-      speciality: jsonMap['speciality'],
+      speciality:s,
       profile: jsonMap['profile'],
-      role: jsonMap['role'],
+      role: r,
       address: jsonMap['address'],
     );
   }
@@ -69,7 +84,21 @@ class User{
 
 
 
-Map<String, dynamic> toJson(User u) {
+Map<String, dynamic> toJsonNew(User u) {
+  var r=[];
+  if(u.role!=null){
+    for(int i=0;i<u.role.length;i++) {
+      r.add(Role().toJson(u.role[i]));
+    }
+    }
+  var s=[];
+  if(u.speciality!=null){
+    for(int i=0;i<u.speciality.length;i++) {
+      s.add(Speciality().toJson(u.speciality[i]));
+    }
+  }
+
+
   Map<String, dynamic> json = {
     'id': u.id,
     'keycloak': u.keycloak,
@@ -81,12 +110,13 @@ Map<String, dynamic> toJson(User u) {
     'name': u.name,
     'verified': u.verified,
     'matriculeFiscale': u.matriculeFiscale,
-    'speciality': u.speciality,
-    'profile': u.profile,
-    'role': u.role,
-    'address': u.address
+    'speciality': s,
+    'profile_id': Profile().toJson(u.profile),
+    'role': r,
+    'address_id': Address().toJson(u.address),
   }; return json;
 }
+
 }
 
 

@@ -22,7 +22,7 @@ class Region{
     );
   }
 
-  Map<String, dynamic> toJsonNew(Region g) {
+  Map<String, dynamic> toJson(Region g) {
     Map<String, dynamic> json = {
 
       'region': g.region,

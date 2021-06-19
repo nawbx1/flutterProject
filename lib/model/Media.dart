@@ -23,5 +23,21 @@ class Media {
         fileName: jsonMap['fileName'],
         mediaURL: jsonMap['mediaURL']
     );
+
+  }
+  Map<String, dynamic> toJson(Media m) {
+
+    Map<String, dynamic> json = {
+
+      'id': m.id,
+      'type': m.type,
+      'mediaURL': m.mediaURL,
+      'label': m.label,
+
+
+
+
+
+    };return json ;
   }
 }
