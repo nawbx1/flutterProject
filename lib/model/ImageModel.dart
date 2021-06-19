@@ -20,4 +20,17 @@ class ImageModel {
         uploadDir: jsonMap['uploadDir']
     );
   }
+
+  Map<String, dynamic> toJson(ImageModel u) {
+
+
+    Map<String, dynamic> json = {
+      'id': u.id,
+      'name': u.name,
+      'type': u.type,
+      'uploadDir': u.uploadDir,
+
+    }; return json;
+  }
+
 }

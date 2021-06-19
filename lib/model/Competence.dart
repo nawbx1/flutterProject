@@ -16,6 +16,23 @@ class Competence {
         interventionType: jsonMap['interventionType'],
     );
   }
+  Map<String, dynamic> toJson(Competence c) {
+    var inter=[];
+    if(c.interventionType!=null){
+      for(int i=0;i<c.interventionType.length;i++) {
+        inter.add(InterventionType().toJson(c.interventionType[i]));
+      }
+    }
+    Map<String, dynamic> json = {
+
+
+
+      'position': c.position,
+      'intervention_id':inter,
+
+
+    };return json ;
+  }
 
 }
 

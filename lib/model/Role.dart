@@ -12,4 +12,12 @@ class Role {
         name: jsonMap['name']
     );
   }
+   Map<String, dynamic> toJson(Role m) {
+
+     Map<String, dynamic> json = {
+
+       'id': m.id,
+       'name': m.name,
+     };return json ;
+   }
 }

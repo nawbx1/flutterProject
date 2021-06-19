@@ -29,6 +29,29 @@ class Speciality {
         media: (jsonMap['media']!=null )? Media.fromJson(jsonMap['media']) : null
     );
   }
+  Map<String, dynamic> toJson(Speciality s) {
+    var inter=[];
+    if(s.interventionTypes!=null)
+      for(int i=0;i<s.interventionTypes.length;i++) {
+        inter.add(InterventionType().toJson(s.interventionTypes[i]));
+
+      }
+
+
+
+
+
+    Map<String, dynamic> json = {
+
+
+      'id':s.id,
+      'name': s.name,
+      'slogon': s.slogon,
+      'media_id':Media().toJson(s.media),
+      'interventionTypes':inter,
+
+    };return json ;
+  }
 
 
 

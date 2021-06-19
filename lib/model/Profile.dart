@@ -38,6 +38,41 @@ class Profile {
         information: jsonMap['information'],
     );
   }
+  Map<String, dynamic> toJson(Profile p) {
+    var c=[];
+    if(p.competences!=null){
+      for(int i=0;i<p.competences.length;i++) {
+        c.add(Competence().toJson(p.competences[i]));
+      }
+    }
+
+    var exp=[];
+    if(p.experiences!=null){
+      for(int i=0;i<p.experiences.length;i++) {
+        exp.add(Experience().toJson(p.experiences[i]));
+      }
+    }
+    var reg=[];
+    if(p.regions!=null){
+      for(int i=0;i<p.regions.length;i++) {
+        reg.add(Region().toJson(p.regions[i]));
+      }
+    }
+
+
+
+    Map<String, dynamic> json = {
+
+
+      'id':p.id,
+      'information': p.information,
+      'cover_image_id': ImageModel().toJson(p.coverImage),
+      'profileImage_id': ImageModel().toJson(p.profileImage),
+      'experiences':exp,
+      'competences':c,
+      'regions':reg,
+    };return json ;
+  }
 
 
 }

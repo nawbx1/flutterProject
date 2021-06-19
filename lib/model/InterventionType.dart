@@ -16,5 +16,17 @@ class InterventionType {
 
     );
   }
+  Map<String, dynamic> toJson(InterventionType i) {
+
+    Map<String, dynamic> json = {
+
+
+
+      'name': i.name,
+
+
+
+    };return json ;
+  }
 
 }
