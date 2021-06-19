@@ -74,17 +74,15 @@ class User{
       verified: jsonMap['verified'],
       matriculeFiscale: jsonMap['matriculeFiscale'],
       speciality:s,
-      profile: jsonMap['profile'],
+      profile: (jsonMap['profile']!=null )? Profile.fromJson(jsonMap['profile']) : null ,
       role: r,
-      address: jsonMap['address'],
+      address: (jsonMap['address']!=null )? Address.fromJson(jsonMap['address']) : null ,
     );
   }
 
 
 
-
-
-Map<String, dynamic> toJsonNew(User u) {
+  Map<String, dynamic> toJsonNew(User u) {
   var r=[];
   if(u.role!=null){
     for(int i=0;i<u.role.length;i++) {
@@ -100,7 +98,7 @@ Map<String, dynamic> toJsonNew(User u) {
 
 
   Map<String, dynamic> json = {
-    'id': u.id,
+
     'keycloak': u.keycloak,
     'username': u.username,
     'password': u.password,
@@ -111,11 +109,19 @@ Map<String, dynamic> toJsonNew(User u) {
     'verified': u.verified,
     'matriculeFiscale': u.matriculeFiscale,
     'speciality': s,
-    'profile_id': Profile().toJson(u.profile),
+    //'profile': Profile().toJson(u.profile),
     'role': r,
-    'address_id': Address().toJson(u.address),
+    //'address': Address().toJson(u.address),
   }; return json;
 }
+
+   @override
+  String toString() {
+    return 'User { id: $id, keycloak: $keycloak, username: $username, password: $password, email: $email, phone: $phone, cin: $cin, name: $name, verified: $verified, matriculeFiscale: $matriculeFiscale, OTP: $OTP, speciality: $speciality, profile: $profile, role: $role, address: $address}';
+  }
+
+
+
 
 }
 

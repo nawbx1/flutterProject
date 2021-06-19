@@ -635,9 +635,10 @@ void initState() {
     ),
     searchHint: "Choisissez le type de Specialite",
     onChanged: (value) {
-      FlutterStepperPage.user.speciality=selectedSpeciality;
     setState(() {
-    selectedSpeciality=value;
+      print("value selectedSpeciality "+value);
+      FlutterStepperPage.user.speciality=[value];
+      selectedSpeciality=value;
     });
 
     },
@@ -736,7 +737,8 @@ void initState() {
         TextFormField(
             onChanged: (value) {
 
-              verif();checkEmail(value);FlutterStepperPage.user.username=fullnameController.text;
+              verif();checkEmail(value);
+              FlutterStepperPage.user.username=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -765,6 +767,8 @@ void initState() {
         TextFormField(
             onChanged: (value) {
               verif(); checkEmail(value);
+              FlutterStepperPage.user.email=emailController.text;
+
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -810,9 +814,18 @@ void initState() {
           ),
           searchHint: "Choisissez le type de Specialite",
           onChanged: (value) {
-            FlutterStepperPage.user.speciality.add(selectedSpeciality);
+            print("value " + value.toString());
+
             setState(() {
+
+
               selectedSpeciality=value;
+              Speciality s = value ;
+
+              FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+
+
+
             });
 
           },
@@ -924,20 +937,25 @@ void initState() {
 
   List<Speciality> specialityList2 ;
   List<Speciality> specialityList ;
+
+  dynamic  selectedSpeciality ;
+  List<DropdownMenuItem> _dropdownMenuItems=[];
+
+
   void fetchSpeciality() async {
     specialityList2 =  await userBloc.fetchSpeciality();
       setState(()  {
         specialityList =  specialityList2;
-      });
-      specialityList.forEach((element) {
-        print(element);
-        _dropdownMenuItems.add(
-          DropdownMenuItem(child: Text(element.name),value: element,),
-        );
+        specialityList.forEach((element) {
+          print("element "+ element.toString());
+          _dropdownMenuItems.add(
+            DropdownMenuItem(child: Text(element.name),value: element,),
+          );
+        });
       });
 
+
   }
-  dynamic  selectedSpeciality ;
-  List<DropdownMenuItem> _dropdownMenuItems=[];
+
 }
 

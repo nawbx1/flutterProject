@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/auth/confirmer.dart';
@@ -23,6 +24,7 @@ class SignupPage extends StatefulWidget {
 
 
 int _curStep = 2;
+UserBloc userBloc =new UserBloc();
 
 class _SignupPageState extends State<SignupPage> {
 
@@ -164,10 +166,14 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
   }
 
 
-  Future<dynamic> doRegister(User user) async {
+  void doRegister(User user) async {
     print("user doregister");
-print(user);
-    //User user =new User();
+    print(user.toString());
+    dynamic usersaved  = await userBloc.saveuser(user) ;
+
+    print("usersaved ==> " + usersaved.toString() );
+
+   /* //User user =new User();
     String myurl = apiUrl+"user-service/keycloak/save";
     print("do register " + user.toString());
     var res ,resOTP;
@@ -203,7 +209,7 @@ print(user);
     {
       return resOTP ;
     }
-    else return null ;
+    else return null ;*/
 
   }
 

@@ -16,8 +16,13 @@ class Role {
 
      Map<String, dynamic> json = {
 
-       'id': m.id,
+
        'name': m.name,
      };return json ;
    }
+
+   @override
+  String toString() {
+    return 'Role{name: $name}';
+  }
 }

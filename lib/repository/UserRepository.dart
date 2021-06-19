@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:doctor_pro/constant/constant.dart';
@@ -8,9 +9,17 @@ import 'package:http/http.dart' as http;
 class UserRepository{
 
   Future<Response>  fetchSpeciality() async {
-print("fetchSpeciality  ..... ");
-    return await http.get(Uri.parse('http://192.168.1.13:9089/user-service/speciality/all'),
+    print("fetchSpeciality  ..... ");
+    return await http.get(Uri.parse(apiUrl+'user-service/speciality/all'),
         headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
+
+  }
+
+  Future<Response>  saveUser(User user) async {
+    print("saveUser  .....  UserRepository "+User().toJsonNew(user).toString());
+    return await http.post(Uri.parse(apiUrl+'user-service/keycloak/save'),
+        body: json.encode(User().toJsonNew(user)),
+        headers: {'Content-Type': 'application/json'});
 
   }
 
