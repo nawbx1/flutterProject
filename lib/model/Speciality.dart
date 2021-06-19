@@ -2,17 +2,21 @@ import 'package:doctor_pro/model/InterventionType.dart';
 import 'package:doctor_pro/model/Media.dart';
 
 class Speciality {
-  final int id;
+   int id;
 
-  final String name ;
+   String name ;
 
-  final String slogon ;
+   String slogon ;
 
-  final Media media ;
+   Media media ;
 
-  final List<InterventionType> interventionTypes ;
+   List<InterventionType> interventionTypes ;
 
   Speciality({this.id, this.name, this.slogon, this.media ,this.interventionTypes});
+
+  Speciality.name(this.id, this.name);
+
+
   factory Speciality.fromJson(Map<String, dynamic> jsonMap) {
     List<InterventionType> list=[];
     if(jsonMap['interventionTypes']!=null){
@@ -27,8 +31,11 @@ class Speciality {
         slogon: jsonMap['slogon'],
         interventionTypes: list,
         media: (jsonMap['media']!=null )? Media.fromJson(jsonMap['media']) : null
-    );
+
+        );
   }
+
+
   Map<String, dynamic> toJson(Speciality s) {
     var inter=[];
     if(s.interventionTypes!=null)
@@ -36,19 +43,12 @@ class Speciality {
         inter.add(InterventionType().toJson(s.interventionTypes[i]));
 
       }
-
-
-
-
-
     Map<String, dynamic> json = {
-
-
       'id':s.id,
       'name': s.name,
-      'slogon': s.slogon,
-      'media_id':Media().toJson(s.media),
-      'interventionTypes':inter,
+      //'slogon': s.slogon,
+      //'media':Media().toJson(s.media),
+      //'interventionTypes':inter,
 
     };return json ;
   }
@@ -56,4 +56,8 @@ class Speciality {
 
 
 
+   @override
+  String toString() {
+    return 'Speciality{id: $id, name: $name}';
+  }
 }

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:doctor_pro/model/Speciality.dart';
+import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/repository/UserRepository.dart';
 
 class UserBloc{
@@ -29,5 +30,15 @@ print(lists.toString());
     return result.statusCode==200? lists : [];
   }
 
+    Future<User> saveuser(User user) async{
+    var result = await userRepository.saveUser(user) ;
+    //User u = json.decode(result.body).map((tagJson) => User.fromJson(tagJson));
+    User u = User.fromJson(json.decode(result.body)) ;
+    print("save user UserBloc "  + u.toString());
+
+
+    print("status code "  +  result.statusCode.toString() );
+    return result.statusCode==200? u : null;
+  }
 
 }

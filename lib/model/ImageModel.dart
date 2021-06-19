@@ -25,7 +25,6 @@ class ImageModel {
 
 
     Map<String, dynamic> json = {
-      'id': u.id,
       'name': u.name,
       'type': u.type,
       'uploadDir': u.uploadDir,

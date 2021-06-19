@@ -32,7 +32,6 @@ class Experience {
     Map<String, dynamic> json = {
 
 
-      'id':e.id,
       'name': e.name,
 
       'media':medi,

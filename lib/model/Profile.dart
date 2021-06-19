@@ -63,8 +63,6 @@ class Profile {
 
     Map<String, dynamic> json = {
 
-
-      'id':p.id,
       'information': p.information,
       'cover_image_id': ImageModel().toJson(p.coverImage),
       'profileImage_id': ImageModel().toJson(p.profileImage),
