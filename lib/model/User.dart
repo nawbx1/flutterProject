@@ -98,7 +98,7 @@ class User{
 
 
   Map<String, dynamic> json = {
-
+  'id':u.id,
     'keycloak': u.keycloak,
     'username': u.username,
     'password': u.password,
@@ -109,9 +109,9 @@ class User{
     'verified': u.verified,
     'matriculeFiscale': u.matriculeFiscale,
     'speciality': s,
-    //'profile': Profile().toJson(u.profile),
+    'profile':  Profile().toJson(u.profile),
     'role': r,
-    //'address': Address().toJson(u.address),
+    'address': Address().toJson(u.address),
   }; return json;
 }
 

@@ -28,10 +28,31 @@ class Profile {
 
 
   factory Profile.fromJson(Map<String, dynamic> jsonMap) {
+   var c=[];
+    if(jsonMap['competences']!=null){
+      for(int i=0;i<jsonMap['competences'].length;i++) {
+        c.add(  new Competence.fromJson(jsonMap['competences'][i]) );
+      }
+    }
+
+    var e=[];
+    if(jsonMap['experiences']!=null){
+      for(int i=0;i<jsonMap['experiences'].length;i++) {
+        e.add(  new Experience.fromJson(jsonMap['experiences'][i]) );
+      }
+    }
+
+    var r=[];
+    if(jsonMap['regions']!=null){
+      for(int i=0;i<jsonMap['regions'].length;i++) {
+        r.add(  new Region.fromJson(jsonMap['regions'][i]) );
+      }
+    }
+
     return Profile(
-        competences: jsonMap['competences'],
-        experiences: jsonMap['experiences'],
-        regions: jsonMap['regions'],
+        competences: c,
+        experiences: e,
+        regions: r,
         coverImage: jsonMap['coverImage'],
         profileImage: jsonMap['profileImage'],
         id: jsonMap['id'],
@@ -62,10 +83,10 @@ class Profile {
 
 
     Map<String, dynamic> json = {
-
+      'id':p.id,
       'information': p.information,
-      'cover_image_id': ImageModel().toJson(p.coverImage),
-      'profileImage_id': ImageModel().toJson(p.profileImage),
+      'cover_image_id':p.coverImage != null ? ImageModel().toJson(p.coverImage) : null,
+      'profileImage_id': p.coverImage != null ?  ImageModel().toJson(p.profileImage) :null,
       'experiences':exp,
       'competences':c,
       'regions':reg,

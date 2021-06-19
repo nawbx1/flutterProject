@@ -173,6 +173,9 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
 
     print("usersaved ==> " + usersaved.toString() );
 
+    if(usersaved!=null)
+      Navigator.push(context,MaterialPageRoute(builder: (context)=>OTPScreen( user: usersaved, )));
+
    /* //User user =new User();
     String myurl = apiUrl+"user-service/keycloak/save";
     print("do register " + user.toString());

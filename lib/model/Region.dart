@@ -24,7 +24,7 @@ class Region{
 
   Map<String, dynamic> toJson(Region g) {
     Map<String, dynamic> json = {
-
+      'id':g.id,
       'region': g.region,
       'gouvernorat': g.gouvernorat,
 

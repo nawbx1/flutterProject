@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:doctor_pro/bloc/UserBloc.dart';
+import 'package:doctor_pro/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileClienPhysiquePage extends StatefulWidget {
   ProfileClienPhysiquePage({Key key , @required this.user }) : super(key: key);
-   Map<String,dynamic> user;
+   User user;
   @override
   ProfileClienPhysiquePageState createState() => ProfileClienPhysiquePageState();
 }
@@ -22,13 +24,22 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
   static TextEditingController matriculeController = TextEditingController();
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
-
+  UserBloc userBloc=new UserBloc();
   @override
   void initState() {
-    fullnameController.text=widget.user['username'];
+    initProfile();
     super.initState();
   }
 
+  initProfile(){
+    if(widget.user!=null){
+    fullnameController.text=widget.user.username;
+    emailController.text=widget.user.email;
+    phoneController.text=widget.user.phone.toString();
+    cinController.text=widget.user.cin as String;
+    matriculeController.text=widget.user.matriculeFiscale;
+    }
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -114,6 +125,9 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
                                   new Flexible(
                                     child: new TextField(
                                       controller: phoneController,
+                                      onChanged: ((v) =>{
+                                      widget.user.phone= int.parse(phoneController.text)
+                                      } ),
                                       enabled: !_status,
                                     ),
                                   ),
@@ -154,6 +168,10 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
                                       enabled: !_status,
                                       autofocus: !_status,
                                       controller: cinController,
+
+                                      onChanged: ((v) =>{
+                                      widget.user.cin= int.parse(cinController.text)
+                                      } ),
                                     ),
                                   ),
                                 ],
@@ -193,6 +211,9 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
                                       enabled: !_status,
                                       autofocus: !_status,
                                       controller: fullnameController,
+                                      onChanged: ((v) =>{
+                                        widget.user.username=fullnameController.text
+                                      } ),
                                     ),
                                   ),
                                 ],
@@ -227,6 +248,9 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
                                     child: new TextField(
                                    controller: emailController,
                                       enabled: !_status,
+                                      onChanged: ((v) =>{
+                                      widget.user.email=emailController.text
+                                      } ),
                                     ),
                                   ),
                                 ],
@@ -326,6 +350,7 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () {
+                      userBloc.updateuser(widget.user);
                       setState(() {
                         _status = true;
                         FocusScope.of(context).requestFocus(new FocusNode());
