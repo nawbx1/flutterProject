@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/model/User.dart';
+import 'package:doctor_pro/ui/profile/profilclientmoral.dart';
 import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
 import 'package:http/http.dart' as http;
 import 'package:doctor_pro/constant/constant.dart';
@@ -31,10 +33,12 @@ class _OTPScreenState extends State<OTPScreen> {
   FocusNode fourthFocusNode = FocusNode();
   FocusNode fivethFocusNode = FocusNode();
   String OTPText = '';
+  UserBloc userBloc=new UserBloc();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
 
     loadingDialog() {
       showDialog(
@@ -163,7 +167,7 @@ class _OTPScreenState extends State<OTPScreen> {
                               border: InputBorder.none,
                             ),
                             onChanged: (v) {
-                              OTPText = v ;
+                              OTPText += v ;
                               FocusScope.of(context)
                                   .requestFocus(secondFocusNode);
                             },
@@ -349,24 +353,35 @@ class _OTPScreenState extends State<OTPScreen> {
   }
   Future<dynamic> verif() async{
     print(widget.user);
-    String myurl = "http://192.168.1.102:9089/user-service/keycloak/verifOtp/"+widget.user.id.toString()+"/"+OTPText;
-    var res ;
-    http.get(Uri.parse(myurl),
+    String myurl = apiUrl+"user-service/keycloak/verifyotp/"+widget.user.id.toString()+"/"+OTPText;
+    bool res= await userBloc.verifOTP(widget.user.id,OTPText);
+    if(res)
+      redirectTo();
+
+
+
+
+
+
+   /* http.get(Uri.parse(myurl),
 
         headers: {'Content-Type': 'application/json'})
         .then((response) {
       res = response.statusCode;
       print(response.body);
-      if (res.statusCode == 200) {
+      if (res == 200) {
         if (response.body != "") {
+          print(widget.user.role[0].name);
+          print(widget.user.role[0].name== "CLIENT_PHYSIQUE");
+          print("jjjjjjj ");
           if (widget.user.role[0].name == "CLIENT_PHYSIQUE") {
             Navigator.push(
                 context,
                 PageTransition(
                     duration: Duration(milliseconds: 600),
                     type: PageTransitionType.fade,
-                    child: ProfileClienPhysiquePage()));
-          } /*if(widget.user['role'] == "CLIENT_MORALE"){
+                    child: ProfileClienPhysiquePage(user: widget.user,)));
+          } *//*if(widget.user['role'] == "CLIENT_MORALE"){
             Navigator.push(
                 context,
                 PageTransition(
@@ -385,16 +400,50 @@ class _OTPScreenState extends State<OTPScreen> {
           }if(widget.user['role']=="PROFESSIONNEL_MORALE"){
 
 
-          }*/
+          }*//*
         }
       }
     }
-    );
+    );*/
 
     }
 
 
+redirectTo(){
+  if (widget.user.role[0].name == "CLIENT_PHYSIQUE") {
+    Navigator.push(
+        context,
+        PageTransition(
+            duration: Duration(milliseconds: 600),
+            type: PageTransitionType.fade,
+            child: ProfileClienPhysiquePage(user: widget.user,)));
+  } if(widget.user.role[0].name == "CLIENT_MORALE"){
+    Navigator.push(
+        context,
+        PageTransition(
+            duration: Duration(milliseconds: 600),
+            type: PageTransitionType.fade,
+            child: Profileclientmorale()));
 
+  }if (widget.user.role[0].name=="PROFESSIONNEL"){
+    Navigator.push(
+        context,
+        PageTransition(
+            duration: Duration(milliseconds: 600),
+            type: PageTransitionType.fade,
+            child: Profileclientmorale()));
+
+  }
+  if (widget.user.role[0].name==""){
+    Navigator.push(
+        context,
+        PageTransition(
+            duration: Duration(milliseconds: 600),
+            type: PageTransitionType.fade,
+            child: Profileclientmorale()));
+
+  }
+}
   }
 
 

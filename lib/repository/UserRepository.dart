@@ -23,8 +23,65 @@ class UserRepository{
 
   }
 
+  Future<Response>  updateUser(User user) async {
+    print("saveUser  .....  UserRepository "+User().toJsonNew(user).toString());
+    return await http.put(Uri.parse(apiUrl+'user-service/user/updateprofile'),
+        body: json.encode(User().toJsonNew(user)),
+        headers: {'Content-Type': 'application/json'});
 
- /* Future<dynamic> doRegister(User user) async {
+  }
+
+  Future<Response> verifOTP(int id, String otp) async{
+
+    String myurl = apiUrl+"user-service/keycloak/verifyotp/"+id.toString()+"/"+otp;
+  return  http.get(Uri.parse(myurl),
+
+        headers: {'Content-Type': 'application/json'});
+      /*  .then((response) {
+      res = response.statusCode;
+      print(response.body);
+      if (res == 200) {
+        if (response.body != "") {
+          print(widget.user.role[0].name);
+          print(widget.user.role[0].name== "CLIENT_PHYSIQUE");
+          print("jjjjjjj ");
+          if (widget.user.role[0].name == "CLIENT_PHYSIQUE") {
+            Navigator.push(
+                context,
+                PageTransition(
+                    duration: Duration(milliseconds: 600),
+                    type: PageTransitionType.fade,
+                    child: ProfileClienPhysiquePage(user: widget.user,)));
+          } if(widget.user.role[0].name == "CLIENT_MORALE"){
+            Navigator.push(
+                context,
+                PageTransition(
+                    duration: Duration(milliseconds: 600),
+                    type: PageTransitionType.fade,
+                    child: Profileclientmorale()));
+
+          }if (widget.user.role[0].name=="PROFESSIONNEL_PHYSIQUE"){
+            Navigator.push(
+                context,
+                PageTransition(
+                    duration: Duration(milliseconds: 600),
+                    type: PageTransitionType.fade,
+                    child: Profileclientmorale()));
+
+          }if(widget.user.role[0].name=="PROFESSIONNEL_MORALE"){
+
+
+          }
+        }
+      }
+    }
+    );*/
+
+  }
+
+
+
+/* Future<dynamic> doRegister(User user) async {
     String myurl = "http://192.168.1.102:9089/user-service/keycloak/save";
     print("do register " + user.toString());
     var res ,resOTP;
