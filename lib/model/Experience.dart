@@ -1,5 +1,10 @@
 import 'package:doctor_pro/model/Media.dart';
 
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'Experience.g.dart';
+@JsonSerializable()
 class Experience {
   final int id;
 
@@ -12,7 +17,17 @@ class Experience {
 
 
   Experience({this.id, this.name, this.description, this.media});
-  factory Experience.fromJson(Map<String, dynamic> jsonMap) {
+
+  factory Experience.fromJson(Map<String, dynamic> json) => _$ExperienceFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ExperienceToJson(this);
+
+  @override
+  String toString() {
+    return 'Experience{id: $id, name: $name, description: $description, media: $media}';
+  }
+
+/* factory Experience.fromJson(Map<String, dynamic> jsonMap) {
     return Experience(
         id: jsonMap['id'],
         name: jsonMap['name'],
@@ -38,6 +53,6 @@ class Experience {
 
     };return json ;
   }
-
+*/
 
 }

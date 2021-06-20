@@ -358,54 +358,6 @@ class _OTPScreenState extends State<OTPScreen> {
     if(res)
       redirectTo();
 
-
-
-
-
-
-   /* http.get(Uri.parse(myurl),
-
-        headers: {'Content-Type': 'application/json'})
-        .then((response) {
-      res = response.statusCode;
-      print(response.body);
-      if (res == 200) {
-        if (response.body != "") {
-          print(widget.user.role[0].name);
-          print(widget.user.role[0].name== "CLIENT_PHYSIQUE");
-          print("jjjjjjj ");
-          if (widget.user.role[0].name == "CLIENT_PHYSIQUE") {
-            Navigator.push(
-                context,
-                PageTransition(
-                    duration: Duration(milliseconds: 600),
-                    type: PageTransitionType.fade,
-                    child: ProfileClienPhysiquePage(user: widget.user,)));
-          } *//*if(widget.user['role'] == "CLIENT_MORALE"){
-            Navigator.push(
-                context,
-                PageTransition(
-                    duration: Duration(milliseconds: 600),
-                    type: PageTransitionType.fade,
-                    child: Profileclientmorale()));
-
-          }if (widget.user['role']=="PROFESSIONNEL_PHYSIQUE"){
-            Navigator.push(
-                context,
-                PageTransition(
-                    duration: Duration(milliseconds: 600),
-                    type: PageTransitionType.fade,
-                    child: Profileclientmorale()));
-
-          }if(widget.user['role']=="PROFESSIONNEL_MORALE"){
-
-
-          }*//*
-        }
-      }
-    }
-    );*/
-
     }
 
 

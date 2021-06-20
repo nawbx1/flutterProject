@@ -1,6 +1,13 @@
+import 'dart:convert';
+
+import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
+import 'package:doctor_pro/bloc/UserBloc.dart';
+import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/pages/login_signup/signup.dart';
 import 'package:doctor_pro/ui/auth/sign_up_page.dart';
+import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class LoginPage extends StatefulWidget  {
   @override
@@ -25,7 +32,8 @@ class LoginPageState extends State<LoginPage> {
   String phoneIsoCode;
   String ErrorMessage1="";
   bool showPassword = true;
-
+User user=new User();
+  UserBloc userBloc=new UserBloc();
   void checkFullname(String v) {
     if (v == '')
       setState(() {
@@ -57,9 +65,6 @@ class LoginPageState extends State<LoginPage> {
         });
     }
   }
-
-
-
 
   void checkPassword(String v) {
     if (v == '')
@@ -143,15 +148,17 @@ class LoginPageState extends State<LoginPage> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
-                keyboardType: TextInputType.number,
-                controller: phoneController,
+
+                controller: emailController,
+
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
-                  checkPhone(value);
+                  checkEmail(value);
+                  user.email=emailController.text;
                 },
 
                 decoration: InputDecoration(
-                  hintText: "Tel",
+                  hintText: "Email",
                   prefixIcon: Icon(Icons.phone),
                   // TextStyle(color: verifPhone ? Colors.black : Colors.red),
                   errorText: verifPhone ? null : '',
@@ -193,6 +200,7 @@ class LoginPageState extends State<LoginPage> {
                 controller: passwordController,
                 onChanged: (value) {
                   checkPassword(value);
+                  user.password=passwordController.text;
                 },
 
                 obscureText: true,
@@ -208,15 +216,15 @@ class LoginPageState extends State<LoginPage> {
                   filled: true,
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color:verifPassword ? Colors.black : Colors.red, width: 1.5),
+                    borderSide: BorderSide(color:Colors.black , width: 1.5),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color:verifPassword ? Colors.black : Colors.red, width: 1.5),
+                    borderSide: BorderSide(color: Colors.black , width: 1.5),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color:verifPassword ? Colors.black : Colors.red, width: 1.5),
+                    borderSide: BorderSide(color:Colors.black , width: 1.5),
                   ),
                 ),
               ),
@@ -253,12 +261,13 @@ class LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(30.0),
                 onTap: () {
                   checkPassword(passwordController.text);
-                  checkPhone(phoneController.text);
+                  checkEmail(emailController.text);
                   setState(() {
                     ErrorMessage1="";
                   });
-                  if (verifName &&
-                      verifPassword) ;
+
+                    singin(user);
+
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(60.0, 15.0, 60.0, 15.0),
@@ -316,6 +325,82 @@ class LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+
+
+
+  singin(User user) async{
+   String accessToken = await userBloc.login(user);
+   if(accessToken!=null){
+     postLoginRedirect();
+   }
+  }
+  postLoginRedirect() async {
+
+print("postLoginRedirect .................................. ");
+    User storedUser = await TokenStorageBloc.getStoredUser() ;
+print("postLoginRedirect 222222222222222222222222222222222 .................................. ");
+      if (storedUser.role[0].name == "CLIENT_PHYSIQUE") {
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.fade,
+                child: ProfileClienPhysiquePage(user: storedUser,)));
+      }
+      /*if(storedUser.role[0].name == "CLIENT_MORALE"){
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.fade,
+                child: Profileclientmorale()));
+
+      }if (storedUser.role[0].name=="PROFESSIONNEL"){
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.fade,
+                child: Profileclientmorale()));
+
+      }
+      if (storedUser.role[0].name==""){
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.fade,
+                child: Profileclientmorale()));
+
+      }*/
+
+  }
+
+
+  bool validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    return (!regex.hasMatch(value)) ? false : true;
+  }
+  void checkEmail(String v) {
+    if (v == '')
+      setState(() {
+        verifEmail = false;
+      });
+    else
+    if(validateEmail(v))
+      setState(() {
+        verifEmail = true;
+      });
+    else
+      setState(() {
+        verifEmail = false;
+      });
+  }
+
+
 }
 
 class CurvePainter extends CustomPainter {

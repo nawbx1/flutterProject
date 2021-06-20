@@ -7,6 +7,11 @@ import 'package:doctor_pro/model/Profile.dart';
 import 'package:doctor_pro/model/Role.dart';
 import 'package:doctor_pro/model/Speciality.dart';
 import 'dart:convert' as Json;
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'User.g.dart';
+@JsonSerializable()
 class User{
 
    int  id ;
@@ -45,6 +50,18 @@ class User{
       this.profile,
       this.role,
       this.address});
+
+
+   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+
+   @override
+   String toString() {
+     return 'User { id: $id, keycloak: $keycloak, username: $username, password: $password, email: $email, phone: $phone, cin: $cin, name: $name, verified: $verified, matriculeFiscale: $matriculeFiscale, OTP: $OTP, speciality: $speciality, profile: $profile, role: $role, address: $address}';
+   }
+/*
 
   factory User.fromJson(Map<String, dynamic> jsonMap) {
     List<Speciality>s =[];
@@ -119,6 +136,7 @@ class User{
   String toString() {
     return 'User { id: $id, keycloak: $keycloak, username: $username, password: $password, email: $email, phone: $phone, cin: $cin, name: $name, verified: $verified, matriculeFiscale: $matriculeFiscale, OTP: $OTP, speciality: $speciality, profile: $profile, role: $role, address: $address}';
   }
+*/
 
 
 

@@ -2,6 +2,10 @@
 import 'package:doctor_pro/model/Region.dart';
 
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'Address.g.dart';
+@JsonSerializable()
 class Address {
   final int id;
 
@@ -15,7 +19,17 @@ class Address {
   Address({this.id, this.region, this.street, this.zipCode, this.longitude,
     this.lattitude});
 
-  factory Address.fromJson(Map<String, dynamic> json) {
+
+  factory Address.fromJson(Map<String, dynamic> json) => _$AddressFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AddressToJson(this);
+
+  @override
+  String toString() {
+    return 'Address{id: $id, region: $region, street: $street, zipCode: $zipCode, longitude: $longitude, lattitude: $lattitude}';
+  }
+
+/*factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
       id: json['id'],
       street: json['street'],
@@ -40,5 +54,5 @@ class Address {
 
 
     };return json ;
-  }
+  }*/
 }

@@ -3,6 +3,10 @@ import 'package:doctor_pro/model/Experience.dart';
 import 'package:doctor_pro/model/ImageModel.dart';
 import 'package:doctor_pro/model/Region.dart';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'Profile.g.dart';
+@JsonSerializable()
 class Profile {
 
 
@@ -14,7 +18,18 @@ class Profile {
   final int id;
   final String information;
 
-/*
+
+  factory Profile.fromJson(Map<String, dynamic> json) => _$ProfileFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProfileToJson(this);
+
+
+  @override
+  String toString() {
+    return 'Profile{competences: $competences, experiences: $experiences, regions: $regions, coverImage: $coverImage, profileImage: $profileImage, id: $id, information: $information}';
+  }
+
+  /*
   Profile.name(this.competences, this.experiences, this.regions,
       this.coverImage, this.profileImage, this.id, this.information);
 
@@ -26,6 +41,7 @@ class Profile {
   });
 
 
+/*
 
   factory Profile.fromJson(Map<String, dynamic> jsonMap) {
    var c=[];
@@ -92,6 +108,7 @@ class Profile {
       'regions':reg,
     };return json ;
   }
+*/
 
 
 }

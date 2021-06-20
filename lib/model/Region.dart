@@ -1,7 +1,12 @@
 
 
-import 'package:doctor_pro/model/Gouvernerat.dart';
 
+import 'package:doctor_pro/model/Gouvernorat.dart';
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'Region.g.dart';
+@JsonSerializable()
 class Region{
   final int id;
 
@@ -13,7 +18,14 @@ class Region{
 
   Region({this.id, this.gouvernorat, this.region});
 
-  factory Region.fromJson(Map<String, dynamic> json) {
+
+
+  factory Region.fromJson(Map<String, dynamic> json) => _$RegionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RegionToJson(this);
+
+
+/* factory Region.fromJson(Map<String, dynamic> json) {
     return Region(
       id: json['id'],
       region: json['region'],
@@ -32,5 +44,5 @@ class Region{
 
     };
   }
-
+*/
 }
