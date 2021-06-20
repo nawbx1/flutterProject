@@ -1,5 +1,11 @@
 import 'package:doctor_pro/model/Speciality.dart';
 
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'InterventionType.g.dart';
+
+@JsonSerializable()
 class InterventionType {
   final int id;
 
@@ -9,7 +15,17 @@ class InterventionType {
 
 
   InterventionType({this.id, this.name});
-  factory InterventionType.fromJson(Map<String, dynamic> jsonMap) {
+
+  factory InterventionType.fromJson(Map<String, dynamic> json) => _$InterventionTypeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InterventionTypeToJson(this);
+
+  @override
+  String toString() {
+    return 'InterventionType{id: $id, name: $name}';
+  }
+
+/* factory InterventionType.fromJson(Map<String, dynamic> jsonMap) {
     return InterventionType(
         id: jsonMap['id'],
         name: jsonMap['name']
@@ -28,5 +44,5 @@ class InterventionType {
 
     };return json ;
   }
-
+*/
 }

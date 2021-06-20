@@ -43,6 +43,11 @@ class Media {
   }
 }
 */
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'Media.g.dart';
+@JsonSerializable()
 class Media {
   int id;
   String type; //image video
@@ -51,6 +56,12 @@ class Media {
   Media({this.id, this.type, this.fileName});
 
 
+  factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MediaToJson(this);
+
+
+/*
 
   factory Media.fromJson(Map<String, dynamic> jsonMap) {
     return Media(
@@ -68,6 +79,7 @@ class Media {
     });
   }
 
+*/
 
 
 

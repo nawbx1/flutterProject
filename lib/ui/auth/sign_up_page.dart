@@ -169,7 +169,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
   void doRegister(User user) async {
     print("user doregister");
     print(user.toString());
-    dynamic usersaved  = await userBloc.saveuser(user) ;
+    User usersaved  = await userBloc.saveuser(user) ;
 
     print("usersaved ==> " + usersaved.toString() );
 

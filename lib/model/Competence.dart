@@ -1,14 +1,31 @@
 import 'package:doctor_pro/model/InterventionType.dart';
 
+
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'Competence.g.dart';
+@JsonSerializable()
 class Competence {
-  final int id;
+   int id;
   
-  final int position ;
+   int position ;
 
-  final List<InterventionType> interventionType ;
-
+   InterventionType interventionType ;
 
   Competence({this.id, this.position, this.interventionType});
+
+
+  factory Competence.fromJson(Map<String, dynamic> json) => _$CompetenceFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompetenceToJson(this);
+
+   @override
+  String toString() {
+    return 'Competence{id: $id, position: $position, interventionType: $interventionType}';
+  }
+
+/*
   factory Competence.fromJson(Map<String, dynamic> jsonMap) {
     return Competence(
         id: jsonMap['id'],
@@ -33,6 +50,7 @@ class Competence {
 
     };return json ;
   }
+*/
 
 }
 

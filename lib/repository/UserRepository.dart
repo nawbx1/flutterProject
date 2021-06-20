@@ -15,18 +15,28 @@ class UserRepository{
 
   }
 
+
+  Future<Response>  login(User user) async {
+    print("login  UserRepository "+user.toJson().toString());
+    return await http.post(Uri.parse(apiUrl+'user-service/keycloak/login'),
+        body: json.encode(user.toJson()),
+        headers: {'Content-Type': 'application/json'});
+
+  }
+
+
   Future<Response>  saveUser(User user) async {
-    print("saveUser  .....  UserRepository "+User().toJsonNew(user).toString());
+    print("saveUser  .....  UserRepository "+user.toJson().toString());
     return await http.post(Uri.parse(apiUrl+'user-service/keycloak/save'),
-        body: json.encode(User().toJsonNew(user)),
+        body: json.encode(user.toJson()),
         headers: {'Content-Type': 'application/json'});
 
   }
 
   Future<Response>  updateUser(User user) async {
-    print("saveUser  .....  UserRepository "+User().toJsonNew(user).toString());
+    print("saveUser  .....  UserRepository "+user.toJson().toString());
     return await http.put(Uri.parse(apiUrl+'user-service/user/updateprofile'),
-        body: json.encode(User().toJsonNew(user)),
+        body: json.encode(user.toJson()),
         headers: {'Content-Type': 'application/json'});
 
   }

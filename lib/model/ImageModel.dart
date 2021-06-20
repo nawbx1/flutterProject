@@ -1,3 +1,9 @@
+
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'ImageModel.g.dart';
+@JsonSerializable()
 class ImageModel {
   final int id;
 
@@ -11,7 +17,12 @@ class ImageModel {
 
   ImageModel({this.id, this.name, this.type, this.picByte, this.uploadDir});
 
-  factory ImageModel.fromJson(Map<String, dynamic> jsonMap) {
+
+  factory ImageModel.fromJson(Map<String, dynamic> json) => _$ImageModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ImageModelToJson(this);
+
+/*factory ImageModel.fromJson(Map<String, dynamic> jsonMap) {
     return ImageModel(
         id: jsonMap['id'],
         name: jsonMap['name'],
@@ -31,5 +42,5 @@ class ImageModel {
 
     }; return json;
   }
-
+*/
 }

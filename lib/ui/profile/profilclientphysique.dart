@@ -36,7 +36,7 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
     fullnameController.text=widget.user.username;
     emailController.text=widget.user.email;
     phoneController.text=widget.user.phone.toString();
-    cinController.text=widget.user.cin as String;
+    cinController.text=widget.user.cin.toString();
     matriculeController.text=widget.user.matriculeFiscale;
     }
   }
