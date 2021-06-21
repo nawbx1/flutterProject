@@ -128,7 +128,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 PageTransition(
                     type: PageTransitionType.rightToLeft,
                     duration: Duration(milliseconds: 600),
-                    child: Speciality()));
+                    child: SpecialityPage()));
           },
           child: Container(
             color: Colors.white,

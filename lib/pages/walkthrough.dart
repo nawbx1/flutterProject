@@ -54,7 +54,7 @@ class _WalkthroughState extends State<Walkthrough> {
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.rightToLeft,
-                                    child: Speciality()));
+                                    child: SpecialityPage()));
                           },
                           child: Container(
                             width: ((width) / 2),

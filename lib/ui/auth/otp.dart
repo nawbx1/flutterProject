@@ -84,7 +84,7 @@ class _OTPScreenState extends State<OTPScreen> {
               PageTransition(
                   duration: Duration(milliseconds: 600),
                   type: PageTransitionType.fade,
-                  child: Speciality())));
+                  child: SpecialityPage())));
     }
 
     return Container(

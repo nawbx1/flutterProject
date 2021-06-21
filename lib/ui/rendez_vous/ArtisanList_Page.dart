@@ -1,66 +1,73 @@
 import 'dart:convert';
 
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/Region.dart';
 import 'package:doctor_pro/pages/artisan/drawer_1.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:doctor_pro/ui/rendez_vous/ArtisanProfile_Page.dart';
-
+import 'package:doctor_pro/bloc/RegionBloc.dart';
 import 'package:doctor_pro/ui/rendez_vous/ArtisanCalendar_Page.dart';
 import 'package:http/http.dart' as http;
 class ArtisanList extends StatefulWidget {
   final String speciality;
-  final List<dynamic>regions ;
+  final int gouvernoratId ;
 
-  const ArtisanList({Key key, @required this.speciality,@required this.regions}) : super(key: key);
+  const ArtisanList({Key key, @required this.speciality,@required this.gouvernoratId}) : super(key: key);
 
   @override
   _ArtisanListState createState() => _ArtisanListState();
 }
 
 class _ArtisanListState extends State<ArtisanList> {
+
+  RegionBloc regionBloc=new RegionBloc();
   final String Url = apiUrl+"user-service/user/all";
 
   List<dynamic> ArtisanList=[];
 
-  List<String> labels = [];
+  //List<Region> labels = [];
   int currentIndex = 0;
 
-  void fetchUserBySpeciality() async {
+  List<Region> regions ;
 
-    var result = await http.get(Uri.parse(Url));
+  getRegions()async{
+    print("getRegions");
+    print(widget.gouvernoratId);
+    print("getRegions 2222222222");
+    regions = await regionBloc.fetchRegionByGouvernoartId(widget.gouvernoratId);
+      setState(() {
+        regions;
+      });
+
+  }
+  void fetchUserBySpeciality(String region) async {
+
+    var result = await http.get(Uri.parse(Url));//algo de recommandation
     if(result.statusCode==200){
       setState(() {
         ArtisanList= json.decode(result.body);
       });
     }
   }
+
   @override
   void initState(){
     super.initState();
-    fetchUserBySpeciality() ;
-    labels.add('Tous');
-    for(int i=0;i<widget.regions.length;i++)
-      labels.add(widget.regions[i]['region'].toString());
+    getRegions();
+    print("list region after");
+    print(regions);
+    //fetchUserBySpeciality() ;//algo
+    /*labels.add('Tous');
+    for(int i=0;i<regions.length;i++)
+      labels.add(regions[i].region.toString());*/
   }
   @override
   Widget build(BuildContext context) {
     drawer: Drawer1().build(context);
     iconTheme: IconThemeData(color: blackColor);
-    getbyRegions(item)  async  {
-      print(item);
-      var result = await http.get(Uri.parse(apiUrl+"user-service/user/speciality/"+widget.speciality)); // get userr by region algo system
-      if(result.statusCode==200){
-        setState(() {
-          ArtisanList = json.decode(result.body);
-
-        });
-      }
-
-
-    }
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -131,18 +138,18 @@ class _ArtisanListState extends State<ArtisanList> {
                               height: (height * 0.15) - 50.0,
                               width: double.infinity,
                               child: ListView.builder(
-                                itemCount: labels.length,
+                                itemCount: regions.length,
                                 scrollDirection: Axis.horizontal,
                                 physics: BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  final item = labels[index];
+                                  final item = regions[index];
                                   return InkWell(
                                     onTap: () {
-                                      getbyRegions(item);
+                                      fetchUserBySpeciality(item.region);
 
                                     },
                                     child: Padding(
-                                      padding: (index == labels.length - 1)
+                                      padding: (index == regions.length - 1)
                                           ? EdgeInsets.symmetric(horizontal: 5.0)
                                           : EdgeInsets.only(left: 5.0),
                                       child: Container(
@@ -158,7 +165,7 @@ class _ArtisanListState extends State<ArtisanList> {
                                                 width: 0.7, color: primaryColor),
                                           ),
                                           child: Text(
-                                            item,
+                                            item.region,
                                             style: primaryColorNormalBoldTextStyle,
                                           ),
                                         ),

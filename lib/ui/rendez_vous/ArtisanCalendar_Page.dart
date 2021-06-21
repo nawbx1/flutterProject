@@ -6,7 +6,6 @@ import 'package:page_transition/page_transition.dart';
 
 import '../../pages/artisan/drawer_1.dart';
 import 'package:doctor_pro/ui/rendez_vous/AppointmentDetails_Page.dart';
-
 import 'package:doctor_pro/ui/rendez_vous/ArtisanProfile_Page.dart';
 
 const labelMonth = 'Month';
@@ -33,40 +32,41 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
   String selectedTimeEnd = '';
   String selectedDate;
   String monthString;
-  final morningSlotList = [
-    {'time': '8:00 '},
-    {'time': '8:30 '},
-    {'time': '9:00 '},
-    {'time': '9:30 '},
-    {'time': '10:00 '},
-    {'time': '10:30 '},
-    {'time': '11:00 '},
-    {'time': '11:30 '}
-  ];
+  bool showConfirmButtom=false;
 
-  final afternoonSlotList = [
-    {'time': '12:30 '},
-    {'time': '13:00 '},
-    {'time': '14:30 '},
-    {'time': '15:00 '},
-    {'time': '15:30 '},
-    {'time': '16:00 '},
-    {'time': '16:30 '},
-    {'time': '17:00 '},
-    {'time': '17:30 '},
-    {'time': '18:00 '},
-    {'time': '18:30 '},
-    {'time': '19:00 '}
-  ];
-
-  final eveningSlotList = [
-    {'time': '20:00 '},
-    {'time': '20:30 '},
-    {'time': '21:00 '},
-    {'time': '21:30 '},
-    {'time': '22:00 '},
-    {'time': '22:30 PM'}
-  ];
+  Map<String,dynamic> timeCalendar ={'morningSlotList' : [
+  {'time': '8:00 ','value':80,'isSelected':false},
+  {'time': '8:30 ','value':85 ,'isSelected':false},
+  {'time': '9:00 ','value':90,'isSelected':false},
+  {'time': '9:30 ','value':95,'isSelected':false},
+{'time': '10:00 ','value':100,'isSelected':false},
+{'time': '10:30 ','value':105,'isSelected':false},
+{'time': '11:00 ','value':110,'isSelected':false},
+{'time': '11:30 ','value':115,'isSelected':false}
+],'afternoonSlotList' : [
+{'time': '12:30 ','value':125,'isSelected':false},
+{'time': '13:00 ','value':130,'isSelected':false},
+{'time': '13:30 ','value':135,'isSelected':false},
+{'time': '14:00 ','value':140,'isSelected':false},
+{'time': '14:30 ','value':145,'isSelected':false},
+{'time': '15:00 ','value':150,'isSelected':false},
+{'time': '15:30 ','value':155,'isSelected':false},
+{'time': '16:00 ','value':160,'isSelected':false},
+{'time': '16:30 ','value':165,'isSelected':false},
+{'time': '17:00 ','value':170,'isSelected':false},
+{'time': '17:30 ','value':175,'isSelected':false},
+{'time': '18:00 ','value':180,'isSelected':false}
+],'eveningSlotList' : [
+{'time': '18:30 ','value':185,'isSelected':false},
+{'time': '19:00 ','value':190,'isSelected':false},
+{'time': '19:30 ','value':195,'isSelected':false},
+{'time': '20:00 ','value':200,'isSelected':false},
+{'time': '20:30 ','value':205,'isSelected':false},
+{'time': '21:00 ','value':210,'isSelected':false},
+{'time': '21:30 ','value':215,'isSelected':false},
+{'time': '22:00 ','value':220,'isSelected':false},
+{'time': '22:30 ','value':225,'isSelected':false}
+]} ;
 
   DateTime firstDate;
   DateTime lastDate;
@@ -93,10 +93,76 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
   RangeValues selectedDateCount;
 
   List<DateTime> initialSelectedDates;
+int count=0;
+int startHour=0;
+  int endHour=0;
+ void initialiserTimeCalender(){
+print('initialiserTimeCalenderinitialiserTimeCalender');
+}
+void  initialiserSelectedTimeCalenderItems(int first,int last){
+print('initialiserSelectedTimeCalenderItems');
+print(first);
+print(last);
+print('value of first  = '+first.toString() +'     value of last  = '+last.toString());
+    for(dynamic value in timeCalendar.values){
+
+      for(dynamic value2 in value) {
+
+        if(int.parse(value2['value'].toString()).compareTo(first) >=0 &&
+            int.parse(value2['value'].toString()).compareTo(last) <= 0 ){
+          print('value of first  = '+first.toString());
+          setState(() {
+            value2['isSelected'] = true;
+          });}
+        else {
+          setState(() {
+            value2['isSelected'] = false;
+          });
+        }
+      }
+    }
+
+}
+
+  updateTimeSelected(int timeSelected){
+   print('updateTimeSelected');
+   print(timeSelected);
+   setState(() {
+     count+=1;
+   });
+
+
+if( count.compareTo(1)==0){
+  setState(() {
+    startHour=timeSelected;
+  });
+
+print('value of startHour if loula');
+  print(startHour);
+  print('value of endHour');
+  print(endHour);
+  initialiserSelectedTimeCalenderItems(startHour,startHour);
+  showConfirmButtom=false;
+}
+     // i
+else if(count.compareTo(2)==0) {
+  setState(() {
+    endHour = timeSelected;// timeSelected !=null ? timeSelected: 0;
+    count=0;
+  });
+  initialiserSelectedTimeCalenderItems(startHour,endHour);
+  showConfirmButtom=true;
+  print('value of startHour if theniya');
+  print(startHour);
+  print('value of endHour');
+  print(endHour);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+
     const int days = 30;
     firstDate = toDateMonthYear(DateTime.now());
     lastDate = toDateMonthYear(firstDate.add(Duration(days: days - 1)));
@@ -170,10 +236,8 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
           style: appBarTitleTextStyle,
         ),
 
-
-
       ),
-      bottomNavigationBar: (selectedTime== '')
+      bottomNavigationBar: (!showConfirmButtom)
           ? Container(
         height: 0.0,
         width: 0.0,
@@ -241,7 +305,7 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Hero(
+                       /* Hero(
                           tag: widget.artisanImage,
                           child: Container(
                             width: 76.0,
@@ -264,7 +328,7 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                         widthSpace,
                         Expanded(
                           child: Column(
@@ -435,15 +499,16 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
           ),
         ),
         Wrap(
-          children: morningSlotList
+          children: timeCalendar['morningSlotList']
               .map(
                 (e) => Padding(
               padding: EdgeInsets.only(
                   left: fixPadding * 2.0, bottom: fixPadding * 2.0),
               child: InkWell(
-                onTap: () {
+                onTap: () {//ontap verif value
                   setState(() {
                     selectedTime = e['time'];
+                    updateTimeSelected(int.parse(e['value'].toString()));
                   });
                 },
                 child: Container(
@@ -453,19 +518,18 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(width: 0.7, color: greyColor),
-                    color: (e['time'] == selectedTime)
+                    color: (e['isSelected'] ==true ) //  (e['value'] >=startHour &&e['value'] <=endHour )
                         ? primaryColor
                         : whiteColor,
                   ),
                   child: Text(e['time'],
-                      style: (e['time'] == selectedTime)
+                      style: (e['isSelected'] ==true )//(e['value'] >=startHour &&e['value'] <=endHour )
                           ? whiteColorNormalTextStyle
                           : primaryColorNormalTextStyle),
                 ),
               ),
             ),
-          )
-              .toList()
+          ).toList()
               .cast<Widget>(),
         ),
 
@@ -496,15 +560,16 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
           ),
         ),
         Wrap(
-          children: afternoonSlotList
+          children: timeCalendar['afternoonSlotList']
               .map(
                 (e) => Padding(
               padding: EdgeInsets.only(
                   left: fixPadding * 2.0, bottom: fixPadding * 2.0),
               child: InkWell(
-                onTap: () {
+                onTap: () {//ksjdksjfks
                   setState(() {
                     selectedTime = e['time'];
+                    updateTimeSelected(int.parse(e['value'].toString()));
                   });
                 },
                 child: Container(
@@ -514,12 +579,12 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(width: 0.7, color: greyColor),
-                    color: (e['time'] == selectedTime)
+                    color: (e['isSelected'] ==true )//(e['value'] >=startHour &&e['value'] <=endHour )
                         ? primaryColor
                         : whiteColor,
                   ),
                   child: Text(e['time'],
-                      style: (e['time'] == selectedTime)
+                      style:(e['isSelected'] ==true )// (e['value'] >=startHour &&e['value'] <=endHour )
                           ? whiteColorNormalTextStyle
                           : primaryColorNormalTextStyle),
                 ),
@@ -556,7 +621,7 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
           ),
         ),
         Wrap(
-          children: eveningSlotList
+          children: timeCalendar['eveningSlotList']
               .map(
                 (e) => Padding(
               padding: EdgeInsets.only(
@@ -565,6 +630,7 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
                 onTap: () {
                   setState(() {
                     selectedTime = e['time'];
+                    updateTimeSelected(int.parse(e['value'].toString()));
                   });
                 },
                 child: Container(
@@ -574,12 +640,12 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(width: 0.7, color: greyColor),
-                    color: (e['time'] == selectedTime)
+                    color: (e['isSelected'] ==true)
                         ? primaryColor
                         : whiteColor,
                   ),
                   child: Text(e['time'],
-                      style: (e['time'] == selectedTime)
+                      style: (e['isSelected'] ==true)
                           ? whiteColorNormalTextStyle
                           : primaryColorNormalTextStyle),
                 ),
