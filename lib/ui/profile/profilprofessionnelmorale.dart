@@ -1,13 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:doctor_pro/bloc/RegionBloc.dart';
+import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
+import 'package:doctor_pro/bloc/UserBloc.dart';
+import 'package:doctor_pro/model/Gouvernorat.dart';
+import 'package:doctor_pro/model/Region.dart';
+import 'package:doctor_pro/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 class Profileprofessionnelmorale extends StatefulWidget {
   Profileprofessionnelmorale({Key key , @required this.user }) : super(key: key);
-  Map<String,dynamic> user;
+  User user;
   @override
   ProfileprofessionnelmoraleState createState() => ProfileprofessionnelmoraleState();
 }
@@ -18,21 +25,98 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
   static TextEditingController fullnameController = TextEditingController();
   static TextEditingController phoneController = TextEditingController();
   static TextEditingController cinController = TextEditingController();
+  static TextEditingController specialiteController = TextEditingController();
 
   static TextEditingController matriculeController = TextEditingController();
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
-
+  UserBloc userBloc=new UserBloc();
+  String userRole;
   @override
   void initState() {
-    fullnameController.text=widget.user['username'];
-    matriculeController.text=widget.user['matricule_fiscale'];
-
-    phoneController.text=widget.user['phone'];
-    emailController.text=widget.user['email'];
+    initProfile();
+    fetchGouvernorat();
     super.initState();
   }
 
+
+  RegionBloc regionBloc =new RegionBloc();
+
+  List<Gouvernorat>GouvList = [];
+
+  String selectedGouv="Ariana" ;
+  String selectedRegion="Ariana Ville" ;
+
+  List<DropdownMenuItem> _dropdownMenuItems=[];
+  List<DropdownMenuItem> _dropdownMenuRegionItems=[];
+
+
+
+  void fetchGouvernorat() async {
+    List<Gouvernorat> GouvList2 = await regionBloc.fetchGouvernorat();
+    setState(() {
+      GouvList= GouvList2;
+      GouvList.forEach((element) {
+        print("element "+ element.toString());
+        _dropdownMenuItems.add(
+          DropdownMenuItem(child: Text(element.name),value: element,),
+        );
+      });
+
+    });
+
+  }
+
+
+  List<Region> regions=[] ;
+
+  getRegions(id)async{
+    print("getRegions");
+    print(id);
+    _dropdownMenuRegionItems=[];
+    regions = await regionBloc.fetchRegionByGouvernoartId(id);
+    setState(() {
+      regions;
+
+      regions.forEach((element) {
+        _dropdownMenuRegionItems.add(
+          DropdownMenuItem(child: Text(element.region),value: element,),
+        );
+      });
+
+
+    });
+
+  }
+
+
+  initProfile() async{
+    print("initProfile");
+    print(widget.user);
+
+    if(widget.user==null)
+    {
+        userRole= await TokenStorageBloc.getStoredUserRole();
+        print('userRole');
+        print(userRole);
+        widget.user = await userBloc.getUserByKeycloak();
+
+    }
+
+
+      fullnameController.text=widget.user.name;
+      emailController.text=widget.user.email;
+      phoneController.text=widget.user.phone.toString();
+      cinController.text=widget.user.cin.toString();
+      matriculeController.text=widget.user.matriculeFiscale;
+      specialiteController.text=widget.user.speciality[0].name ;
+    if(widget.user.address!=null && widget.user.address.region!=null && widget.user.address.region.gouvernorat!=null )
+    {
+      selectedGouv = widget.user.address.region.gouvernorat.name ;
+      selectedRegion = widget.user.address.region.region ;
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -118,6 +202,9 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
                                   new Flexible(
                                     child: new TextField(
                                       controller: phoneController,
+                                      onChanged: ((v) =>{
+                                        widget.user.phone= int.parse(phoneController.text)
+                                      } ),
                                       enabled: !_status,
                                     ),
                                   ),
@@ -134,7 +221,7 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'RNE',
+                                        'Matricule Fiscale',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -158,6 +245,10 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
                                       enabled: !_status,
                                       autofocus: !_status,
                                       controller: matriculeController,
+
+                                      onChanged: ((v) =>{
+                                        widget.user.matriculeFiscale= matriculeController.text
+                                      } ),
                                     ),
                                   ),
                                 ],
@@ -173,7 +264,27 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'Raison social',
+                                        'Raison Social',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Spécialité',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -194,9 +305,12 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
                                       decoration: const InputDecoration(
 
                                       ),
-                                      enabled: !_status,
+                                      enabled: false,
                                       autofocus: !_status,
-                                      controller: fullnameController,
+                                      controller: specialiteController,
+                                      onChanged: ((v) =>{
+                                        widget.user.speciality[0].name=specialiteController.text
+                                      } ),
                                     ),
                                   ),
                                 ],
@@ -231,11 +345,106 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
                                     child: new TextField(
                                       controller: emailController,
                                       enabled: !_status,
+                                      onChanged: ((v) =>{
+                                        widget.user.email=emailController.text
+                                      } ),
                                     ),
                                   ),
                                 ],
                               )),
 
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    child:   SearchableDropdown.single(
+                                      readOnly:_status,
+                                      items:_dropdownMenuItems ,
+                                      label: Padding(
+                                        padding: EdgeInsets.only(left: 15, top: 5),
+                                        child: Text(
+                                          "Gouvernorat",
+                                          // style: AppTheme.dropdownTitleStyle,
+                                        ),
+                                      ),
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(selectedGouv),
+                                      ),
+
+                                      searchHint: "Gouvernorat",
+                                      onChanged: (value) {
+                                        setState(() {
+
+                                          /*selectedSpeciality=value;
+                                          Speciality s = value ;
+
+                                          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+
+                                          */
+
+                                          getRegions(value.id);
+                                          selectedGouv = value.name ;
+
+                                        });
+
+                                      },
+                                      onClear: (){
+                                        setState(() {
+                                          // selectedGouv = null;
+                                        });
+                                      },
+                                      isExpanded: true,
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Expanded(
+
+                                    child:   SearchableDropdown.single(
+                                      readOnly:_status,
+                                      items:_dropdownMenuRegionItems ,
+
+                                      label: Padding(
+                                        padding: EdgeInsets.only(left: 15, top: 5),
+                                        child: Text(
+                                          "Région",
+                                          // style: AppTheme.dropdownTitleStyle,
+                                        ),
+                                      ),
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(selectedRegion),
+                                      ),
+
+                                      searchHint: "Région",
+                                      onChanged: (value) {
+                                        setState(() {
+
+                                          /*selectedSpeciality=value;
+                                          Speciality s = value ;
+                                          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+                                          */
+                                          widget.user.address.region = value ;
+
+
+                                        });
+
+                                      },
+                                      onClear: (){
+                                        setState(() {
+                                          // selectedGouv = null;
+                                        });
+                                      },
+                                      isExpanded: true,
+                                    ),
+                                    flex: 2,
+                                  ),
+                                ],
+                              )),
 
                           !_status ? _getActionButtons() : new Container(),
                         ],
@@ -272,6 +481,7 @@ class ProfileprofessionnelmoraleState extends State<Profileprofessionnelmorale>
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () {
+                      userBloc.updateuser(widget.user);
                       setState(() {
                         _status = true;
                         FocusScope.of(context).requestFocus(new FocusNode());

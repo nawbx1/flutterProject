@@ -267,7 +267,7 @@ void initState() {
       TextFormField(
           onChanged: (value) {
 
-            verif();FlutterStepperPage.user.username=fullnameController.text;
+            verif();FlutterStepperPage.user.name=fullnameController.text;
           },
 
           textInputAction: TextInputAction.next,
@@ -433,7 +433,7 @@ void initState() {
         TextFormField(
             onChanged: (value) {
 
-              verif();FlutterStepperPage.user.username=fullnameController.text;
+              verif();FlutterStepperPage.user.name=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -533,7 +533,7 @@ void initState() {
         TextFormField(
             onChanged: (value) {
 
-              verif();FlutterStepperPage.user.username=fullnameController.text;
+              verif();FlutterStepperPage.user.name=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,
@@ -611,40 +611,46 @@ void initState() {
             ),
             controller: emailController),
         SizedBox(height: 20),
-    SearchableDropdown.single(
+        SearchableDropdown.single(
 
-    items:_dropdownMenuItems ,
-    label: Padding(
-    padding: EdgeInsets.only(left: 15, top: 5),
-    child: Text(
-    "Specialité",
-   // style: AppTheme.dropdownTitleStyle,
-    ),
-    ),
-    hint: Padding(
-    padding: const EdgeInsets.all(2.0),
-    child: Text("Choisissez le type de votre specialité"),
-    ),
-    clearIcon: Icon(
-    Icons.delete,
-    color: Colors.red,
-    ),
-    searchHint: "Choisissez le type de Specialite",
-    onChanged: (value) {
-    setState(() {
-      print("value selectedSpeciality "+value);
-      FlutterStepperPage.user.speciality=[value];
-      selectedSpeciality=value;
-    });
+        items:_dropdownMenuItems ,
+        label: Padding(
+        padding: EdgeInsets.only(left: 15, top: 5),
+        child: Text(
+        "Specialité",
+       // style: AppTheme.dropdownTitleStyle,
+        ),
+        ),
+        hint: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Text("Choisissez le type de votre specialité"),
+        ),
+        clearIcon: Icon(
+        Icons.delete,
+        color: Colors.red,
+        ),
+        searchHint: "Choisissez le type de Specialite",
+        onChanged: (value) {
+        setState(() {
 
-    },
-    onClear: (){
-    setState(() {
-    selectedSpeciality = null;
-    });
-    },
-    isExpanded: true,
-    ),
+          selectedSpeciality=value;
+          Speciality s = value ;
+
+          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+
+
+
+
+        });
+
+        },
+        onClear: (){
+        setState(() {
+        selectedSpeciality = null;
+        });
+        },
+        isExpanded: true,
+        ),
 
 
       ],
@@ -734,7 +740,7 @@ void initState() {
             onChanged: (value) {
 
               verif();checkEmail(value);
-              FlutterStepperPage.user.username=fullnameController.text;
+              FlutterStepperPage.user.name=fullnameController.text;
             },
             textInputAction: TextInputAction.next,
             maxLines: 1,

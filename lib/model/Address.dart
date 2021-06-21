@@ -9,7 +9,7 @@ part 'Address.g.dart';
 class Address {
   final int id;
 
-  final Region region;
+  Region region;
   final String street;
   final int zipCode;
 
