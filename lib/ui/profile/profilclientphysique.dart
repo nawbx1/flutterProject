@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 class ProfileClienPhysiquePage extends StatefulWidget {
   ProfileClienPhysiquePage({Key key , @required this.user }) : super(key: key);
    User user;
+
   @override
   ProfileClienPhysiquePageState createState() => ProfileClienPhysiquePageState();
 }
@@ -25,13 +27,20 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
   UserBloc userBloc=new UserBloc();
+  String userRole;
   @override
   void initState() {
     initProfile();
     super.initState();
   }
 
-  initProfile(){
+  initProfile() async{
+    print("initProfile");
+    userRole= await TokenStorageBloc.getStoredUserRole();
+    print('userRole');
+    print(userRole);
+    widget.user = await userBloc.getUserByKeycloak();
+
     if(widget.user!=null){
     fullnameController.text=widget.user.username;
     emailController.text=widget.user.email;

@@ -2,26 +2,25 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:doctor_pro/constant/constant.dart';
-import 'package:doctor_pro/pages/artisan/artisan_list.dart';
 
-import 'package:doctor_pro/pages/screens.dart';
+import 'package:doctor_pro/ui/rendez_vous/ArtisanList_Page.dart';
 import 'package:flutter/material.dart';
 import 'package:group_list_view/group_list_view.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:http/http.dart' as http;
 
-import 'drawer_1.dart';
+import '../../pages/artisan/drawer_1.dart';
 
 
-class gouvernorat extends StatefulWidget {
+class Gouvernorat extends StatefulWidget {
   final String  intervention;
   final String speciality  ;
-  const gouvernorat({Key key, @required this.intervention,@required this.speciality }) : super(key: key);
+  const Gouvernorat({Key key, @required this.intervention,@required this.speciality }) : super(key: key);
   @override
-  _gouvernoratState createState() => _gouvernoratState();
+  _GouvernoratState createState() => _GouvernoratState();
 }
 
-class _gouvernoratState extends State<gouvernorat> {
+class _GouvernoratState extends State<Gouvernorat> {
 
 
   List<dynamic>GouvList = [];
@@ -71,7 +70,7 @@ class _gouvernoratState extends State<gouvernorat> {
       ),
       body:
       Column(
-          children: <Widget>[
+        children: <Widget>[
           Stack(
             children: [
               Container(

@@ -12,6 +12,7 @@ import 'package:doctor_pro/pages/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:doctor_pro/ui/rendez_vous/Speciality_Page.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({Key key , @required this.user }) : super(key: key);

@@ -5,7 +5,6 @@ import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/Role.dart';
 import 'package:doctor_pro/model/Speciality.dart';
-import 'package:doctor_pro/pages/login_signup/profilclient.dart';
 import 'package:doctor_pro/repository/UserRepository.dart';
 
 import 'package:doctor_pro/ui/auth/sign_up_page.dart';

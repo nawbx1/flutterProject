@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/model/User.dart';
-import 'package:doctor_pro/pages/login_signup/signup.dart';
 import 'package:doctor_pro/ui/auth/sign_up_page.dart';
 import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
 import 'package:flutter/material.dart';
@@ -338,16 +337,17 @@ User user=new User();
   postLoginRedirect() async {
 
 print("postLoginRedirect .................................. ");
-    User storedUser = await TokenStorageBloc.getStoredUser() ;
+    String userRole = await TokenStorageBloc.getStoredUserRole() ;
 print("postLoginRedirect 222222222222222222222222222222222 .................................. ");
-      if (storedUser.role[0].name == "CLIENT_PHYSIQUE") {
+      if (userRole == "CLIENT_PHYSIQUE") {
         Navigator.push(
             context,
             PageTransition(
                 duration: Duration(milliseconds: 600),
                 type: PageTransitionType.fade,
-                child: ProfileClienPhysiquePage(user: storedUser,)));
+                child: ProfileClienPhysiquePage()));
       }
+
       /*if(storedUser.role[0].name == "CLIENT_MORALE"){
         Navigator.push(
             context,

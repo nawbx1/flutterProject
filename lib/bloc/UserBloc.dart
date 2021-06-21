@@ -16,6 +16,28 @@ class UserBloc{
 
   UserBloc();
 
+  Future<User> getUserByKeycloak() async {
+
+    String keycloak = await TokenStorageBloc.getStoredUserKeycloak();
+
+    print('getUserByKeycloak');
+    print(keycloak);
+    if(keycloak ==null )
+      return null ;
+    var result = await userRepository.getUserByKeycloak(keycloak) ;
+
+    String source = Utf8Decoder().convert(result.bodyBytes);
+
+    User user = User.fromJson(json.decode(source.toString()));
+print('usesssssssssssssr');
+    print(user.toString());
+
+    return result.statusCode==200? user : null;
+  }
+
+
+
+
   Future<List<Speciality>> fetchSpeciality() async {
     print("userbloc   ..... ");
 
@@ -58,7 +80,7 @@ print(result2.toString());
     user = responseLogin.user;
     print("login user UserBloc "  + user.toString());
     print("status code "  +  result.statusCode.toString() );
-    TokenStorageBloc.storeUser(user);
+    TokenStorageBloc.storeUserDetails(user);
     TokenStorageBloc.storeAccessToken(responseLogin.accessToken);
 
     return responseLogin.accessToken;
