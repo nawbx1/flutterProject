@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:doctor_pro/bloc/RegionBloc.dart';
 import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/bloc/UserBloc.dart';
+import 'package:doctor_pro/model/Gouvernorat.dart';
+import 'package:doctor_pro/model/Region.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 class ProfileClienPhysiquePage extends StatefulWidget {
   ProfileClienPhysiquePage({Key key , @required this.user }) : super(key: key);
@@ -28,26 +32,95 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
   final FocusNode myFocusNode = FocusNode();
   UserBloc userBloc=new UserBloc();
   String userRole;
+
+
   @override
   void initState() {
     initProfile();
+    fetchGouvernorat();
     super.initState();
+  }
+
+
+  RegionBloc regionBloc =new RegionBloc();
+
+  List<Gouvernorat>GouvList = [];
+
+  String selectedGouv="Ariana" ;
+  String selectedRegion="Ariana Ville" ;
+
+  List<DropdownMenuItem> _dropdownMenuItems=[];
+  List<DropdownMenuItem> _dropdownMenuRegionItems=[];
+
+
+
+  void fetchGouvernorat() async {
+    List<Gouvernorat> GouvList2 = await regionBloc.fetchGouvernorat();
+    setState(() {
+      GouvList= GouvList2;
+      GouvList.forEach((element) {
+        print("element "+ element.toString());
+        _dropdownMenuItems.add(
+          DropdownMenuItem(child: Text(element.name),value: element,),
+        );
+      });
+
+    });
+
+  }
+
+
+  List<Region> regions=[] ;
+
+  getRegions(id)async{
+    print("getRegions");
+    print(id);
+    _dropdownMenuRegionItems=[];
+    regions = await regionBloc.fetchRegionByGouvernoartId(id);
+    setState(() {
+      regions;
+
+      regions.forEach((element) {
+        _dropdownMenuRegionItems.add(
+          DropdownMenuItem(child: Text(element.region),value: element,),
+        );
+      });
+
+
+    });
+
   }
 
   initProfile() async{
     print("initProfile");
-    userRole= await TokenStorageBloc.getStoredUserRole();
-    print('userRole');
-    print(userRole);
-    widget.user = await userBloc.getUserByKeycloak();
+    print(widget.user);
+    User u =  await userBloc.getUserByKeycloak();
+    print(u.toString());
 
-    if(widget.user!=null){
-    fullnameController.text=widget.user.username;
-    emailController.text=widget.user.email;
-    phoneController.text=widget.user.phone.toString();
-    cinController.text=widget.user.cin.toString();
-    matriculeController.text=widget.user.matriculeFiscale;
+    if(widget.user==null)
+    {
+      userRole= await TokenStorageBloc.getStoredUserRole();
+      print('userRole');
+      print(userRole);
+      print('widget.user');
+      widget.user = u ;
+      print(widget.user);
+
     }
+
+      fullnameController.text=widget.user.name;
+      emailController.text=widget.user.email;
+      phoneController.text=widget.user.phone.toString();
+      cinController.text=widget.user.cin.toString();
+      matriculeController.text=widget.user.matriculeFiscale;
+      if(widget.user.address!=null && widget.user.address.region!=null && widget.user.address.region.gouvernorat!=null )
+        {
+          selectedGouv = widget.user.address.region.gouvernorat.name ;
+          selectedRegion = widget.user.address.region.region ;
+        }
+
+
+
   }
   @override
   Widget build(BuildContext context) {
@@ -273,57 +346,92 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Expanded(
-                                    child: Container(
-                                      child: new Text(
-                                        'Pin Code',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
+                                    child:   SearchableDropdown.single(
+                                      readOnly:_status,
+                                      items:_dropdownMenuItems ,
+                                      label: Padding(
+                                        padding: EdgeInsets.only(left: 15, top: 5),
+                                        child: Text(
+                                          "Gouvernorat",
+                                          // style: AppTheme.dropdownTitleStyle,
+                                        ),
                                       ),
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(selectedGouv),
+                                      ),
+
+                                      searchHint: "Gouvernorat",
+                                      onChanged: (value) {
+                                        setState(() {
+
+                                          /*selectedSpeciality=value;
+                                          Speciality s = value ;
+
+                                          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+
+                                          */
+
+                                          getRegions(value.id);
+                                          selectedGouv = value.name ;
+
+                                        });
+
+                                      },
+                                      onClear: (){
+                                        setState(() {
+                                          // selectedGouv = null;
+                                        });
+                                      },
+                                      isExpanded: true,
                                     ),
                                     flex: 2,
                                   ),
                                   Expanded(
-                                    child: Container(
-                                      child: new Text(
-                                        'State',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
+
+                                    child:   SearchableDropdown.single(
+                                      readOnly:_status,
+                                      items:_dropdownMenuRegionItems ,
+
+                                      label: Padding(
+                                        padding: EdgeInsets.only(left: 15, top: 5),
+                                        child: Text(
+                                          "Région",
+                                          // style: AppTheme.dropdownTitleStyle,
+                                        ),
                                       ),
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(selectedRegion),
+                                      ),
+
+                                      searchHint: "Région",
+                                      onChanged: (value) {
+                                        setState(() {
+
+                                          /*selectedSpeciality=value;
+                                          Speciality s = value ;
+                                          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+                                          */
+                                          widget.user.address.region = value ;
+
+
+                                        });
+
+                                      },
+                                      onClear: (){
+                                        setState(() {
+                                          // selectedGouv = null;
+                                        });
+                                      },
+                                      isExpanded: true,
                                     ),
                                     flex: 2,
                                   ),
                                 ],
                               )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Flexible(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(right: 10.0),
-                                      child: new TextField(
-                                        decoration: const InputDecoration(
-                                            hintText: "Enter Pin Code"),
-                                        enabled: !_status,
-                                      ),
-                                    ),
-                                    flex: 2,
-                                  ),
-                                  Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Enter State"),
-                                      enabled: !_status,
-                                    ),
-                                    flex: 2,
-                                  ),
-                                ],
-                              )),
+
+
                           !_status ? _getActionButtons() : new Container(),
                         ],
                       ),

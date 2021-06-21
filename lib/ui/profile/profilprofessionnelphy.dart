@@ -1,13 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:doctor_pro/bloc/RegionBloc.dart';
+import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
+import 'package:doctor_pro/bloc/UserBloc.dart';
+import 'package:doctor_pro/model/Gouvernorat.dart';
+import 'package:doctor_pro/model/Region.dart';
+import 'package:doctor_pro/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 class Profileprofessionnelphy extends StatefulWidget {
   Profileprofessionnelphy({Key key , @required this.user }) : super(key: key);
-  Map<String,dynamic> user;
+  User user;
   @override
   ProfileprofessionnelphyState createState() => ProfileprofessionnelphyState();
 }
@@ -18,20 +25,98 @@ class ProfileprofessionnelphyState extends State<Profileprofessionnelphy>
   static TextEditingController fullnameController = TextEditingController();
   static TextEditingController phoneController = TextEditingController();
   static TextEditingController cinController = TextEditingController();
+  static TextEditingController specialiteController = TextEditingController();
+
 
   static TextEditingController matriculeController = TextEditingController();
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
+  UserBloc userBloc=new UserBloc();
+  String userRole;
 
   @override
   void initState() {
-    fullnameController.text=widget.user['username'];
-    cinController.text=widget.user['cin'];
-    phoneController.text=widget.user['phone'];
-    emailController.text=widget.user['email'];
+    initProfile();
+    fetchGouvernorat();
     super.initState();
   }
 
+
+  RegionBloc regionBloc =new RegionBloc();
+
+  List<Gouvernorat>GouvList = [];
+
+  String selectedGouv="Ariana" ;
+  String selectedRegion="Ariana Ville" ;
+
+  List<DropdownMenuItem> _dropdownMenuItems=[];
+  List<DropdownMenuItem> _dropdownMenuRegionItems=[];
+
+
+
+  void fetchGouvernorat() async {
+    List<Gouvernorat> GouvList2 = await regionBloc.fetchGouvernorat();
+    setState(() {
+      GouvList= GouvList2;
+      GouvList.forEach((element) {
+        print("element "+ element.toString());
+        _dropdownMenuItems.add(
+          DropdownMenuItem(child: Text(element.name),value: element,),
+        );
+      });
+
+    });
+
+  }
+
+
+  List<Region> regions=[] ;
+
+  getRegions(id)async{
+    print("getRegions");
+    print(id);
+    _dropdownMenuRegionItems=[];
+    regions = await regionBloc.fetchRegionByGouvernoartId(id);
+    setState(() {
+      regions;
+
+      regions.forEach((element) {
+        _dropdownMenuRegionItems.add(
+          DropdownMenuItem(child: Text(element.region),value: element,),
+        );
+      });
+
+
+    });
+
+  }
+
+
+  initProfile() async{
+    print("initProfile");
+
+    if(widget.user==null)
+    {
+      userRole= await TokenStorageBloc.getStoredUserRole();
+      print('userRole');
+      print(userRole);
+      widget.user = await userBloc.getUserByKeycloak();
+
+    }
+      fullnameController.text=widget.user.name;
+      emailController.text=widget.user.email;
+      phoneController.text=widget.user.phone.toString();
+      cinController.text=widget.user.cin.toString();
+      matriculeController.text=widget.user.matriculeFiscale;
+      specialiteController.text=widget.user.speciality[0].name ;
+    if(widget.user.address!=null && widget.user.address.region!=null && widget.user.address.region.gouvernorat!=null )
+    {
+      selectedGouv = widget.user.address.region.gouvernorat.name ;
+      selectedRegion = widget.user.address.region.region ;
+    }
+
+
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -117,6 +202,9 @@ class ProfileprofessionnelphyState extends State<Profileprofessionnelphy>
                                   new Flexible(
                                     child: new TextField(
                                       controller: phoneController,
+                                      onChanged: ((v) =>{
+                                        widget.user.phone= int.parse(phoneController.text)
+                                      } ),
                                       enabled: !_status,
                                     ),
                                   ),
@@ -157,6 +245,10 @@ class ProfileprofessionnelphyState extends State<Profileprofessionnelphy>
                                       enabled: !_status,
                                       autofocus: !_status,
                                       controller: cinController,
+
+                                      onChanged: ((v) =>{
+                                        widget.user.cin= int.parse(cinController.text)
+                                      } ),
                                     ),
                                   ),
                                 ],
@@ -196,6 +288,9 @@ class ProfileprofessionnelphyState extends State<Profileprofessionnelphy>
                                       enabled: !_status,
                                       autofocus: !_status,
                                       controller: fullnameController,
+                                      onChanged: ((v) =>{
+                                        widget.user.username=fullnameController.text
+                                      } ),
                                     ),
                                   ),
                                 ],
@@ -230,7 +325,102 @@ class ProfileprofessionnelphyState extends State<Profileprofessionnelphy>
                                     child: new TextField(
                                       controller: emailController,
                                       enabled: !_status,
+                                      onChanged: ((v) =>{
+                                        widget.user.email=emailController.text
+                                      } ),
                                     ),
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    child:   SearchableDropdown.single(
+                                      readOnly:_status,
+                                      items:_dropdownMenuItems ,
+                                      label: Padding(
+                                        padding: EdgeInsets.only(left: 15, top: 5),
+                                        child: Text(
+                                          "Gouvernorat",
+                                          // style: AppTheme.dropdownTitleStyle,
+                                        ),
+                                      ),
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(selectedGouv),
+                                      ),
+
+                                      searchHint: "Gouvernorat",
+                                      onChanged: (value) {
+                                        setState(() {
+
+                                          /*selectedSpeciality=value;
+                                          Speciality s = value ;
+
+                                          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+
+                                          */
+
+                                          getRegions(value.id);
+                                          selectedGouv = value.name ;
+
+                                        });
+
+                                      },
+                                      onClear: (){
+                                        setState(() {
+                                          // selectedGouv = null;
+                                        });
+                                      },
+                                      isExpanded: true,
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Expanded(
+
+                                    child:   SearchableDropdown.single(
+                                      readOnly:_status,
+                                      items:_dropdownMenuRegionItems ,
+
+                                      label: Padding(
+                                        padding: EdgeInsets.only(left: 15, top: 5),
+                                        child: Text(
+                                          "Région",
+                                          // style: AppTheme.dropdownTitleStyle,
+                                        ),
+                                      ),
+                                      hint: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Text(selectedRegion),
+                                      ),
+
+                                      searchHint: "Région",
+                                      onChanged: (value) {
+                                        setState(() {
+
+                                          /*selectedSpeciality=value;
+                                          Speciality s = value ;
+                                          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
+                                          */
+                                          widget.user.address.region = value ;
+
+
+                                        });
+
+                                      },
+                                      onClear: (){
+                                        setState(() {
+                                          // selectedGouv = null;
+                                        });
+                                      },
+                                      isExpanded: true,
+                                    ),
+                                    flex: 2,
                                   ),
                                 ],
                               )),
@@ -271,6 +461,7 @@ class ProfileprofessionnelphyState extends State<Profileprofessionnelphy>
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () {
+                      userBloc.updateuser(widget.user);
                       setState(() {
                         _status = true;
                         FocusScope.of(context).requestFocus(new FocusNode());

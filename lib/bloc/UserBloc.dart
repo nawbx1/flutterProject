@@ -29,7 +29,7 @@ class UserBloc{
     String source = Utf8Decoder().convert(result.bodyBytes);
 
     User user = User.fromJson(json.decode(source.toString()));
-print('usesssssssssssssr');
+    print('usesssssssssssssr');
     print(user.toString());
 
     return result.statusCode==200? user : null;
@@ -66,6 +66,7 @@ print(result2.toString());
 
 
     print("status code "  +  result.statusCode.toString() );
+
     return result.statusCode==200? u : null;
   }
 
@@ -78,9 +79,9 @@ print(result2.toString());
     ResponseLogin responseLogin = ResponseLogin.fromJson(json.decode(source.toString())) ;
     print(responseLogin.toString());
     user = responseLogin.user;
-    print("login user UserBloc "  + user.toString());
+    print("login user UserBloc "  + responseLogin.user.toString());
     print("status code "  +  result.statusCode.toString() );
-    TokenStorageBloc.storeUserDetails(user);
+    TokenStorageBloc.storeUserDetails(responseLogin.user);
     TokenStorageBloc.storeAccessToken(responseLogin.accessToken);
 
     return responseLogin.accessToken;

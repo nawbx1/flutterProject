@@ -8,13 +8,13 @@ import 'package:json_annotation/json_annotation.dart';
 part 'Region.g.dart';
 @JsonSerializable()
 class Region{
-  final int id;
+  int id;
 
 
-  final Gouvernorat gouvernorat;
+  Gouvernorat gouvernorat;
 
 
-  final String region;
+  String region;
 
   Region({this.id, this.gouvernorat, this.region});
 

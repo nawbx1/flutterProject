@@ -4,7 +4,10 @@ import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/auth/sign_up_page.dart';
+import 'package:doctor_pro/ui/profile/profilclientmoral.dart';
 import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
+import 'package:doctor_pro/ui/profile/profilprofessionnelmorale.dart';
+import 'package:doctor_pro/ui/profile/profilprofessionnelphy.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -347,8 +350,34 @@ print("postLoginRedirect 222222222222222222222222222222222 .....................
                 type: PageTransitionType.fade,
                 child: ProfileClienPhysiquePage()));
       }
+      else  if (userRole == "CLIENT_MORAL") {
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.fade,
+                child: Profileclientmorale()));
+      }
 
-      /*if(storedUser.role[0].name == "CLIENT_MORALE"){
+      else  if (userRole == "GESTIONNAIRE") {
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.fade,
+                child: Profileprofessionnelmorale()));
+      }
+
+      else  if (userRole == "PROFESSIONNEL") {
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 600),
+                type: PageTransitionType.fade,
+                child: Profileprofessionnelphy()));
+      }
+
+    /*if(storedUser.role[0].name == "CLIENT_MORALE"){
         Navigator.push(
             context,
             PageTransition(

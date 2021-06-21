@@ -5,6 +5,8 @@ import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/profile/profilclientmoral.dart';
 import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
+import 'package:doctor_pro/ui/profile/profilprofessionnelmorale.dart';
+import 'package:doctor_pro/ui/profile/profilprofessionnelphy.dart';
 import 'package:http/http.dart' as http;
 import 'package:doctor_pro/constant/constant.dart';
 
@@ -370,32 +372,33 @@ redirectTo(){
             duration: Duration(milliseconds: 600),
             type: PageTransitionType.fade,
             child: ProfileClienPhysiquePage(user: widget.user,)));
-  } if(widget.user.role[0].name == "CLIENT_MORALE"){
+  }  else  if (widget.user.role[0].name  == "CLIENT_MORAL") {
     Navigator.push(
         context,
         PageTransition(
             duration: Duration(milliseconds: 600),
             type: PageTransitionType.fade,
-            child: Profileclientmorale()));
-
-  }if (widget.user.role[0].name=="PROFESSIONNEL"){
-    Navigator.push(
-        context,
-        PageTransition(
-            duration: Duration(milliseconds: 600),
-            type: PageTransitionType.fade,
-            child: Profileclientmorale()));
-
+            child: Profileclientmorale(user: widget.user,)));
   }
-  if (widget.user.role[0].name==""){
+
+  else  if (widget.user.role[0].name  == "GESTIONNAIRE") {
+    Navigator.push(
+        context,
+          PageTransition(
+            duration: Duration(milliseconds: 600),
+            type: PageTransitionType.fade,
+            child: Profileprofessionnelmorale(user: widget.user,)));
+  }
+
+  else  if (widget.user.role[0].name  == "PROFESSIONNEL") {
     Navigator.push(
         context,
         PageTransition(
             duration: Duration(milliseconds: 600),
             type: PageTransitionType.fade,
-            child: Profileclientmorale()));
-
+            child: Profileprofessionnelphy(user: widget.user,)));
   }
+
 }
   }
 
