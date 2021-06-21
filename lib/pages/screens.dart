@@ -1,4 +1,4 @@
-export 'speciality/speciality.dart';
+export '../ui/rendez_vous/Speciality_Page.dart';
 
 export 'review/review.dart';
 

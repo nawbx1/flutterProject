@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/model/User.dart';
-import 'package:doctor_pro/pages/artisan/gouvernorat.dart';
+import 'package:doctor_pro/ui/rendez_vous/Gouvernorat_Page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;

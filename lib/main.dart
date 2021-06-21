@@ -1,7 +1,4 @@
 import 'package:doctor_pro/appBehaviour/my_behaviour.dart';
-import 'package:doctor_pro/pages/login_signup/log.dart';
-import 'package:doctor_pro/pages/login_signup/myapp.dart';
-import 'package:doctor_pro/pages/login_signup/profil/profilpage.dart';
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:doctor_pro/ui/auth/login_page.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +40,9 @@ class MyApp extends StatelessWidget {
           child: child,
         );
       },
-
-
-      home: LoginPage (),
-
+     //  home: LoginPage (),
+      home: Speciality(),
     );
   }
+
 }

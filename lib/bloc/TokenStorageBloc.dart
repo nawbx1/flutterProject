@@ -5,10 +5,11 @@ import 'dart:convert';
 
 class TokenStorageBloc{
 
-  static void  storeUser(User user) async {
+  static void  storeUserDetails(User user) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('user', user.toJson().toString());
-
+    prefs.setInt('userId', user.id);
+    prefs.setString('userKeycloak', user.keycloak.toString());
+    prefs.setString('userRole', user.role[0].name.toString());
 
   }
   static void storeAccessToken(String token) async {
@@ -16,21 +17,21 @@ class TokenStorageBloc{
     prefs.setString('accessToken', token);
 
   }
-  static Future<User> getStoredUser() async {
+  static Future<int> getStoredUserId() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    JsonCodec codec = new JsonCodec();
-    print("getStoredUser 000000000000000");
-    var sss= prefs.getString('user') ;
-    print("user from storage");
-    print(sss);
-    var s = codec.decode(sss);
-    print("getStoredUser 222222222222");
-    print(s);
-    User user= User.fromJson( s ) ;
+
+    return await prefs.getInt("userId");
+  }
 
 
+  static Future<String> getStoredUserKeycloak() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.getString("userKeycloak");
+  }
 
-    return user;
+  static Future<String> getStoredUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.getString("userRole");
   }
 
   static Future<String> getStoredAccessToken() async {
