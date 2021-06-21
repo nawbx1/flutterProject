@@ -1,34 +1,33 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/Speciality.dart';
 import 'package:doctor_pro/pages/artisan/drawer_1.dart';
-
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:doctor_pro/ui/rendez_vous/TypeDintervention.dart';
 import 'package:http/http.dart' as http;
 
 
-class Speciality extends StatefulWidget {
+class SpecialityPage extends StatefulWidget {
   @override
-  _SpecialityState createState() => _SpecialityState();
+  _SpecialityPageState createState() => _SpecialityPageState();
 
 }
 
-class _SpecialityState extends State<Speciality> {
-  List<dynamic> specialityList=[];
-
+class _SpecialityPageState extends State<SpecialityPage> {
+  List<Speciality> specialityList=[];
+UserBloc userBloc=new UserBloc();
 
   void fetchSpeciality() async {
 
-    var result = await http.get(Uri.parse(apiUrl+'user-service/speciality/all'),headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
+    List<Speciality> specialityList2 = await userBloc.fetchSpeciality();
 
-    if(result.statusCode==200){
       setState(() {
-        specialityList= json.decode(result.body);
+        specialityList= specialityList2;
       });
-    }
+
   }
   @override
   void initState(){
@@ -108,14 +107,14 @@ class _SpecialityState extends State<Speciality> {
                       duration: Duration(milliseconds: 800),
                       type: PageTransitionType.fade,
                       child: TypeDintervention(
-                        interventions: item['interventionTypes'],
-                        speciality : item['name'],
+                        interventions: item.interventionTypes,
+                        speciality : item.name,
                       ),
                     ),
                   );
                 },
                 child: Hero(
-                  tag: item['name'],
+                  tag: item.name,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -137,7 +136,7 @@ class _SpecialityState extends State<Speciality> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(23.0),
                             image: DecorationImage(
-                              image: NetworkImage(apiUrl+'user-service/uploads/specialities/'+item['media']['fileName']),
+                              image: NetworkImage(apiUrl+'user-service/uploads/specialities/'+item.media.fileName),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -145,7 +144,7 @@ class _SpecialityState extends State<Speciality> {
                         ),
                         SizedBox(height: 10.0),
                         Text(
-                          item['name'],
+                          item.name,
                           style: blackNormalBoldTextStyle,
                           textAlign: TextAlign.center,
                         ),

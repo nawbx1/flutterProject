@@ -1,40 +1,38 @@
-import 'dart:convert';
-import 'dart:io';
 
+
+import 'package:doctor_pro/bloc/RegionBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/Gouvernorat.dart';
 
 import 'package:doctor_pro/ui/rendez_vous/ArtisanList_Page.dart';
 import 'package:flutter/material.dart';
-import 'package:group_list_view/group_list_view.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:http/http.dart' as http;
 
 import '../../pages/artisan/drawer_1.dart';
 
 
-class Gouvernorat extends StatefulWidget {
+class GouvernoratPage extends StatefulWidget {
   final String  intervention;
   final String speciality  ;
-  const Gouvernorat({Key key, @required this.intervention,@required this.speciality }) : super(key: key);
+  const GouvernoratPage({Key key, @required this.intervention,@required this.speciality }) : super(key: key);
   @override
-  _GouvernoratState createState() => _GouvernoratState();
+  _GouvernoratPageState createState() => _GouvernoratPageState();
 }
 
-class _GouvernoratState extends State<Gouvernorat> {
+class _GouvernoratPageState extends State<GouvernoratPage> {
+
+  RegionBloc regionBloc =new RegionBloc();
 
 
-  List<dynamic>GouvList = [];
+  List<Gouvernorat>GouvList = [];
 
 
   void fetchGouvernorat() async {
-
-    var result = await http.get(Uri.parse(apiUrl+'user-service/region/gouvernorat/all'),headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
-
-    if(result.statusCode==200){
+    List<Gouvernorat> GouvList2 = await regionBloc.fetchGouvernorat();
       setState(() {
-        GouvList= json.decode(result.body);
+        GouvList= GouvList2;
       });
-    }
+
   }
   @override
   void initState(){
@@ -103,7 +101,7 @@ class _GouvernoratState extends State<Gouvernorat> {
                         child: ListTile(
                           contentPadding:
                           EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
-                          title: Text(GouvList[index]['name']),
+                          title: Text(GouvList[index].name),
                           trailing: Icon(Icons.arrow_forward),
                         ),
                       ),
@@ -116,7 +114,7 @@ class _GouvernoratState extends State<Gouvernorat> {
                           type: PageTransitionType.fade,
                           child: ArtisanList(
                               speciality: widget.speciality,
-                              regions:GouvList[index]['regions']
+                              gouvernoratId:GouvList[index].id
                           ),
                         ),
                       );

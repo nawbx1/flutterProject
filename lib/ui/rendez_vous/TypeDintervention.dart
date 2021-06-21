@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/InterventionType.dart';
 import 'package:doctor_pro/ui/rendez_vous/Gouvernorat_Page.dart';
 
 import 'package:doctor_pro/pages/screens.dart';
@@ -14,7 +15,7 @@ import '../../pages/artisan/drawer_1.dart';
 
 
 class TypeDintervention extends StatefulWidget {
-  final List  <dynamic> interventions ;
+  final List<InterventionType> interventions ;
   final String speciality  ;
   const TypeDintervention({Key key, @required this.interventions,@required this.speciality }) : super(key: key);
   @override
@@ -102,15 +103,15 @@ class _TypeDinterventionState extends State<TypeDintervention> {
                     PageTransition(
                       duration: Duration(milliseconds: 800),
                       type: PageTransitionType.fade,
-                      child: Gouvernorat(
+                      child: GouvernoratPage(
                         speciality: widget.speciality ,
-                        intervention: item['name']
+                        intervention: item.name
                       ),
                     ),
                   );
                 },
                 child: Hero(
-                  tag: item['name'],
+                  tag: item.name,
                   child: Container(
                     decoration: BoxDecoration(
                       color:Colors.white,
@@ -141,7 +142,7 @@ class _TypeDinterventionState extends State<TypeDintervention> {
                         // ),
                         // SizedBox(height: 10.0),
                         Text(
-                        item['name'],
+                        item.name,
                           style: blackNormalBoldTextStyle,
                           textAlign: TextAlign.center,
                         ),
