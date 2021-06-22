@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-String  apiUrl='http://192.168.1.9:9089/';
+String  apiUrl='http://192.168.1.13:9089/';
 
 Color scaffoldBgColor = Color(0xFFFAF9F7);
 Color primaryColor = Color(0xFF6979F8);
