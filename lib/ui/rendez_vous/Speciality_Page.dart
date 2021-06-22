@@ -118,7 +118,7 @@ UserBloc userBloc=new UserBloc();
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(17.0),
+                     borderRadius: BorderRadius.circular(17.0),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
                             blurRadius: 1.0,
@@ -130,15 +130,16 @@ UserBloc userBloc=new UserBloc();
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 75,
-                          height: 75,
+                        Expanded(
+                          child: Container(
+
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(23.0),
                             image: DecorationImage(
                               image: NetworkImage(apiUrl+'user-service/uploads/specialities/'+item.media.fileName),
                               fit: BoxFit.cover,
                             ),
+                          ),
                           ),
 
                         ),
