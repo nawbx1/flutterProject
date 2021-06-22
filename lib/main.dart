@@ -43,7 +43,9 @@ class MyApp extends StatelessWidget {
       },
      //  home: LoginPage (),
       //home: SpecialityPage(),
-      home:CompetanceList()
+      //home:CompetanceList()
+      home: SpecialityPage(),
+      //home:LoginPage()
     );
   }
 
