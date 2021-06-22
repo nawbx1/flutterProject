@@ -1,6 +1,7 @@
 import 'package:doctor_pro/appBehaviour/my_behaviour.dart';
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:doctor_pro/ui/auth/login_page.dart';
+import 'package:doctor_pro/ui/util/Competence_DraggableList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
       },
      //  home: LoginPage (),
       //home: SpecialityPage(),
-      home:LoginPage()
+      home:CompetanceList()
     );
   }
 

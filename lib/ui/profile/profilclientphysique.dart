@@ -41,18 +41,12 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
     super.initState();
   }
 
-
   RegionBloc regionBloc =new RegionBloc();
-
   List<Gouvernorat>GouvList = [];
-
   String selectedGouv="Ariana" ;
   String selectedRegion="Ariana Ville" ;
-
   List<DropdownMenuItem> _dropdownMenuItems=[];
   List<DropdownMenuItem> _dropdownMenuRegionItems=[];
-
-
 
   void fetchGouvernorat() async {
     List<Gouvernorat> GouvList2 = await regionBloc.fetchGouvernorat();
@@ -522,15 +516,5 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
       },
     );
   }
-  getuser() async {
-    var result = await http.get(Uri.parse('http://192.168.1.102:9089/user-service/getuserbyid'),headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
-    print('dddd');
-    if(result.statusCode==200){
 
-       var usert=json.decode(result.body);
-       setState(() {
-         fullnameController.text=usert['username'];
-       });
-      }
-  }
 }
