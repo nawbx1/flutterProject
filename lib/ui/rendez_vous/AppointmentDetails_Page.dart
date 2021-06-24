@@ -15,6 +15,7 @@ import 'package:doctor_pro/pages/key/key.dart';
 import 'package:doctor_pro/ui/rendez_vous/ArtisanProfile_Page.dart';
 
 import 'package:doctor_pro/ui/rendez_vous/Speciality_Page.dart';
+import 'package:doctor_pro/ui/util/NotificationDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
@@ -51,9 +52,19 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
   getCurrentUserId()async{
     currentUserId= await TokenStorageBloc.getStoredUserId();
+    setState(() {
+      currentUserId ;
+      print('currentUserId   ' + currentUserId.toString()) ;
+
+    });
   }
 
   saveAppointment()async{
+    appointment.appointmentPK.clientId=currentUserId ; //currentUserId;
+    setState(() {
+      appointment ;
+
+    });
     Appointment savedAppointment= await appointmentBloc.save(appointment);
    /* if(savedAppointment!=null)
       successOrderDialog('félicitation! ','le rendez-vous a été enregistrer');
@@ -86,7 +97,6 @@ Address address=new Address();
     appointmentPK.startDate=finalDateDebut;
       appointmentPK.endDate=finalDateFin;
       appointmentPK.professionnelId=widget.professionel.id;
-      appointmentPK.clientId= 7; //currentUserId;
     appointment.title=widget.interventionType.name;
     address.region=widget.region;
     appointment.appointmentPK=appointmentPK;
@@ -230,6 +240,7 @@ print(widget.date);
               borderRadius: BorderRadius.circular(15.0),
               onTap: () {
                 saveAppointment();
+
                 //successOrderDialog();
               },
               child: Container(

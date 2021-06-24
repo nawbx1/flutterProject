@@ -335,7 +335,7 @@ User user=new User();
 
 
   singin(User user) async{
-   String accessToken = await userBloc.login(user);
+   String accessToken = await userBloc.login(context,user);
    if(accessToken!=null){
      postLoginRedirect();
    }

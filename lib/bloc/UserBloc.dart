@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/model/Competence.dart';
 import 'package:doctor_pro/model/InterventionType.dart';
@@ -93,7 +94,7 @@ class UserBloc{
     return result.statusCode==200? u : null;
   }
 
-  Future<String> login(User user) async{
+  Future<String> login(context,User user) async{
     print("user to login is "+user.toString());
     var result = await userRepository.login(user) ;
     //User u = json.decode(result.body).map((tagJson) => User.fromJson(tagJson));
@@ -105,7 +106,10 @@ class UserBloc{
     print("status code "  +  result.statusCode.toString() );
     TokenStorageBloc.storeUserDetails(responseLogin.user);
     TokenStorageBloc.storeAccessToken(responseLogin.accessToken);
-
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.loading,
+    );
     return responseLogin.accessToken;
   }
 

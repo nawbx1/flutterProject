@@ -3,6 +3,7 @@ import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:doctor_pro/ui/auth/login_page.dart';
 import 'package:doctor_pro/ui/rendez_vous/AppointmentList.dart';
+import 'package:doctor_pro/ui/rendez_vous/CalendarPage.dart';
 import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:doctor_pro/ui/util/Home.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _BottomNavigationBarState extends State<BottomNavigation> {
           curveSize: 100,
           curve: Curves.easeInCirc,
           onTap: (int i) => changePage(i),
-          backgroundColor: redColor,
+          backgroundColor: vertColor,
           elevation: 0.0,
         ),
       ),
@@ -55,7 +56,7 @@ class _BottomNavigationBarState extends State<BottomNavigation> {
             )
           : (currentIndex == 1)
               ? Center(
-                  child: AppointmentPage(),
+                  child: CalendarPage(),
                 )
               : (currentIndex == 2)
                   ? Center(

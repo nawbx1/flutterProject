@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 String  apiUrl='http://192.168.1.9:9089/';
 
 Color scaffoldBgColor = Color(0xFFFAF9F7);
-Color primaryColor = Color(0xFFe83b70);
+Color primaryColor = Color(0xFF1cb7dd);
 //#3d296f violet
 // #1c232e vert
 //#1cb7dd blue
