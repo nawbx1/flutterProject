@@ -3,7 +3,7 @@ import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/auth/login_page.dart';
-import 'package:doctor_pro/ui/setting/Experience.dart';
+import 'package:doctor_pro/ui/setting/ExperiencePage.dart';
 import 'package:doctor_pro/ui/setting/changepassword.dart';
 import 'package:doctor_pro/ui/setting/edit_profile.dart';
 import 'package:doctor_pro/ui/util/Competence_DraggableList.dart';

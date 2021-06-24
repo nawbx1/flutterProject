@@ -38,4 +38,14 @@ class AppointmentRepository {
         });
   }
 
+
+  Future<Response> getMyAppointmentAsClient(int id) async {
+    return await http.get(
+        Uri.parse(urlRendezVous + 'appointmentbyclient/' + id.toString()),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"
+        });
+  }
+
+
 }

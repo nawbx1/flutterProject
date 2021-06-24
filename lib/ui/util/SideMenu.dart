@@ -123,7 +123,7 @@ class SideMenu extends StatefulWidget {
                 PageTransition(
                   duration: Duration(milliseconds: 800),
                   type: PageTransitionType.fade,
-                  child: Setting1(),
+                  child: ProfileSetting(),
                 ),
               );
             },

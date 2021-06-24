@@ -33,8 +33,8 @@ class AppointmentBloc{
   Future<List<Appointment>> getMyAppointment() async {
 
    int id = await TokenStorageBloc.getStoredUserId();
-
-    var result = await appointmentRepository.getMyAppointment(7) ;
+    print(id);
+    var result = await appointmentRepository.getMyAppointment(id) ;
     print("result is");
     String source = Utf8Decoder().convert(result.bodyBytes);
     var  res = json.decode(source.toString()) as List;
@@ -64,5 +64,28 @@ class AppointmentBloc{
     print(res[0]);
     return result.statusCode==200? result2 : [];
   }
+
+  Future<List<Appointment>> getMyAppointmentAsClient() async {
+
+    int id = await TokenStorageBloc.getStoredUserId();
+    print("id is");
+    print(id);
+    var result = await appointmentRepository.getMyAppointmentAsClient(id) ;
+    print("result is");
+    String source = Utf8Decoder().convert(result.bodyBytes);
+    var  res = json.decode(source.toString()) as List;
+    print(res.length);
+    print(res);
+    print("result is 2");
+    List<Appointment> result2 = res.map((i) => Appointment.fromJson(i)).toList();
+    print(result2.toString());
+    print("result is 3");
+    print(res[0]);
+    return result.statusCode==200? result2 : [];
+  }
+
+
+
+
 
 }
