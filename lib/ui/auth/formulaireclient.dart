@@ -611,7 +611,7 @@ void initState() {
             ),
             controller: emailController),
         SizedBox(height: 20),
-        SearchableDropdown.single(
+        SearchableDropdown.multiple(
 
         items:_dropdownMenuItems ,
         label: Padding(
@@ -623,7 +623,7 @@ void initState() {
         ),
         hint: Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Text("Choisissez le type de votre specialité"),
+        child: Text(selectedSpeciality),
         ),
         clearIcon: Icon(
         Icons.delete,
@@ -631,13 +631,24 @@ void initState() {
         ),
         searchHint: "Choisissez le type de Specialite",
         onChanged: (value) {
+
+            List<Speciality>list =[];
+            selectedSpeciality="";
+
+            value.forEach((element) {
+            print("i ");
+            print(specialityList[element]);
+            list.add(specialityList[element]);
+            selectedSpeciality += specialityList[element].name + " " ;
+            // element.key==value ? print(element.value):  print("element") ;
+          });
         setState(() {
-
-          selectedSpeciality=value;
+          /*selectedSpeciality=value;
           Speciality s = value ;
-
-          FlutterStepperPage.user.speciality = [new Speciality.name(s.id,s.name)];
-
+          */
+          FlutterStepperPage.user.speciality = list;
+          selectedSpeciality ;
+          print(selectedSpeciality );
 
 
 
@@ -911,7 +922,7 @@ void initState() {
           ),
           Expanded(
             child: new Text(
-              'Professionnel morale(entreprise)',
+              'Entreprise',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,

@@ -1,5 +1,5 @@
-import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/pages/profile/Setting1.dart';
+import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -39,7 +39,7 @@ class SideMenu extends StatefulWidget {
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(15.0),
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +150,7 @@ class SideMenu extends StatefulWidget {
                 PageTransition(
                   duration: Duration(milliseconds: 800),
                   type: PageTransitionType.fade,
-                  child: Setting1(),
+                  child: ProfileSetting(),
                 ),
               );
             },

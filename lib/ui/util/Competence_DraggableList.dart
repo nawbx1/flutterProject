@@ -1,12 +1,14 @@
 
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/Competence.dart';
 import 'package:doctor_pro/model/DraggableList.dart';
 import 'package:doctor_pro/model/InterventionType.dart';
 import 'package:doctor_pro/model/Speciality.dart';
 import 'package:doctor_pro/model/User.dart';
 
 import 'package:doctor_pro/pages/profile/Setting1.dart';
+import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,8 @@ import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 
 class CompetanceList extends StatefulWidget {
-
+  User user ;
+  CompetanceList({Key key , @required this.user }) : super(key: key);
 
   @override
   CompetanceListState createState() => CompetanceListState();
@@ -28,36 +31,90 @@ class CompetanceListState extends State<CompetanceList> {
    List<DraggableList> allLists =[];
    DraggableList drag=new DraggableList();
    User user =new User();
-
+   List<InterventionType>listFinal = [] ;
+   bool loading = true ;
    initCurrentUser() async{
      user=await userBloc.getUserByKeycloak();
      initListIntervention();
    }
-   initListIntervention() async {
-     List<Speciality> slist= await userBloc.fetchSpeciality();
-     print(slist);
-     List<InterventionType> inteventionList = slist[0].interventionTypes;
-     print('lksdlsdknvslkvnlkvn');
-     print(inteventionList);
-     drag.header="Disponible";
-     drag.items=inteventionList;
-     allLists.add(drag);
-     drag=new DraggableList();
-     drag.header="choix";
-     if(user!=null&&user.profile!=null&&user.profile.competences!=null)
-     user.profile.competences.map((e) => drag.items.add(e.interventionType)) ;
-     drag.items=[];
-     allLists.add(drag);
-     setState(() {
-       allLists;
-     });
-     lists = allLists.map(buildList).toList();
+   void  fetchInterventionsBySpecialityName()async{
+     List<InterventionType>list = [] ;
+     await widget.user.speciality.forEach((element) async {
+       list =   await userBloc.fetchInterventionsBySpecialityName(element.name) ;
+       await list.forEach((e) async{
+         await listFinal.add(e);
+         setState(() {
+           listFinal;
+         });
+       });
 
+     });
+
+   }
+
+
+   initListIntervention() async {
+
+     await fetchInterventionsBySpecialityName() ;
+     Future.delayed(const Duration(milliseconds: 500), () {
+
+       print("list") ;
+       print(listFinal) ;
+
+
+
+    if(listFinal!=null){
+      setState(() {
+        loading=false ;
+      });
+      print("listtttt after IF") ;
+      print(listFinal) ;
+
+
+      drag.header="Disponible";
+      drag.items=listFinal;
+      allLists.add(drag);
+      drag=new DraggableList();
+      drag.header="choix";
+      if(user!=null&&user.profile!=null&&user.profile.competences!=null)
+        user.profile.competences.map((e) => drag.items.add(e.interventionType)) ;
+      drag.items=[];
+      allLists.add(drag);
+      setState(() {
+        allLists;
+      });
+      lists = allLists.map(buildList).toList();
+
+    }
+     });
    }
   @override
   void initState() {
     super.initState();
-initCurrentUser();
+    initCurrentUser();
+
+  }
+
+  updateCompetence()async{
+    List<Competence>listComptence =[];
+    allLists.forEach((element) {
+      print(element.toString());
+      element.items.forEach((i) {
+        listComptence.add(new Competence.name(i));
+      });
+    });
+
+    print(listComptence);
+    User user = await  userBloc.updateCompetence(listComptence, widget.user.id.toString());
+    (user!=null)?
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.rightToLeft,
+            duration: Duration(milliseconds: 600),
+            child: ProfileSetting()
+        ))
+        :print(user);
 
   }
 
@@ -67,10 +124,42 @@ initCurrentUser();
     return Scaffold(
         //backgroundColor : color : Colors,
         appBar: AppBar(
-        title: Text('update competences'),
+        title: Text('Competences'),
     centerTitle: true,
     ),
-     body:   DragAndDropLists(
+      bottomNavigationBar:
+        Material(
+        elevation: 5.0,
+        child: Container(
+          color: Colors.white,
+          width: double.infinity,
+          height: 70.0,
+          padding: EdgeInsets.symmetric(horizontal: fixPadding * 2.0),
+          alignment: Alignment.center,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15.0),
+            onTap: () {
+              updateCompetence();
+            },
+            child: Container(
+              width: double.infinity,
+              height: 50.0,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: primaryColor,
+              ),
+              child: Text(
+                'Enregistrer',
+                style: whiteColorButtonTextStyle,
+              ),
+            ),
+          ),
+        ),
+      ),
+     body:  (loading==false) ?
+
+     DragAndDropLists(
         // lastItemTargetHeight: 50,
         // addLastItemTargetHeightToTop: true,
         // lastListTargetSize: 30,
@@ -90,6 +179,7 @@ initCurrentUser();
         onItemReorder: onReorderListItem,
         onListReorder: onReorderList,
      )
+         :Container(),
       );
   }
 
@@ -125,7 +215,8 @@ initCurrentUser();
         child: ListTile (
 
           leading: Image.network(
-            apiUrl+'user-service/uploads/specialities/plombier.png',
+            (widget.user.speciality!=null)?
+            apiUrl+'user-service/uploads/specialities/'+widget.user.speciality[0].media.fileName:"",
             width: 40,
             height: 40,
             fit: BoxFit.cover,

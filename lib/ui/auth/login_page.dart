@@ -2,12 +2,15 @@ import 'dart:convert';
 
 import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/bloc/UserBloc.dart';
+import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/auth/sign_up_page.dart';
 import 'package:doctor_pro/ui/profile/profilclientmoral.dart';
 import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
 import 'package:doctor_pro/ui/profile/profilprofessionnelmorale.dart';
 import 'package:doctor_pro/ui/profile/profilprofessionnelphy.dart';
+import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
+import 'package:doctor_pro/ui/util/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -98,31 +101,31 @@ User user=new User();
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 250.0,
+            height: 150.0,
             alignment: Alignment.bottomCenter,
             child: Stack(
               children: [
-                Container(
+               /* Container(
                   height: 250.0,
                   width: MediaQuery.of(context).size.width,
                   child: CustomPaint(
-                    size: Size(double.infinity, 250.0),
-                    painter: CurvePainter(),
+                    size: Size(double.infinity, 200.0),
+                    //painter: CurvePainter(),
                   ),
-                ),
+                ),*/
                 Container(
                   width: double.infinity,
-                  height: 250.0,
+                  height: double.infinity,
                   alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 30.0),
+                  padding: EdgeInsets.only(bottom: 20.0),
                   child: Container(
-                    width: 80.0,
+                    width: 100.0,
                     height: 80.0,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.0),
-                      border: Border.all(width: 3.0, color: Colors.white),
+                      //borderRadius: BorderRadius.circular(40.0),
+                      //border: Border.all(width: 3.0, color: Colors.white),
                       image: DecorationImage(
-                        image: AssetImage('assets/google.png'),
+                        image: AssetImage('assets/winek.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -244,7 +247,7 @@ User user=new User();
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   fontSize: 15.0,
-                  color: Colors.red[800],
+                  color: redColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -275,7 +278,7 @@ User user=new User();
                   padding: EdgeInsets.fromLTRB(60.0, 15.0, 60.0, 15.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30.0),
-                    color: Colors.red[800],
+                    color: redColor,
                   ),
                   child: Text(
                     'Connecter',
@@ -317,7 +320,7 @@ User user=new User();
                     style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red[800],
+                      color: redColor,
                     ),
                   )),
             ],
@@ -342,67 +345,15 @@ User user=new User();
 print("postLoginRedirect .................................. ");
     String userRole = await TokenStorageBloc.getStoredUserRole() ;
 print("postLoginRedirect 222222222222222222222222222222222 .................................. ");
-      if (userRole == "CLIENT_PHYSIQUE") {
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: Duration(milliseconds: 600),
-                type: PageTransitionType.fade,
-                child: ProfileClienPhysiquePage()));
-      }
-      else  if (userRole == "CLIENT_MORAL") {
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: Duration(milliseconds: 600),
-                type: PageTransitionType.fade,
-                child: Profileclientmorale()));
-      }
 
-      else  if (userRole == "GESTIONNAIRE") {
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: Duration(milliseconds: 600),
-                type: PageTransitionType.fade,
-                child: Profileprofessionnelmorale()));
-      }
+    Navigator.push(
+      context,
+      PageTransition(
+          duration: Duration(milliseconds: 600),
+          type: PageTransitionType.fade,
+          child: BottomNavigation()));
 
-      else  if (userRole == "PROFESSIONNEL") {
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: Duration(milliseconds: 600),
-                type: PageTransitionType.fade,
-                child: Profileprofessionnelphy()));
-      }
 
-    /*if(storedUser.role[0].name == "CLIENT_MORALE"){
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: Duration(milliseconds: 600),
-                type: PageTransitionType.fade,
-                child: Profileclientmorale()));
-
-      }if (storedUser.role[0].name=="PROFESSIONNEL"){
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: Duration(milliseconds: 600),
-                type: PageTransitionType.fade,
-                child: Profileclientmorale()));
-
-      }
-      if (storedUser.role[0].name==""){
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: Duration(milliseconds: 600),
-                type: PageTransitionType.fade,
-                child: Profileclientmorale()));
-
-      }*/
 
   }
 

@@ -2,6 +2,9 @@
 import 'dart:convert';
 
 import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
+import 'package:doctor_pro/model/Competence.dart';
+import 'package:doctor_pro/model/InterventionType.dart';
+import 'package:doctor_pro/model/Media.dart';
 import 'package:doctor_pro/model/Speciality.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/model/ResponseLogin.dart';
@@ -53,6 +56,27 @@ class UserBloc{
     print(res[0]);
     return result.statusCode==200? result2 : [];
   }
+
+
+  Future<List<InterventionType>> fetchInterventionsBySpecialityName(String name) async {
+
+    var result = await userRepository.fetchInterventionsBySpecialityName(name) ;
+    String source = Utf8Decoder().convert(result.bodyBytes);
+    Speciality speciality = Speciality.fromJson(json.decode(source.toString()));
+    print(speciality.toString());
+
+    List<InterventionType>list = [] ;
+
+    await speciality.interventionTypes.forEach((e) async{
+        list.add(e);
+    });
+    print('list after foreach interventions');
+    print(list);
+
+    return result.statusCode==200? list : null ;
+  }
+
+
 
   Future<User> saveuser(User user) async{
 
@@ -123,6 +147,29 @@ else return false;
     return result.statusCode==200? result2 : [];
   }
 
+  Future<User> updateCompetence(competence, id) async{
+    var result = await userRepository.updateCompetance(competence, id) ;
+    String source = Utf8Decoder().convert(result.bodyBytes);
+    User u = User.fromJson(json.decode(source.toString())) ;
+    print("status code "  +  result.statusCode.toString() );
+    return result.statusCode==200? u : null;
+  }
+
+
+  Future<String> updatepassword(String keycloak,String password) async{
+    var result = await userRepository.updatepassword(keycloak,password) ;
+    return result.statusCode==200? "ok" : "not ok";
+  }
+
+  Future<User> updatePhotoProfile(Media media) async {
+    int id = await TokenStorageBloc.getStoredUserId();
+    var result = await userRepository.updatePhotoProfile(id,media) ;
+    String source = Utf8Decoder().convert(result.bodyBytes);
+    User u = User.fromJson(json.decode(source.toString())) ;
+    print("status code "  +  result.statusCode.toString() );
+    return result.statusCode==200? u : null;
+
+  }
 
 
 

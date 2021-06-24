@@ -1,7 +1,10 @@
 import 'package:doctor_pro/appBehaviour/my_behaviour.dart';
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:doctor_pro/ui/auth/login_page.dart';
+import 'package:doctor_pro/ui/auth/otp.dart';
+import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:doctor_pro/ui/util/Competence_DraggableList.dart';
+import 'package:doctor_pro/ui/util/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:doctor_pro/ui/rendez_vous/AppointmentList.dart';
@@ -39,17 +42,19 @@ class MyApp extends StatelessWidget {
         return ScrollConfiguration(
           behavior: MyBehavior(),
           child: child,
+
         );
       },
-     //  home: LoginPage (),
+        home: LoginPage (),
       //home: SpecialityPage(),
       //home:CompetanceList()
       //home: SpecialityPage(),
       //home:LoginPage()
       // home: LoginPage (),
-        home: SpecialityPage(),
+       // home: SpecialityPage(),
       //home: AppointmentPage(),//for client (client or profesiionel)
       // home:CompetanceList()
+     // home: OTPScreen(),
     );
   }
 

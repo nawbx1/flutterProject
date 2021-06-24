@@ -7,9 +7,9 @@ part 'InterventionType.g.dart';
 
 @JsonSerializable()
 class InterventionType {
-  final int id;
+  int id;
 
-  final String name ;
+  String name ;
 
  // final Speciality speciality ;
 

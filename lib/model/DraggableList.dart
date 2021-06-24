@@ -4,7 +4,10 @@ class DraggableList {
    String header;
    List<InterventionType> items;
 
-
+   @override
+  String toString() {
+    return 'DraggableList{ items: $items}';
+  }
 }
 
 /*
