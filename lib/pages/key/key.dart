@@ -1,1 +1,1 @@
-String googleMapApiKey = 'Enter Your Google Map API Key Here';
+String googleMapApiKey = 'AIzaSyChj-bBECS2Wv_ASuYsC2RgLUWASRA0HSA';

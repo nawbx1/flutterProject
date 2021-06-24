@@ -167,6 +167,12 @@ TextStyle greySmallBoldTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+TextStyle greyVerySmallBoldTextStyle = TextStyle(
+  color: greyColor,
+  fontSize: 10.0,
+  fontWeight: FontWeight.bold,
+);
+
 TextStyle greySmallTextStyle = TextStyle(
   color: greyColor,
   fontSize: 12.0,

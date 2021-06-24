@@ -105,7 +105,7 @@ class _TypeDinterventionState extends State<TypeDintervention> {
                       type: PageTransitionType.fade,
                       child: GouvernoratPage(
                         speciality: widget.speciality ,
-                        intervention: item.name
+                        interventionType: item
                       ),
                     ),
                   );

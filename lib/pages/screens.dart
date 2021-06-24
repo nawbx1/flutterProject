@@ -5,7 +5,6 @@ export 'review/review.dart';
 // export 'payment/payment.dart';
 // export 'lab/lab_list.dart';
 // export 'lab/lab.dart';
-export 'appointment/appointment.dart';
 // export 'chat/chat_list.dart';
 // export 'chat/chat.dart';
 export 'profile/profile.dart';

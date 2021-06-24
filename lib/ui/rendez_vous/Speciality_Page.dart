@@ -1,40 +1,35 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/Speciality.dart';
 import 'package:doctor_pro/pages/artisan/drawer_1.dart';
+import 'package:doctor_pro/ui/rendez_vous/TypeDintervention.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:doctor_pro/ui/rendez_vous/TypeDintervention.dart';
-import 'package:http/http.dart' as http;
-
 
 class SpecialityPage extends StatefulWidget {
   @override
   _SpecialityPageState createState() => _SpecialityPageState();
-
 }
 
 class _SpecialityPageState extends State<SpecialityPage> {
-  List<Speciality> specialityList=[];
-UserBloc userBloc=new UserBloc();
+  List<Speciality> specialityList = [];
+  UserBloc userBloc = new UserBloc();
 
   void fetchSpeciality() async {
-
     List<Speciality> specialityList2 = await userBloc.fetchSpeciality();
 
-      setState(() {
-        specialityList= specialityList2;
-      });
-
+    setState(() {
+      specialityList = specialityList2;
+    });
   }
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    fetchSpeciality() ;
+    fetchSpeciality();
     print(specialityList);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +44,6 @@ UserBloc userBloc=new UserBloc();
           'spécialité',
           style: appBarTitleTextStyle,
         ),
-
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(65.0),
           child: Container(
@@ -70,7 +64,7 @@ UserBloc userBloc=new UserBloc();
                 color: whiteColor,
                 borderRadius: BorderRadius.circular(8.0),
                 border:
-                Border.all(width: 1.0, color: greyColor.withOpacity(0.6)),
+                    Border.all(width: 1.0, color: greyColor.withOpacity(0.6)),
               ),
               child: TextField(
                 decoration: InputDecoration(
@@ -85,16 +79,13 @@ UserBloc userBloc=new UserBloc();
             ),
           ),
         ),
-
       ),
-
-
       body: Container(
         padding: EdgeInsets.all(fixPadding),
         child: GridView.builder(
           itemCount: specialityList.length,
           gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (BuildContext context, int index) {
             final item = specialityList[index];
             return Padding(
@@ -108,7 +99,7 @@ UserBloc userBloc=new UserBloc();
                       type: PageTransitionType.fade,
                       child: TypeDintervention(
                         interventions: item.interventionTypes,
-                        speciality : item.name,
+                        speciality: item.name,
                       ),
                     ),
                   );
@@ -136,7 +127,20 @@ UserBloc userBloc=new UserBloc();
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(23.0),
                             image: DecorationImage(
-                              image: NetworkImage(apiUrl+'user-service/uploads/specialities/'+item.media.fileName),
+                              image:
+                              NetworkImage(
+                                item.media != null ?
+                                apiUrl +
+                                    'user-service/uploads/specialities/' +
+                                    item.media.fileName :apiUrl + 'user-service/uploads/image-not-available.jpg',
+                              ),
+                              onError: (exception, stackTrace) => Image(
+                                  image: NetworkImage(
+                                apiUrl + 'user-service/uploads/avatar.jpg',
+                              )
+
+                              ),
+
                               fit: BoxFit.cover,
                             ),
                           ),

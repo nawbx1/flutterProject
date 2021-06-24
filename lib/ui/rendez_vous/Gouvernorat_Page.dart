@@ -3,6 +3,7 @@
 import 'package:doctor_pro/bloc/RegionBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/Gouvernorat.dart';
+import 'package:doctor_pro/model/InterventionType.dart';
 
 import 'package:doctor_pro/ui/rendez_vous/ArtisanList_Page.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +13,9 @@ import '../../pages/artisan/drawer_1.dart';
 
 
 class GouvernoratPage extends StatefulWidget {
-  final String  intervention;
+  final InterventionType  interventionType;
   final String speciality  ;
-  const GouvernoratPage({Key key, @required this.intervention,@required this.speciality }) : super(key: key);
+  const GouvernoratPage({Key key, @required this.interventionType,@required this.speciality }) : super(key: key);
   @override
   _GouvernoratPageState createState() => _GouvernoratPageState();
 }
@@ -113,7 +114,8 @@ class _GouvernoratPageState extends State<GouvernoratPage> {
                           duration: Duration(milliseconds: 800),
                           type: PageTransitionType.fade,
                           child: ArtisanList(
-                              speciality: widget.speciality,
+
+                          interventionType: widget.interventionType,
                               gouvernoratId:GouvList[index].id
                           ),
                         ),

@@ -19,6 +19,10 @@ class Region{
   Region({this.id, this.gouvernorat, this.region});
 
 
+  @override
+  String toString() {
+    return 'Region{id: $id, gouvernorat: $gouvernorat, region: $region}';
+  }
 
   factory Region.fromJson(Map<String, dynamic> json) => _$RegionFromJson(json);
 

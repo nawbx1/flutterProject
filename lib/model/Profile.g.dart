@@ -22,10 +22,10 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
         ?.toList(),
     coverImage: json['coverImage'] == null
         ? null
-        : ImageModel.fromJson(json['coverImage'] as Map<String, dynamic>),
+        : Media.fromJson(json['coverImage'] as Map<String, dynamic>),
     profileImage: json['profileImage'] == null
         ? null
-        : ImageModel.fromJson(json['profileImage'] as Map<String, dynamic>),
+        : Media.fromJson(json['profileImage'] as Map<String, dynamic>),
     id: json['id'] as int,
     information: json['information'] as String,
   );

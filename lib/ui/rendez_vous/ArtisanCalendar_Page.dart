@@ -1,4 +1,8 @@
+import 'package:doctor_pro/bloc/AppointmentBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/InterventionType.dart';
+import 'package:doctor_pro/model/Region.dart';
+import 'package:doctor_pro/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_calendar_widget/date_helper.dart';
 import 'package:horizontal_calendar_widget/horizontal_calendar.dart';
@@ -7,6 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import '../../pages/artisan/drawer_1.dart';
 import 'package:doctor_pro/ui/rendez_vous/AppointmentDetails_Page.dart';
 import 'package:doctor_pro/ui/rendez_vous/ArtisanProfile_Page.dart';
+import 'package:doctor_pro/model/Appointment.dart';
 
 const labelMonth = 'Month';
 const labelDate = 'Date';
@@ -14,15 +19,22 @@ const labelDate = 'Date';
 const labelWeekDay = 'Week Day';
 
 class ArtisanCalendar extends StatefulWidget {
-  final String artisanName, artisanImage, artisanType, experience;
+
+  final int id;
+  final User professionel;
+  final InterventionType  interventionType;
+  final Region region;
 
   const ArtisanCalendar(
       {Key key,
-        @required this.artisanName,
-        @required this.artisanImage,
-        @required this.artisanType,
-        @required this.experience})
+
+        @required this.id,
+      @required this.professionel,
+      @required this.interventionType,
+      @required this.region
+      })
       : super(key: key);
+
   @override
   ArtisanCalendarState createState() => ArtisanCalendarState();
 }
@@ -31,42 +43,50 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
   String selectedTime = '';
   String selectedTimeEnd = '';
   String selectedDate;
+  DateTime date = DateTime.now();
   String monthString;
-  bool showConfirmButtom=false;
+  bool showConfirmButtom = false;
 
-  Map<String,dynamic> timeCalendar ={'morningSlotList' : [
-  {'time': '8:00 ','value':80,'isSelected':false},
-  {'time': '8:30 ','value':85 ,'isSelected':false},
-  {'time': '9:00 ','value':90,'isSelected':false},
-  {'time': '9:30 ','value':95,'isSelected':false},
-{'time': '10:00 ','value':100,'isSelected':false},
-{'time': '10:30 ','value':105,'isSelected':false},
-{'time': '11:00 ','value':110,'isSelected':false},
-{'time': '11:30 ','value':115,'isSelected':false}
-],'afternoonSlotList' : [
-{'time': '12:30 ','value':125,'isSelected':false},
-{'time': '13:00 ','value':130,'isSelected':false},
-{'time': '13:30 ','value':135,'isSelected':false},
-{'time': '14:00 ','value':140,'isSelected':false},
-{'time': '14:30 ','value':145,'isSelected':false},
-{'time': '15:00 ','value':150,'isSelected':false},
-{'time': '15:30 ','value':155,'isSelected':false},
-{'time': '16:00 ','value':160,'isSelected':false},
-{'time': '16:30 ','value':165,'isSelected':false},
-{'time': '17:00 ','value':170,'isSelected':false},
-{'time': '17:30 ','value':175,'isSelected':false},
-{'time': '18:00 ','value':180,'isSelected':false}
-],'eveningSlotList' : [
-{'time': '18:30 ','value':185,'isSelected':false},
-{'time': '19:00 ','value':190,'isSelected':false},
-{'time': '19:30 ','value':195,'isSelected':false},
-{'time': '20:00 ','value':200,'isSelected':false},
-{'time': '20:30 ','value':205,'isSelected':false},
-{'time': '21:00 ','value':210,'isSelected':false},
-{'time': '21:30 ','value':215,'isSelected':false},
-{'time': '22:00 ','value':220,'isSelected':false},
-{'time': '22:30 ','value':225,'isSelected':false}
-]} ;
+  List<Appointment> listAppointment;
+
+  AppointmentBloc appointmentBloc = new AppointmentBloc();
+  Map<String, dynamic> timeCalendar = {
+    'morningSlotList': [
+      {'time': '8:00 ', 'value': 80, 'isSelected': false,'isDisabled':false},
+      {'time': '8:30 ', 'value': 85, 'isSelected': false },
+      {'time': '9:00 ', 'value': 90, 'isSelected': false},
+      {'time': '9:30 ', 'value': 95, 'isSelected': false},
+      {'time': '10:00 ', 'value': 100, 'isSelected': false},
+      {'time': '10:30 ', 'value': 105, 'isSelected': false},
+      {'time': '11:00 ', 'value': 110, 'isSelected': false},
+      {'time': '11:30 ', 'value': 115, 'isSelected': false}
+    ],
+    'afternoonSlotList': [
+      {'time': '12:30 ', 'value': 125, 'isSelected': false},
+      {'time': '13:00 ', 'value': 130, 'isSelected': false},
+      {'time': '13:30 ', 'value': 135, 'isSelected': false},
+      {'time': '14:00 ', 'value': 140, 'isSelected': false},
+      {'time': '14:30 ', 'value': 145, 'isSelected': false},
+      {'time': '15:00 ', 'value': 150, 'isSelected': false},
+      {'time': '15:30 ', 'value': 155, 'isSelected': false},
+      {'time': '16:00 ', 'value': 160, 'isSelected': false},
+      {'time': '16:30 ', 'value': 165, 'isSelected': false},
+      {'time': '17:00 ', 'value': 170, 'isSelected': false},
+      {'time': '17:30 ', 'value': 175, 'isSelected': false},
+      {'time': '18:00 ', 'value': 180, 'isSelected': false}
+    ],
+    'eveningSlotList': [
+      {'time': '18:30 ', 'value': 185, 'isSelected': false},
+      {'time': '19:00 ', 'value': 190, 'isSelected': false},
+      {'time': '19:30 ', 'value': 195, 'isSelected': false},
+      {'time': '20:00 ', 'value': 200, 'isSelected': false},
+      {'time': '20:30 ', 'value': 205, 'isSelected': false},
+      {'time': '21:00 ', 'value': 210, 'isSelected': false},
+      {'time': '21:30 ', 'value': 215, 'isSelected': false},
+      {'time': '22:00 ', 'value': 220, 'isSelected': false},
+      {'time': '22:30 ', 'value': 225, 'isSelected': false}
+    ]
+  };
 
   DateTime firstDate;
   DateTime lastDate;
@@ -93,69 +113,78 @@ class ArtisanCalendarState extends State<ArtisanCalendar> {
   RangeValues selectedDateCount;
 
   List<DateTime> initialSelectedDates;
-int count=0;
-int startHour=0;
-  int endHour=0;
- void initialiserTimeCalender(){
-print('initialiserTimeCalenderinitialiserTimeCalender');
-}
-void  initialiserSelectedTimeCalenderItems(int first,int last){
-print('initialiserSelectedTimeCalenderItems');
-print(first);
-print(last);
-print('value of first  = '+first.toString() +'     value of last  = '+last.toString());
-    for(dynamic value in timeCalendar.values){
+  int count = 0;
+  int startHour = 0;
+  int endHour = 0;
 
-      for(dynamic value2 in value) {
+  void initialiserTimeCalender() async{
+    listAppointment = await appointmentBloc.getProfessionelCalendar(7);
+  }
 
-        if(int.parse(value2['value'].toString()).compareTo(first) >=0 &&
-            int.parse(value2['value'].toString()).compareTo(last) <= 0 ){
-          print('value of first  = '+first.toString());
+  testvars(e){
+    print('selected date is ');
+print(e.toString());
+  }
+  void initialiserSelectedTimeCalenderItems(int first, int last) {
+    print('initialiserSelectedTimeCalenderItems');
+    print(first);
+    print(last);
+    print('value of first  = ' +
+        first.toString() +
+        '     value of last  = ' +
+        last.toString());
+    for (dynamic value in timeCalendar.values) {
+      for (dynamic value2 in value) {
+        if (int.parse(value2['value'].toString()).compareTo(first) >= 0 &&
+            int.parse(value2['value'].toString()).compareTo(last) <= 0) {
+          print('value of first  = ' + first.toString());
           setState(() {
             value2['isSelected'] = true;
-          });}
-        else {
+          });
+        } else {
           setState(() {
             value2['isSelected'] = false;
           });
         }
       }
     }
+  }
+  String heurDebut;
+  String heurFin;
 
-}
+  updateTimeSelected(int timeSelected) {
+    print('updateTimeSelected');
+    print(timeSelected);
+    setState(() {
+      count += 1;
+    });
 
-  updateTimeSelected(int timeSelected){
-   print('updateTimeSelected');
-   print(timeSelected);
-   setState(() {
-     count+=1;
-   });
+    if (count.compareTo(1) == 0) {
+      setState(() {
+        startHour = timeSelected;
+        heurDebut=selectedTime;
+      });
 
-
-if( count.compareTo(1)==0){
-  setState(() {
-    startHour=timeSelected;
-  });
-
-print('value of startHour if loula');
-  print(startHour);
-  print('value of endHour');
-  print(endHour);
-  initialiserSelectedTimeCalenderItems(startHour,startHour);
-  showConfirmButtom=false;
-}
-     // i
-else if(count.compareTo(2)==0) {
-  setState(() {
-    endHour = timeSelected;// timeSelected !=null ? timeSelected: 0;
-    count=0;
-  });
-  initialiserSelectedTimeCalenderItems(startHour,endHour);
-  showConfirmButtom=true;
-  print('value of startHour if theniya');
-  print(startHour);
-  print('value of endHour');
-  print(endHour);
+      print('value of startHour if loula');
+      print(startHour);
+      print('value of endHour');
+      print(endHour);
+      initialiserSelectedTimeCalenderItems(startHour, startHour);
+      showConfirmButtom = false;
+    }
+    // i
+    else if (count.compareTo(2) == 0) {
+      setState(() {
+        endHour = timeSelected; // timeSelected !=null ? timeSelected: 0;
+        heurFin=selectedTime;
+        count = 0;
+      });
+      initialiserSelectedTimeCalenderItems(startHour, endHour);
+      showConfirmButtom = true;
+      print('value of startHour if theniya');
+      print(startHour);
+      print('value of endHour');
+      print(endHour);
     }
   }
 
@@ -173,7 +202,7 @@ else if(count.compareTo(2)==0) {
     initialSelectedDates = feedInitialSelectedDates(minSelectedDateCount, days);
     setState(() {
       selectedDate =
-      '${firstDate.day}-${convertNumberMonthToStringMonth(firstDate.month)}';
+          '${firstDate.day}-${convertNumberMonthToStringMonth(firstDate.month)}';
     });
   }
 
@@ -235,57 +264,57 @@ else if(count.compareTo(2)==0) {
           'Rendez-vous ',
           style: appBarTitleTextStyle,
         ),
-
       ),
       bottomNavigationBar: (!showConfirmButtom)
           ? Container(
-        height: 0.0,
-        width: 0.0,
-      )
+              height: 0.0,
+              width: 0.0,
+            )
           : Material(
-        elevation: 5.0,
-        child: Container(
-          color: Colors.white,
-          width: double.infinity,
-          height: 70.0,
-          padding: EdgeInsets.symmetric(horizontal: fixPadding * 2.0),
-          alignment: Alignment.center,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(15.0),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      duration: Duration(milliseconds: 600),
-                      child:
-                      //GoogleMapPlacePicker()
-                      AppointmentDetails(
-                        artisanName: widget.artisanName,
-                        artisanType: widget.artisanType,
-                        artisanExp: widget.experience,
-                        artisanImage: widget.artisanImage,
-                        date: selectedDate,
-                        time: selectedTime,
-                      )
-                  ));
-            },
-            child: Container(
-              width: double.infinity,
-              height: 50.0,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: primaryColor,
-              ),
-              child: Text(
-                'Confirmer',
-                style: whiteColorButtonTextStyle,
+              elevation: 5.0,
+              child: Container(
+                color: Colors.white,
+                width: double.infinity,
+                height: 70.0,
+                padding: EdgeInsets.symmetric(horizontal: fixPadding * 2.0),
+                alignment: Alignment.center,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(15.0),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            duration: Duration(milliseconds: 600),
+                            child:
+                                //GoogleMapPlacePicker()
+                                AppointmentDetails(
+
+                                professionel: widget.professionel,
+                                interventionType: widget.interventionType,
+                                region: widget.region,
+
+                              date: date,
+                                  heurFin: heurFin,
+                                    heurDebut:heurDebut ,
+                            )));
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 50.0,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: primaryColor,
+                    ),
+                    child: Text(
+                      'Confirmer',
+                      style: whiteColorButtonTextStyle,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,8 +334,9 @@ else if(count.compareTo(2)==0) {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                       /* Hero(
-                          tag: widget.artisanImage,
+                        Hero(
+                          tag: widget.professionel!=null && widget.professionel.profile!=null&& widget.professionel.profile.profileImage!=null ?
+                          widget.professionel.profile.profileImage.mediaURL: 'uploads/avatar.jpg',
                           child: Container(
                             width: 76.0,
                             height: 76.0,
@@ -314,7 +344,7 @@ else if(count.compareTo(2)==0) {
                               color: whiteColor,
                               borderRadius: BorderRadius.circular(38.0),
                               border:
-                              Border.all(width: 0.3, color: primaryColor),
+                                  Border.all(width: 0.3, color: primaryColor),
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
                                   blurRadius: 1.0,
@@ -323,12 +353,21 @@ else if(count.compareTo(2)==0) {
                                 ),
                               ],
                               image: DecorationImage(
-                                image: AssetImage(widget.artisanImage),
+                                image: NetworkImage(
+                                   widget.professionel!=null && widget.professionel.profile!=null&& widget.professionel.profile.profileImage!=null ?
+                                   apiUrl +
+                                       'user-service/'+  widget.professionel.profile.profileImage.mediaURL: apiUrl +
+                                       'user-service/uploads/avatar.jpg',
+                                ),
+                                onError: (exception, stackTrace) => Image(
+                                    image: NetworkImage(
+                                  apiUrl + 'user-service/uploads/avatar.jpg',
+                                )),
                                 fit: BoxFit.fitHeight,
                               ),
                             ),
                           ),
-                        ),*/
+                        ),
                         widthSpace,
                         Expanded(
                           child: Column(
@@ -339,7 +378,7 @@ else if(count.compareTo(2)==0) {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      ' ${widget.artisanName}',
+                                      ' ${ widget.professionel!=null  ? widget.professionel.username:''}',
                                       style: blackNormalBoldTextStyle,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -356,13 +395,13 @@ else if(count.compareTo(2)==0) {
                                                   type: PageTransitionType.fade,
                                                   child: ArtisanProfilePage(
                                                     artisanImage:
-                                                    widget.artisanImage,
+                                                       '',
                                                     artisanName:
-                                                    widget.artisanName,
+                                                        '',
                                                     artisanType:
-                                                    widget.artisanType,
+                                                        '',
                                                     experience:
-                                                    widget.experience,
+                                                        '',
                                                   )));
                                         },
                                         child: Text(
@@ -376,15 +415,16 @@ else if(count.compareTo(2)==0) {
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                widget.artisanType,
+                                widget.professionel!=null && widget.professionel.profile!=null&& widget.professionel.speciality!=null
+                                    && widget.professionel.speciality.isNotEmpty?
+                                widget.professionel.speciality[0].name:' ' ,
                                 style: greyNormalTextStyle,
                               ),
                               SizedBox(height: 7.0),
-                              Text(
-                                '${widget.experience} ans  d\'Experience',
-                                style: primaryColorNormalTextStyle,
-                              ),
-
+                              //Text(
+                              //  '${widget.experience} ans  d\'Experience',
+                               // style: primaryColorNormalTextStyle,
+                              //),
                             ],
                           ),
                         ),
@@ -408,28 +448,28 @@ else if(count.compareTo(2)==0) {
                       color: defaultDecorationColor,
                       shape: defaultDecorationShape,
                       borderRadius:
-                      defaultDecorationShape == BoxShape.rectangle &&
-                          isCircularRadiusDefault
-                          ? BorderRadius.circular(8)
-                          : null,
+                          defaultDecorationShape == BoxShape.rectangle &&
+                                  isCircularRadiusDefault
+                              ? BorderRadius.circular(8)
+                              : null,
                     ),
                     selectedDecoration: BoxDecoration(
                       color: selectedDecorationColor,
                       shape: selectedDecorationShape,
                       borderRadius:
-                      selectedDecorationShape == BoxShape.rectangle &&
-                          isCircularRadiusSelected
-                          ? BorderRadius.circular(8)
-                          : null,
+                          selectedDecorationShape == BoxShape.rectangle &&
+                                  isCircularRadiusSelected
+                              ? BorderRadius.circular(8)
+                              : null,
                     ),
                     disabledDecoration: BoxDecoration(
                       color: disabledDecorationColor,
                       shape: disabledDecorationShape,
                       borderRadius:
-                      disabledDecorationShape == BoxShape.rectangle &&
-                          isCircularRadiusDisabled
-                          ? BorderRadius.circular(8)
-                          : null,
+                          disabledDecorationShape == BoxShape.rectangle &&
+                                  isCircularRadiusDisabled
+                              ? BorderRadius.circular(8)
+                              : null,
                     ),
                     isDateDisabled: (date) => date.weekday == DateTime.sunday,
                     labelOrder: order.map(toLabelType).toList(),
@@ -437,8 +477,10 @@ else if(count.compareTo(2)==0) {
                     initialSelectedDates: initialSelectedDates,
                     onDateSelected: (e) async {
                       setState(() {
+                        testvars(e);
                         selectedDate =
-                        '${e.day}-${convertNumberMonthToStringMonth(e.month)}';
+                            '${e.day}-${convertNumberMonthToStringMonth(e.month)}';
+                        date=e;
                       });
                     },
                   ),
@@ -502,34 +544,38 @@ else if(count.compareTo(2)==0) {
           children: timeCalendar['morningSlotList']
               .map(
                 (e) => Padding(
-              padding: EdgeInsets.only(
-                  left: fixPadding * 2.0, bottom: fixPadding * 2.0),
-              child: InkWell(
-                onTap: () {//ontap verif value
-                  setState(() {
-                    selectedTime = e['time'];
-                    updateTimeSelected(int.parse(e['value'].toString()));
-                  });
-                },
-                child: Container(
-                  width: 90.0,
-                  padding: EdgeInsets.all(fixPadding),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(width: 0.7, color: greyColor),
-                    color: (e['isSelected'] ==true ) //  (e['value'] >=startHour &&e['value'] <=endHour )
-                        ? primaryColor
-                        : whiteColor,
+                  padding: EdgeInsets.only(
+                      left: fixPadding * 2.0, bottom: fixPadding * 2.0),
+                  child: InkWell(
+                    onTap: () {
+                      //ontap verif value
+                      setState(() {
+                        selectedTime = e['time'];
+                        updateTimeSelected(int.parse(e['value'].toString()));
+                      });
+                    },
+                    child: Container(
+                      width: 90.0,
+                      padding: EdgeInsets.all(fixPadding),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(width: 0.7, color: greyColor),
+                        color: (e['isSelected'] ==
+                                true) //  (e['value'] >=startHour &&e['value'] <=endHour )
+                            ? primaryColor
+                            : whiteColor,
+                      ),
+                      child: Text(e['time'],
+                          style: (e['isSelected'] ==
+                                  true) //(e['value'] >=startHour &&e['value'] <=endHour )
+                              ? whiteColorNormalTextStyle
+                              : primaryColorNormalTextStyle),
+                    ),
                   ),
-                  child: Text(e['time'],
-                      style: (e['isSelected'] ==true )//(e['value'] >=startHour &&e['value'] <=endHour )
-                          ? whiteColorNormalTextStyle
-                          : primaryColorNormalTextStyle),
                 ),
-              ),
-            ),
-          ).toList()
+              )
+              .toList()
               .cast<Widget>(),
         ),
 
@@ -563,34 +609,37 @@ else if(count.compareTo(2)==0) {
           children: timeCalendar['afternoonSlotList']
               .map(
                 (e) => Padding(
-              padding: EdgeInsets.only(
-                  left: fixPadding * 2.0, bottom: fixPadding * 2.0),
-              child: InkWell(
-                onTap: () {//ksjdksjfks
-                  setState(() {
-                    selectedTime = e['time'];
-                    updateTimeSelected(int.parse(e['value'].toString()));
-                  });
-                },
-                child: Container(
-                  width: 90.0,
-                  padding: EdgeInsets.all(fixPadding),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(width: 0.7, color: greyColor),
-                    color: (e['isSelected'] ==true )//(e['value'] >=startHour &&e['value'] <=endHour )
-                        ? primaryColor
-                        : whiteColor,
+                  padding: EdgeInsets.only(
+                      left: fixPadding * 2.0, bottom: fixPadding * 2.0),
+                  child: InkWell(
+                    onTap: () {
+                      //ksjdksjfks
+                      setState(() {
+                        selectedTime = e['time'];
+                        updateTimeSelected(int.parse(e['value'].toString()));
+                      });
+                    },
+                    child: Container(
+                      width: 90.0,
+                      padding: EdgeInsets.all(fixPadding),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(width: 0.7, color: greyColor),
+                        color: (e['isSelected'] ==
+                                true) //(e['value'] >=startHour &&e['value'] <=endHour )
+                            ? primaryColor
+                            : whiteColor,
+                      ),
+                      child: Text(e['time'],
+                          style: (e['isSelected'] ==
+                                  true) // (e['value'] >=startHour &&e['value'] <=endHour )
+                              ? whiteColorNormalTextStyle
+                              : primaryColorNormalTextStyle),
+                    ),
                   ),
-                  child: Text(e['time'],
-                      style:(e['isSelected'] ==true )// (e['value'] >=startHour &&e['value'] <=endHour )
-                          ? whiteColorNormalTextStyle
-                          : primaryColorNormalTextStyle),
                 ),
-              ),
-            ),
-          )
+              )
               .toList()
               .cast<Widget>(),
         ),
@@ -624,34 +673,34 @@ else if(count.compareTo(2)==0) {
           children: timeCalendar['eveningSlotList']
               .map(
                 (e) => Padding(
-              padding: EdgeInsets.only(
-                  left: fixPadding * 2.0, bottom: fixPadding * 2.0),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    selectedTime = e['time'];
-                    updateTimeSelected(int.parse(e['value'].toString()));
-                  });
-                },
-                child: Container(
-                  width: 90.0,
-                  padding: EdgeInsets.all(fixPadding),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(width: 0.7, color: greyColor),
-                    color: (e['isSelected'] ==true)
-                        ? primaryColor
-                        : whiteColor,
+                  padding: EdgeInsets.only(
+                      left: fixPadding * 2.0, bottom: fixPadding * 2.0),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedTime = e['time'];
+                        updateTimeSelected(int.parse(e['value'].toString()));
+                      });
+                    },
+                    child: Container(
+                      width: 90.0,
+                      padding: EdgeInsets.all(fixPadding),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(width: 0.7, color: greyColor),
+                        color: (e['isSelected'] == true)
+                            ? primaryColor
+                            : whiteColor,
+                      ),
+                      child: Text(e['time'],
+                          style: (e['isSelected'] == true)
+                              ? whiteColorNormalTextStyle
+                              : primaryColorNormalTextStyle),
+                    ),
                   ),
-                  child: Text(e['time'],
-                      style: (e['isSelected'] ==true)
-                          ? whiteColorNormalTextStyle
-                          : primaryColorNormalTextStyle),
                 ),
-              ),
-            ),
-          )
+              )
               .toList()
               .cast<Widget>(),
         ),

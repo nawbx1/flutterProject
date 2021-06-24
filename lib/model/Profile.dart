@@ -1,6 +1,7 @@
 import 'package:doctor_pro/model/Competence.dart';
 import 'package:doctor_pro/model/Experience.dart';
 import 'package:doctor_pro/model/ImageModel.dart';
+import 'package:doctor_pro/model/Media.dart';
 import 'package:doctor_pro/model/Region.dart';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -13,8 +14,8 @@ class Profile {
   final List<Competence> competences;
   final List<Experience> experiences;
   final List<Region> regions;
-  final ImageModel coverImage;
-  final ImageModel profileImage;
+  final Media coverImage;
+  final Media profileImage;
   final int id;
   final String information;
 

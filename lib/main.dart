@@ -4,7 +4,7 @@ import 'package:doctor_pro/ui/auth/login_page.dart';
 import 'package:doctor_pro/ui/util/Competence_DraggableList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:doctor_pro/ui/rendez_vous/AppointmentList.dart';
 import 'constant/constant.dart';
 
 void main() {
@@ -44,8 +44,12 @@ class MyApp extends StatelessWidget {
      //  home: LoginPage (),
       //home: SpecialityPage(),
       //home:CompetanceList()
-      home: SpecialityPage(),
+      //home: SpecialityPage(),
       //home:LoginPage()
+      // home: LoginPage (),
+        home: SpecialityPage(),
+      //home: AppointmentPage(),//for client (client or profesiionel)
+      // home:CompetanceList()
     );
   }
 
