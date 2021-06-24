@@ -3,10 +3,12 @@ import 'dart:convert';
 
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/model/User.dart';
+import 'package:doctor_pro/ui/auth/login_page.dart';
 import 'package:doctor_pro/ui/profile/profilclientmoral.dart';
 import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
 import 'package:doctor_pro/ui/profile/profilprofessionnelmorale.dart';
 import 'package:doctor_pro/ui/profile/profilprofessionnelphy.dart';
+import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:doctor_pro/constant/constant.dart';
 
@@ -43,56 +45,10 @@ class _OTPScreenState extends State<OTPScreen> {
     double height = MediaQuery.of(context).size.height;
 
 
-    loadingDialog() {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          // return object of type Dialog
-          return Dialog(
-            elevation: 0.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Wrap(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SpinKitRing(
-                        color: primaryColor,
-                        size: 40.0,
-                        lineWidth: 1.0,
-                      ),
-                      SizedBox(height: 25.0),
-                      Text(
-                        'Please Wait..',
-                        style: greySmallTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-      Timer(
-          Duration(seconds: 3),
-          () => Navigator.push(
-              context,
-              PageTransition(
-                  duration: Duration(milliseconds: 600),
-                  type: PageTransitionType.fade,
-                  child: SpecialityPage())));
-    }
-
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/doctor_bg.jpg'), fit: BoxFit.cover),
+            image: AssetImage('assets/Winek fond blanc.jpeg'), fit: BoxFit.cover ),
       ),
       child: Stack(
         children: <Widget>[
@@ -112,7 +68,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     Colors.black.withOpacity(0.55),
                     Colors.black.withOpacity(0.7),
                     Colors.black.withOpacity(0.8),
-                    Colors.black.withOpacity(1.0),
+                    Colors.black.withOpacity(0.8),
                   ],
                 ),
               ),
@@ -131,7 +87,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20.0, left: 20.0),
                     child: Text(
-                      'Verification',
+                      'Vérification',
                       style: loginBigTextStyle,
                     ),
                   ),
@@ -139,7 +95,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   Padding(
                     padding: EdgeInsets.only(left: 20.0),
                     child: Text(
-                      'Enter the OTP code from the phone we just sent you.',
+                      'Entrez le code OTP .',
                       style: whiteSmallLoginTextStyle,
                     ),
                   ),
@@ -298,14 +254,14 @@ class _OTPScreenState extends State<OTPScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'Didn\'t receive OTP Code!',
+                          'Je n\'ai pas reçu le code OTP !',
                           style: greySmallTextStyle,
                         ),
                         SizedBox(width: 10.0),
                         InkWell(
                           onTap: () {},
                           child: Text(
-                            'Resend',
+                            'Renvoyer',
                             style: inputLoginTextStyle,
                           ),
                         ),
@@ -333,14 +289,14 @@ class _OTPScreenState extends State<OTPScreen> {
                             end: Alignment.bottomRight,
                             stops: [0.1, 0.5, 0.9],
                             colors: [
-                              Colors.blue[300].withOpacity(0.8),
-                              Colors.blue[500].withOpacity(0.8),
-                              Colors.blue[800].withOpacity(0.8),
+                              blueColor.withOpacity(0.8),
+                              blueColor.withOpacity(0.8),
+                              blueColor.withOpacity(0.8),
                             ],
                           ),
                         ),
                         child: Text(
-                          'Submit',
+                          'Envoyer',
                           style: inputLoginTextStyle,
                         ),
                       ),
@@ -356,51 +312,20 @@ class _OTPScreenState extends State<OTPScreen> {
   }
   Future<dynamic> verif() async{
     print(widget.user);
-    String myurl = apiUrl+"user-service/keycloak/verifyotp/"+widget.user.id.toString()+"/"+OTPText;
     bool res= await userBloc.verifOTP(widget.user.id,OTPText);
     if(res)
-      redirectTo();
-
-    }
-
-
-redirectTo(){
-  if (widget.user.role[0].name == "CLIENT_PHYSIQUE") {
-    Navigator.push(
-        context,
-        PageTransition(
-            duration: Duration(milliseconds: 600),
-            type: PageTransitionType.fade,
-            child: ProfileClienPhysiquePage(user: widget.user,)));
-  }  else  if (widget.user.role[0].name  == "CLIENT_MORAL") {
-    Navigator.push(
-        context,
-        PageTransition(
-            duration: Duration(milliseconds: 600),
-            type: PageTransitionType.fade,
-            child: Profileclientmorale(user: widget.user,)));
-  }
-
-  else  if (widget.user.role[0].name  == "GESTIONNAIRE") {
-    Navigator.push(
-        context,
+      Navigator.push(
+          context,
           PageTransition(
-            duration: Duration(milliseconds: 600),
-            type: PageTransitionType.fade,
-            child: Profileprofessionnelmorale(user: widget.user,)));
+              duration: Duration(milliseconds: 600),
+              type: PageTransitionType.fade,
+              child: LoginPage()));
+
   }
 
-  else  if (widget.user.role[0].name  == "PROFESSIONNEL") {
-    Navigator.push(
-        context,
-        PageTransition(
-            duration: Duration(milliseconds: 600),
-            type: PageTransitionType.fade,
-            child: Profileprofessionnelphy(user: widget.user,)));
-  }
+
+
 
 }
-  }
-
 
 

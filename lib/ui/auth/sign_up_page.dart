@@ -35,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
       backgroundColor: Colors.white,
       body: Container(
         child: Column(children: [
-          Padding(padding: EdgeInsets.symmetric(vertical: 60.0)),
+          Padding(padding: EdgeInsets.symmetric(vertical: 50.0)),
           Container(
             height: 100.0,
             alignment: Alignment.center,
@@ -169,6 +169,7 @@ class _FlutterStepperPageState extends State<FlutterStepperPage> {
   void doRegister(User user) async {
     print("user doregister");
     print(user.toString());
+    user.username = user.email ;
     User usersaved  = await userBloc.saveuser(user) ;
 
     print("usersaved ==> " + usersaved.toString() );

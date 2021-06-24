@@ -3,6 +3,7 @@ import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/Speciality.dart';
 import 'package:doctor_pro/pages/artisan/drawer_1.dart';
 import 'package:doctor_pro/ui/rendez_vous/TypeDintervention.dart';
+import 'package:doctor_pro/ui/util/SideMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -33,7 +34,7 @@ class _SpecialityPageState extends State<SpecialityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer1().build(context),
+      drawer: SideMenu().build(context),
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -147,6 +148,7 @@ class _SpecialityPageState extends State<SpecialityPage> {
                           ),
 
                         ),
+                        SizedBox(height: 10.0),
                         SizedBox(height: 10.0),
                         Text(
                           item.name,

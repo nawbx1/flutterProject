@@ -4,12 +4,14 @@ import 'dart:io';
 import 'package:doctor_pro/bloc/RegionBloc.dart';
 import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/bloc/UserBloc.dart';
+import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/Gouvernorat.dart';
 import 'package:doctor_pro/model/Region.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 class ProfileClienPhysiquePage extends StatefulWidget {
@@ -116,6 +118,86 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
 
 
   }
+
+  String imageUrl ="assets/hh.png" ;
+  void Modal(context) {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        ),
+        isDismissible: true,
+        isScrollControlled: false,
+        builder: (BuildContext bc) {
+          return Container(
+            decoration: BoxDecoration(
+/*          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),*/
+            ),
+            height: 120,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      openGallery();
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      // AppLocalizations.of(context).translate('profileGalery'),
+                      'profileGalery',
+                      style: TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    height: 5,
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      openCamera();
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      // AppLocalizations.of(context).translate('profileCamera'),
+                      'profileCamera',
+                      style: TextStyle(
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+  File _image;
+  Future openGallery() async {
+    final pickedFile =
+    await ImagePicker().getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(pickedFile.path);
+     // _uploadImage();
+    });
+  }
+
+  Future openCamera() async {
+
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = File(pickedFile.path);
+      //_uploadImage();
+    });
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -129,8 +211,42 @@ class ProfileClienPhysiquePageState extends State<ProfileClienPhysiquePage>
                   new Container(
                     height: 250.0,
                     color: Colors.white,
-                    child: new Column(
+                    child: new Stack(
                       children: <Widget>[
+
+
+
+                        ClipRRect(
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(30.0)),
+                          child: Image.network(
+                              //apiUrl+'user-service/uploads/59/tim.png',
+                              "",
+                              height: 100,
+                              width: 100,
+                              errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                                return Image(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage("assets/user.png"),
+                                );
+                              }
+                          ),
+                        ),
+                        Positioned(
+                          // draw a red marble
+                           top: 5.0,
+                            right: 5.0,
+                            child: IconButton(
+                              onPressed: () {
+                                Modal(context);
+                              },
+                              icon: Icon(
+                                Icons.camera_alt,
+                                size: 30,
+                                color: Colors.black,
+                              ),
+                            )),
+
 
 
                       ],

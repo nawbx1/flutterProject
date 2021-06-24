@@ -1,15 +1,13 @@
-
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'Media.g.dart';
 @JsonSerializable()
 class Media {
-  final int id;
+   int id;
 
    String type;
 
-  final String label;
+   String label;
 
    String fileName;
 
@@ -19,7 +17,7 @@ class Media {
 
 
   Media({
-      this.id, this.type, this.label, this.fileName, this.file, this.mediaURL});
+    this.id, this.type, this.label, this.fileName, this.file, this.mediaURL});
 
   factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
 
@@ -29,28 +27,6 @@ class Media {
   String toString() {
     return 'Media{id: $id, type: $type, label: $label, fileName: $fileName, file: $file, mediaURL: $mediaURL}';
   }
-
-/*
-
-  factory Media.fromJson(Map<String, dynamic> jsonMap) {
-    return Media(
-
-        id: jsonMap['id'],
-        type: jsonMap['type'],
-        fileName: jsonMap['fileName'],
-    );
-
-  }
-  Map<String, dynamic> toJson(Media m) {
-    return({
-      'fileName': m.fileName,
-      'type': m.type,
-    });
-  }
-
-*/
-
-
 
 
 }

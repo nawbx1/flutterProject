@@ -38,6 +38,18 @@ class TokenStorageBloc{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
    String accessToken= prefs.getString('accessToken');
     return accessToken;
+
   }
+
+  static Future<String> removeAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('accessToken');
+    prefs.remove('userRole');
+    prefs.remove('userId');
+    prefs.remove('userKeycloak');
+    return 'ok' ;
+  }
+
+
 
 }

@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 
-String  apiUrl='http://192.168.1.13:9089/';
+String  apiUrl='http://192.168.1.9:9089/';
 
 Color scaffoldBgColor = Color(0xFFFAF9F7);
-Color primaryColor = Color(0xFF6979F8);
+Color primaryColor = Color(0xFFe83b70);
+//#3d296f violet
+// #1c232e vert
+//#1cb7dd blue
+// 0xFFe83b70 Rouge
+
+
+Color violetColor = Color(0xFF3d296f);
+
+Color vertColor = Color(0xFF1c232e);
+
+Color blueColor = Color(0xFF1cb7dd);
+Color redColor = Color(0xFFe83b70);
+
 Color greyColor = Colors.grey;
 Color whiteColor = Colors.white;
 Color blackColor = Colors.black;
@@ -203,7 +216,7 @@ TextStyle redColorNormalTextStyle = TextStyle(
 // Login Signup Text Style
 
 TextStyle loginBigTextStyle = TextStyle(
-  color: Colors.white,
+  color: primaryColor,
   fontSize: 30.0,
   fontWeight: FontWeight.w600,
 );

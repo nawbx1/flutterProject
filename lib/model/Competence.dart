@@ -16,6 +16,8 @@ class Competence {
   Competence({this.id, this.position, this.interventionType});
 
 
+   Competence.name(this.interventionType);
+
   factory Competence.fromJson(Map<String, dynamic> json) => _$CompetenceFromJson(json);
 
   Map<String, dynamic> toJson() => _$CompetenceToJson(this);
