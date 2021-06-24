@@ -1,6 +1,15 @@
 import 'dart:io';
 
+import 'package:doctor_pro/bloc/AppointmentBloc.dart';
+import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
+import 'package:doctor_pro/model/Address.dart';
+import 'package:doctor_pro/model/Appointment.dart';
+import 'package:doctor_pro/model/AppointmentPK.dart';
+import 'package:doctor_pro/model/InterventionType.dart';
+import 'package:doctor_pro/model/Media.dart';
+import 'package:doctor_pro/model/Region.dart';
+import 'package:doctor_pro/model/User.dart';
 
 import 'package:doctor_pro/pages/key/key.dart';
 import 'package:doctor_pro/ui/rendez_vous/ArtisanProfile_Page.dart';
@@ -13,14 +22,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:doctor_pro/ui/util/SideMenu.dart';
 class AppointmentDetails extends StatefulWidget {
-  final String artisanName, artisanType, artisanImage, artisanExp, time, date;
+  final String  heurDebut,heurFin;
+  final User professionel;
+  final InterventionType  interventionType;
+  final Region region;
+  final DateTime date;
+
   const AppointmentDetails(
       {Key key,
-        @required this.artisanName,
-        @required this.artisanType,
-        @required this.artisanImage,
-        @required this.artisanExp,
-        @required this.time,
+        @required this.professionel,
+        @required this.interventionType,
+        @required this.region,
+        @required this.heurDebut,
+        @required this.heurFin,
         @required this.date ,
 
       })
@@ -29,6 +43,22 @@ class AppointmentDetails extends StatefulWidget {
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
 class _AppointmentDetailsState extends State<AppointmentDetails> {
+
+  static TextEditingController descriptionController = TextEditingController();
+  Appointment appointment =new Appointment();
+  AppointmentBloc appointmentBloc= new AppointmentBloc();
+  int currentUserId;
+
+  getCurrentUserId()async{
+    currentUserId= await TokenStorageBloc.getStoredUserId();
+  }
+
+  saveAppointment()async{
+    Appointment savedAppointment= await appointmentBloc.save(appointment);
+   /* if(savedAppointment!=null)
+      successOrderDialog('félicitation! ','le rendez-vous a été enregistrer');
+    else  successOrderDialog('Desole! ','rendez-vous a echoué');*/
+  }
   final patientList = [
     {'name': 'Allison Perry', 'image': 'assets/user/user_3.jpg'},
     {'name': 'John Smith', 'image': ''}
@@ -36,6 +66,42 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   File _image;
   final _picker = ImagePicker();
   PickResult selectedPickupPlace;
+  DateTime finalDateDebut;
+  DateTime finalDateFin;
+  Media media=new Media();
+AppointmentPK appointmentPK=new AppointmentPK();
+Address address=new Address();
+  @override
+  void initState() {
+    getCurrentUserId();
+
+    if(widget.date!=null){
+    setState(() {
+       finalDateDebut=widget.date;
+       finalDateFin=widget.date;
+    });
+    setState(() {
+      finalDateDebut= finalDateDebut.add(new Duration(days: 0,hours:int.parse(widget.heurDebut.split(':')[0]),minutes:int.parse(widget.heurDebut.split(':')[1])  )) ;//0,int.parse(widget.heurDebut.split(':')[0]),int.parse(widget.heurDebut.split(':')[1])
+      finalDateFin =finalDateFin.add(new Duration(days: 0,hours:int.parse(widget.heurFin.split(':')[0]),minutes:int.parse(widget.heurFin.split(':')[1])  )) ;
+    appointmentPK.startDate=finalDateDebut;
+      appointmentPK.endDate=finalDateFin;
+      appointmentPK.professionnelId=widget.professionel.id;
+      appointmentPK.clientId= 7; //currentUserId;
+    appointment.title=widget.interventionType.name;
+    address.region=widget.region;
+    appointment.appointmentPK=appointmentPK;
+    appointment.address=address;
+    appointment.status="en_attente";
+    print('appointmen iiiiiiiiis ');
+    print(appointment);
+    });
+    }
+print(widget.date);
+    print('hours:int.parse(widget.heurDebut.split()[0]) === '+ widget.heurDebut.split(':')[0].toString());
+    print("date debu is "+finalDateDebut.toString());
+    print("date fin is "+finalDateFin.toString());
+  }
+
   Future getImageFromCamera() async {
     final pickedFile = await _picker.getImage(source: ImageSource.camera);
 
@@ -43,8 +109,19 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
-        print('Aucune image sélectionnée .');
+        print('Aucune image sélectionnée ');
       }
+    });
+    media.file= await _image.readAsBytes();
+    setState(() {
+      print('hedhi limage ');
+      print(_image.readAsBytes().toString());
+      media;
+      media.fileName=_image.path.substring(_image.path.lastIndexOf('.'),_image.path.length) ;
+      print("hedhi media ");
+      print(media);
+
+      appointment.media=media;
     });
   }
   Future getImageFromGallery() async {
@@ -59,6 +136,19 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
         print('Aucune image sélectionnée ');
       }
     });
+    media.file= await _image.readAsBytes();
+    setState(() {
+      print('hedhi limage ');
+      print(_image.readAsBytes().toString());
+      media;
+      media.fileName=_image.path.substring(_image.path.lastIndexOf('.'),_image.path.length) ;
+      print("hedhi media ");
+      print(media);
+
+      appointment.media=media;
+    });
+
+
   }
   @override
   Widget build(BuildContext context) {
@@ -139,7 +229,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             child: InkWell(
               borderRadius: BorderRadius.circular(15.0),
               onTap: () {
-                successOrderDialog();
+                saveAppointment();
+                //successOrderDialog();
               },
               child: Container(
                 width: double.infinity,
@@ -179,7 +270,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Hero(
-                          tag: widget.artisanImage,
+                          tag:  widget.professionel!=null && widget.professionel.profile!=null&& widget.professionel.profile.profileImage!=null ?
+                    apiUrl +
+                    'user-service/'+  widget.professionel.profile.profileImage.mediaURL: apiUrl +
+                    'user-service/uploads/avatar.jpg',
                           child: Container(
                             width: 76.0,
                             height: 76.0,
@@ -196,7 +290,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                 ),
                               ],
                               image: DecorationImage(
-                                image: AssetImage(widget.artisanImage),
+                                image: NetworkImage( widget.professionel!=null && widget.professionel.profile!=null&& widget.professionel.profile.profileImage!=null ?
+                                apiUrl +
+                                    'user-service/'+  widget.professionel.profile.profileImage.mediaURL: apiUrl +
+                                    'user-service/uploads/avatar.jpg',),
                                 fit: BoxFit.fitHeight,
                               ),
                             ),
@@ -212,7 +309,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      ' ${widget.artisanName}',
+                                      ' ${widget.professionel!=null  ? widget.professionel.username:''}',
                                       style: blackNormalBoldTextStyle,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -229,13 +326,13 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                                   type: PageTransitionType.fade,
                                                   child: ArtisanProfilePage(
                                                     artisanImage:
-                                                    widget.artisanImage,
+                                                   '',
                                                     artisanName:
-                                                    widget.artisanName,
+                                                    'widget.artisanName',
                                                     artisanType:
-                                                    widget.artisanType,
+                                                    'widget.artisanType',
                                                     experience:
-                                                    widget.artisanExp,
+                                                    'widget.artisanExp',
                                                   )));
                                         },
                                         child: Text(
@@ -249,15 +346,16 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               ),
                               SizedBox(height: 7.0),
                               Text(
-                                widget.artisanType,
+                                widget.professionel!=null && widget.professionel.profile!=null&& widget.professionel.speciality!=null && widget.professionel.speciality.isNotEmpty  ?
+                                widget.professionel.speciality[0].name:' ' ,
                                 style: greyNormalTextStyle,
                               ),
                               SizedBox(height: 7.0),
-                              Text(
+                             /* Text(
 
                                 '${widget.artisanExp} Ans d\'Experience',
                                 style: primaryColorNormalTextStyle,
-                              ),
+                              ),*/
                             ],
                           ),
                         ),
@@ -290,7 +388,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             ),
                             widthSpace,
                             Text(
-                              widget.date,
+                              widget.date.toString(),
                               style: blackNormalTextStyle,
                             ),
                           ],
@@ -306,7 +404,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             ),
                             widthSpace,
                             Text(
-                              widget.time,
+                              'from: ' +widget.heurDebut +' to: '+widget.heurFin,
                               style: blackNormalTextStyle,
                             ),
 
@@ -435,7 +533,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             initialPosition: LatLng(-33.8567844, 151.213108),
             useCurrentLocation: true,
             selectInitialPosition: true,
-            //usePlaceDetailSearch: true,
+            usePlaceDetailSearch: true,
             onPlacePicked: (result) {
               selectedPickupPlace = result;
               Navigator.of(context).pop();
@@ -476,7 +574,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
           );
         });
   }
-  successOrderDialog() {
+  successOrderDialog( String headerTitle,String bodyMessage) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -511,8 +609,16 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   height: 20.0,
                 ),
                 Text(
-                  "Succès!",
+                  headerTitle ,
                   style: greySmallBoldTextStyle,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Text(
+                  bodyMessage,
+                  style: greyVerySmallBoldTextStyle,
                   textAlign: TextAlign.center,
                 ),
 
@@ -536,6 +642,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             style: blackBigBoldTextStyle,
           ),
           TextField(
+            controller: descriptionController,
+            onChanged: (v){
+              appointment.description=descriptionController.text;
+            },
             maxLines: 8,
             decoration: new InputDecoration(
                 border: new OutlineInputBorder(
@@ -549,6 +659,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 hintText: "Ecrire votre Description ",
                 fillColor: Colors.white70),
           ),
+
           heightSpace,
           heightSpace,
 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:page_transition/page_transition.dart';
+import 'package:doctor_pro/ui/rendez_vous/AppointmentList.dart';
 
 class Walkthrough extends StatefulWidget {
   @override
@@ -73,7 +74,7 @@ class _WalkthroughState extends State<Walkthrough> {
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.rightToLeft,
-                                    child: Appointment()));
+                                    child: AppointmentPage()));
                           },
                           child: Container(
                             width: ((width) / 2),

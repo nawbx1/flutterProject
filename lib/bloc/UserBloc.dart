@@ -40,7 +40,7 @@ class UserBloc{
     var result = await userRepository.fetchSpeciality() ;
     print("result is");
     String source = Utf8Decoder().convert(result.bodyBytes);
-    var  res = json.decode(source.toString())as List;
+    var  res = json.decode(source.toString()) as List;
     print(res.length);
     print(res[1]);
     print("result is 2");
@@ -100,6 +100,27 @@ class UserBloc{
 if(response.statusCode==200)
   return true;
 else return false;
+  }
+
+
+  Future<List<User>> getAllUsers() async {
+    print("userbloc   ..... ");
+
+    var result = await userRepository.getAllUsers() ;
+    print("result is");
+    String source = Utf8Decoder().convert(result.bodyBytes);
+    var  res = json.decode(source.toString()) as List;
+    print(res.length);
+    print(res[1]);
+    print("result is 2");
+    //List<Speciality> lists = res.map((tagJson) => Speciality.fromJson(tagJson)).toList() ;
+    List<User> result2 = res.map((i) => User.fromJson(i)).toList();
+
+
+    print(result2.toString());
+    print("result is 3");
+    print(res[0]);
+    return result.statusCode==200? result2 : [];
   }
 
 

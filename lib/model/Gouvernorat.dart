@@ -17,6 +17,11 @@ class Gouvernorat {
   Gouvernorat({this.id, this.name, this.regions});
 
 
+  @override
+  String toString() {
+    return 'Gouvernorat{id: $id, name: $name, regions: $regions}';
+  }
+
   factory Gouvernorat.fromJson(Map<String, dynamic> json) => _$GouvernoratFromJson(json);
 
   Map<String, dynamic> toJson() => _$GouvernoratToJson(this);

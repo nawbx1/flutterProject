@@ -10,6 +10,11 @@ class UserRepository{
 
 
 
+  Future<Response>  getAllUsers() async {
+
+    return await http.get(Uri.parse(apiUrl+'user-service/user/all'),
+        headers: {HttpHeaders.contentTypeHeader: "application/json; charset=utf-8"});
+  }
 
   Future<Response>  getUserByKeycloak(String keycloak) async {
 
