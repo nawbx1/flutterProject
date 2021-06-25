@@ -34,7 +34,7 @@ class AppointmentBloc{
 
    int id = await TokenStorageBloc.getStoredUserId();
     print(id);
-    var result = await appointmentRepository.getMyAppointment(id) ;
+    var result = await appointmentRepository.getMyAppointment(7) ;
     print("result is");
     String source = Utf8Decoder().convert(result.bodyBytes);
     var  res = json.decode(source.toString()) as List;
@@ -70,7 +70,7 @@ class AppointmentBloc{
     int id = await TokenStorageBloc.getStoredUserId();
     print("id is");
     print(id);
-    var result = await appointmentRepository.getMyAppointmentAsClient(id) ;
+    var result = await appointmentRepository.getMyAppointmentAsClient(7) ;
     print("result is");
     String source = Utf8Decoder().convert(result.bodyBytes);
     var  res = json.decode(source.toString()) as List;

@@ -22,7 +22,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   AppointmentBloc appointmentBloc=new AppointmentBloc();
   void fetchRDV() async {
-    RDVList = await appointmentBloc.getMyAppointment();
+    RDVList = await appointmentBloc.getMyAppointmentAsClient();
 
     //encours,validée,refusée,terminée,en_attente
     for(Appointment a in RDVList ){
@@ -135,7 +135,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         backgroundColor: whiteColor,
         appBar: AppBar(
@@ -147,9 +147,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
             style: appBarTitleTextStyle,
           ),
           bottom: TabBar(
-            // isScrollable: true,
+            isScrollable: true,
             tabs: [
-
+              Tab(
+                child: tabItem('tous ', RDVList !=null ? RDVList.length:0),
+              ),
               Tab(
                 child: tabItem('en attente ', enattentelist !=null ? enattentelist.length:0),
               ),
@@ -164,9 +166,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ),
         body: TabBarView(
           children: [
-            activeAppointment(),
-            pastAppointment(),
-            cancelledAppointment(),
+            AllAppointment(),
+            enAttenteAppointments(),
+            acceptedAppointments(),
+            acheavedAppointments(),
           ],
         ),
       ),
@@ -203,8 +206,93 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
-  activeAppointment() {
-    return (enattentelist != null && enattentelist.length == 0)
+  AllAppointment() {
+    return (RDVList  == null ||  RDVList.length == 0)
+        ? Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.date_range,
+            color: greyColor,
+            size: 70.0,
+          ),
+          heightSpace,
+          Text(
+            'AUCUN RENDEZ-VOUS ACCEPTÉ',
+            style: greyNormalTextStyle,
+          ),
+        ],
+      ),
+    )
+        : ListView.builder(
+      itemCount: RDVList != null ?RDVList.length :0,
+      itemBuilder: (context, index) {
+        final item = RDVList[index];
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(fixPadding * 2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 80.0,
+                    height: 80.0,
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(3.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40.0),
+                      border: Border.all(width: 1.0, color: primaryColor),
+                      color: primaryColor.withOpacity(0.15),
+                    ),
+                    child: Text(
+                      new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
+                      textAlign: TextAlign.center,
+                      style: primaryColorNormalTextStyle,
+                    ),
+                  ),
+                  widthSpace,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
+                          style: blackHeadingTextStyle,
+                        ),
+                        SizedBox(height: 7.0),
+                        Text(
+                          ' ${item.professionnel.username}',
+                          style: blackNormalTextStyle,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 7.0),
+                        Text(
+
+                          '${item.professionnel !=null  && item.professionnel.speciality!=null ? item.professionnel.speciality[0].name :"mramaji"}',
+                          style: primaryColorsmallTextStyle,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            divider(),
+          ],
+        );
+      },
+    );
+  }
+  enAttenteAppointments() {
+    return (enattentelist  == null ||  enattentelist.length == 0)
         ? Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -302,8 +390,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
-  pastAppointment() {
-    return (RDVList != null && RDVList.length == 0)
+  acceptedAppointments() {
+    return (acceptedlist == null || acceptedlist.length == 0)
         ? Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -323,9 +411,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
       ),
     )
         : ListView.builder(
-      itemCount: RDVList != null ?RDVList.length :0,
+      itemCount: acceptedlist != null ?acceptedlist.length :0,
       itemBuilder: (context, index) {
-        final item = RDVList[index];
+        final item = acceptedlist[index];
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -388,8 +476,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
-  cancelledAppointment() {
-    return (RDVList.length == 0)
+  acheavedAppointments() {
+    return (acheavedlist==null || acheavedlist.length == 0)
         ? Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -409,9 +497,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
       ),
     )
         : ListView.builder(
-      itemCount: RDVList.length,
+      itemCount: acheavedlist.length,
       itemBuilder: (context, index) {
-        final item = RDVList[index];
+        final item = acheavedlist[index];
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
