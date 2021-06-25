@@ -163,7 +163,7 @@ print(widget.date);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideMenu().build(context),
+      drawer: SideMenu(),
       backgroundColor: whiteColor,
       appBar: AppBar(
         backgroundColor: whiteColor,

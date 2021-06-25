@@ -125,7 +125,7 @@ class _profileSetting extends State<ProfileSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideMenu().build(context),
+      drawer: SideMenu().createState().build(context),
       backgroundColor: whiteColor,
       appBar: PreferredSize(
 

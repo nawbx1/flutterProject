@@ -34,7 +34,7 @@ class _SpecialityPageState extends State<SpecialityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SideMenu().build(context),
+      drawer: SideMenu(),
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
