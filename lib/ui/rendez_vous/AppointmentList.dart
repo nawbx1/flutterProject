@@ -6,6 +6,9 @@ import 'package:doctor_pro/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 class AppointmentPage extends StatefulWidget {
+  final bool isProfessionnel ;
+  const AppointmentPage(
+      {Key key, @required this.isProfessionnel }) : super(key: key);
   @override
   _AppointmentPageState createState() => _AppointmentPageState();
 }
@@ -22,7 +25,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   AppointmentBloc appointmentBloc=new AppointmentBloc();
   void fetchRDV() async {
-    RDVList = await appointmentBloc.getMyAppointmentAsClient();
+    if(!widget.isProfessionnel)
+      RDVList = await appointmentBloc.getMyAppointmentAsClient();
+    else   RDVList = await appointmentBloc.getMyAppointment();
+
 
     //encours,validée,refusée,terminée,en_attente
     for(Appointment a in RDVList ){

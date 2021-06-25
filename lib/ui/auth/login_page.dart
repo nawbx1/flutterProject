@@ -1,15 +1,9 @@
-import 'dart:convert';
 
 import 'package:doctor_pro/bloc/TokenStorageBloc.dart';
 import 'package:doctor_pro/bloc/UserBloc.dart';
 import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/User.dart';
 import 'package:doctor_pro/ui/auth/sign_up_page.dart';
-import 'package:doctor_pro/ui/profile/profilclientmoral.dart';
-import 'package:doctor_pro/ui/profile/profilclientphysique.dart';
-import 'package:doctor_pro/ui/profile/profilprofessionnelmorale.dart';
-import 'package:doctor_pro/ui/profile/profilprofessionnelphy.dart';
-import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:doctor_pro/ui/util/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -37,63 +31,12 @@ class LoginPageState extends State<LoginPage> {
   String phoneIsoCode;
   String ErrorMessage1="";
   bool showPassword = true;
-User user=new User();
+  User user=new User();
   UserBloc userBloc=new UserBloc();
-  void checkFullname(String v) {
-    if (v == '')
-      setState(() {
-        verifName = false;
-      });
-    else
-      setState(() {
-        verifName = true;
-      });
-  }
-  void checkPhone(String v) {
-    if (v == '')
-      setState(() {
-        verifPhone = false;
-      });
-    else {
-      if (v.length >= 8)
-        setState(() {
-          verifPhone = true;
-          passwordVerification = "";
-          ErrorMessage = "";
-        });
-      else
-        setState(() {
-          verifPhone = false;
-          passwordVerification =
-          'Mot de passe faible, il faut au moins 8 caractères';
-          ErrorMessage1 = passwordVerification;
-        });
-    }
-  }
 
-  void checkPassword(String v) {
-    if (v == '')
-      setState(() {
-        verifPassword = false;
-        passwordVerification = "Veuillez saisir un mot de passe";
-        ErrorMessage1 = passwordVerification;
-      });
-    else {
-      if (v.length >= 8)
-        setState(() {
-          verifPassword = true;
-          passwordVerification = "";
-          ErrorMessage = "";
-        });
-      else
-        setState(() {
-          verifPassword = false;
-          passwordVerification =
-          'Mot de passe faible, il faut au moins 8 caractères';
-          ErrorMessage1 = passwordVerification;
-        });
-    }
-  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +48,7 @@ User user=new User();
             alignment: Alignment.bottomCenter,
             child: Stack(
               children: [
-               /* Container(
+                /* Container(
                   height: 250.0,
                   width: MediaQuery.of(context).size.width,
                   child: CustomPaint(
@@ -155,32 +98,19 @@ User user=new User();
               child: TextField(
 
                 controller: emailController,
-
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
-                  checkEmail(value);
                   user.email=emailController.text;
                 },
 
                 decoration: InputDecoration(
                   hintText: "Email",
-                  prefixIcon: Icon(Icons.phone),
-                  // TextStyle(color: verifPhone ? Colors.black : Colors.red),
-                  errorText: verifPhone ? null : '',
-                  errorStyle: TextStyle(
-                      decorationColor: Colors.red, height: 0, fontSize: 0.1),
+                  prefixIcon: Icon(Icons.email),
                   contentPadding: EdgeInsets.zero,    filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: verifPhone ? Colors.black : Colors.red, width: 1.5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: verifPhone ? Colors.black : Colors.red, width: 1.5),
-                  ),
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: verifPhone ? Colors.black : Colors.red, width: 1.5),
+                    borderSide: BorderSide(color: Colors.black, width: 1.5),
                   ),
 
                 ),
@@ -189,11 +119,7 @@ User user=new User();
             ),
           ),
           SizedBox(height: 30.0),
-          // Email Field Start
 
-          // Email Field End
-
-          // Password Field Start
           Theme(
             data: Theme.of(context).copyWith(
               primaryColor: Colors.grey,
@@ -201,42 +127,40 @@ User user=new User();
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: TextField(
-                textInputAction: TextInputAction.next,
+
                 controller: passwordController,
+                obscureText: showPassword,
+
+                textInputAction: TextInputAction.next,
                 onChanged: (value) {
-                  checkPassword(value);
                   user.password=passwordController.text;
                 },
 
-                obscureText: true,
                 decoration: InputDecoration(
-                  hintText: "Mot passe",
+                  hintText: "Mot de passe",
                   prefixIcon: Icon(Icons.vpn_key),
-
                   suffixIcon: IconButton(
                     icon: Icon(Icons.remove_red_eye),
                     onPressed: () => setState(() => showPassword = !showPassword),
                   ),
-                  fillColor: Colors.grey[200],
-                  filled: true,
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color:Colors.black , width: 1.5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color: Colors.black , width: 1.5),
-                  ),
+
+                  contentPadding: EdgeInsets.zero,    filled: true,
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(color:Colors.black , width: 1.5),
+                    borderSide: BorderSide(color: Colors.black, width: 1.5),
                   ),
+
                 ),
+
               ),
             ),
           ),
+          SizedBox(height: 20.0),
+
+          ErrorMessage!=''?Center(child: Text(ErrorMessage,style: TextStyle(color: Colors.red),)):Container(),
           // Password Field End
-          SizedBox(height: 12.0),
+          SizedBox(height: 20.0),
           // Forgot Password Start
           Padding(
             padding: EdgeInsets.only(right: 20.0),
@@ -254,8 +178,9 @@ User user=new User();
             ),
           ),
           // Forgot Password End
+
           SizedBox(height: 20.0),
-          // Sign in button start
+
           Container(
             width: double.infinity,
             alignment: Alignment.center,
@@ -265,14 +190,7 @@ User user=new User();
               child: InkWell(
                 borderRadius: BorderRadius.circular(30.0),
                 onTap: () {
-                  checkPassword(passwordController.text);
-                  checkEmail(emailController.text);
-                  setState(() {
-                    ErrorMessage1="";
-                  });
-
-                    singin(user);
-
+                  singin(user);
                 },
                 child: Container(
                   padding: EdgeInsets.fromLTRB(60.0, 15.0, 60.0, 15.0),
@@ -281,7 +199,7 @@ User user=new User();
                     color: redColor,
                   ),
                   child: Text(
-                    'Connecter',
+                    'Se connecter',
                     style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
@@ -300,7 +218,7 @@ User user=new User();
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'New User?',
+                'Nouveau utilisateur ?',
                 style: TextStyle(
                   fontSize: 15.0,
                   fontWeight: FontWeight.bold,
@@ -316,7 +234,7 @@ User user=new User();
                     );
                   },
                   child: Text(
-                    'Sign Up',
+                    'Créer un compte',
                     style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
@@ -332,76 +250,52 @@ User user=new User();
   }
 
 
+  bool check() {
+    ErrorMessage='';
+    bool v=true ;
+    if (emailController.text == '')
+      setState(() {
+        ErrorMessage+="verifier email\n";
+        v=false;
+      });
+    if (passwordController.text == '')
+      setState(() {
+        ErrorMessage+="verifier password";
+        v=false ;
+      });
 
+    return v ;
+
+  }
 
   singin(User user) async{
-   String accessToken = await userBloc.login(context,user);
-   if(accessToken!=null){
-     postLoginRedirect();
-   }
+    String accessToken ;
+    print(check()) ;
+    if(check())
+    {
+      accessToken = await userBloc.login(context,user);
+      if(accessToken!=null){
+        postLoginRedirect();
+      }
+      else ErrorMessage = "verifier votre email/mot de passe" ;
+    }
+    setState(() {
+      ErrorMessage ;
+    });
+
   }
   postLoginRedirect() async {
 
-print("postLoginRedirect .................................. ");
     String userRole = await TokenStorageBloc.getStoredUserRole() ;
-print("postLoginRedirect 222222222222222222222222222222222 .................................. ");
-
     Navigator.push(
-      context,
-      PageTransition(
-          duration: Duration(milliseconds: 600),
-          type: PageTransitionType.fade,
-          child: BottomNavigation()));
-
-
-
+        context,
+        PageTransition(
+            duration: Duration(milliseconds: 600),
+            type: PageTransitionType.fade,
+            child: BottomNavigation()));
   }
 
 
-  bool validateEmail(String value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    return (!regex.hasMatch(value)) ? false : true;
-  }
-  void checkEmail(String v) {
-    if (v == '')
-      setState(() {
-        verifEmail = false;
-      });
-    else
-    if(validateEmail(v))
-      setState(() {
-        verifEmail = true;
-      });
-    else
-      setState(() {
-        verifEmail = false;
-      });
-  }
 
 
-}
-
-class CurvePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint();
-    paint.color = Colors.red[800];
-    paint.style = PaintingStyle.fill; // Change this to fill
-
-    var path = Path();
-
-    path.moveTo(0, 200.0);
-    path.quadraticBezierTo(size.width / 2, 300.0, size.width, 200.0);
-    path.lineTo(size.width, 0);
-    path.lineTo(0, 0);
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
 }

@@ -106,10 +106,10 @@ class UserBloc{
     print("status code "  +  result.statusCode.toString() );
     TokenStorageBloc.storeUserDetails(responseLogin.user);
     TokenStorageBloc.storeAccessToken(responseLogin.accessToken);
-    CoolAlert.show(
+    /*CoolAlert.show(
       context: context,
       type: CoolAlertType.loading,
-    );
+    );*/
     return responseLogin.accessToken;
   }
 

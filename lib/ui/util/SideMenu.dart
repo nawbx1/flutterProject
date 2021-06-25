@@ -1,11 +1,39 @@
+import 'package:doctor_pro/model/User.dart';
+import 'package:doctor_pro/pages/home/home.dart';
 import 'package:doctor_pro/pages/profile/Setting1.dart';
+import 'package:doctor_pro/ui/auth/sign_up_page.dart';
+import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/appointmentScreen.dart';
 import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
+
 class SideMenu extends StatefulWidget {
   @override
-  Drawer build(BuildContext context) {
+  _SideMenuState createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
+
+  User user ;
+  initUser() async{
+    user = await userBloc.getUserByKeycloak();
+    print("user _SideMenuState ");
+    print(user);
+    setState(() {
+      user ;
+    });
+
+  }
+@override
+  void initState() {
+    initUser();
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: [
@@ -13,10 +41,10 @@ class SideMenu extends StatefulWidget {
             width: double.infinity,
             height: 200.0,
             decoration: BoxDecoration(
-              image: DecorationImage(
+              /*image: DecorationImage(
                 image: AssetImage('assets/bg_home.jpg'),
                 fit: BoxFit.cover,
-              ),
+              ),*/
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,10 +57,10 @@ class SideMenu extends StatefulWidget {
                     height: 70.0,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(35.0),
-                      image: DecorationImage(
+                      /*image: DecorationImage(
                         image: AssetImage('assets/user.jpg'),
                         fit: BoxFit.cover,
-                      ),
+                      ),*/
                     ),
                   ),
                 ),
@@ -45,7 +73,7 @@ class SideMenu extends StatefulWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Ellison Perry',
+                        user!=null &&   user.email!=null ?  user.email : "",
                         style: TextStyle(
                           fontSize: 18.0,
                           color: Colors.white,
@@ -54,7 +82,7 @@ class SideMenu extends StatefulWidget {
                       ),
                       SizedBox(height: 5.0),
                       Text(
-                        'test@abc.com',
+                        user!=null &&   user.email!=null ?  user.email : "",
                         style: TextStyle(
                           fontSize: 15.0,
                           color: Colors.white,
@@ -67,13 +95,22 @@ class SideMenu extends StatefulWidget {
             ),
           ),
           ListTile(
-            onTap: ( ) {},
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  duration: Duration(milliseconds: 800),
+                  type: PageTransitionType.fade,
+                  child: Home(),
+                ),
+              );
+            },
             leading: Icon(
               Icons.home,
               color: Colors.black,
             ),
             title: Text(
-              'Home ',
+              'Acceuil ',
               style: TextStyle(color: Colors.black),
             ),
 
@@ -85,13 +122,22 @@ class SideMenu extends StatefulWidget {
             ),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  duration: Duration(milliseconds: 800),
+                  type: PageTransitionType.fade,
+                  child: AppointmentScreen(),
+                ),
+              );
+            },
             leading: Icon(
               Icons.photo_album,
               color: Colors.black,
             ),
             title: Text(
-              'Gallery',
+              'Liste des RDVs',
               style: TextStyle(color: Colors.black),
             ),
             trailing: Icon(
@@ -184,10 +230,7 @@ class SideMenu extends StatefulWidget {
       ),
     );
   }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
 }
+
+
+
