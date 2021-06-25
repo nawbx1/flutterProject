@@ -4,59 +4,94 @@ import 'package:flutter/material.dart';
 import 'package:cell_calendar/cell_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
-
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  List<Appointment> RDVList=[];
-  List<Appointment> enattentelist=[];
-  List<Appointment> acceptedlist=[];
-  List<Appointment> acheavedlist=[];
+  List<Appointment> RDVList = [];
+  List<Appointment> enattentelist = [];
+  List<Appointment> acceptedlist = [];
+  List<Appointment> acheavedlist = [];
 
+  AppointmentBloc appointmentBloc = new AppointmentBloc();
 
-  AppointmentBloc appointmentBloc=new AppointmentBloc();
   void fetchRDV() async {
-
-    RDVList = await appointmentBloc.getMyAppointmentAsClient();
+    RDVList = await appointmentBloc.getMyAppointment();//les rdv dont current user is professionel
 
     setState(() {
-      RDVList ;
+      RDVList;
     });
+
+    final today = DateTime.now();
+
+
+    for (Appointment a in RDVList) {
+      setState(() {
+        sampleEvents.add(CalendarEvent(
+            eventName: a.description !=null ?a.description: 'rdv' ,
+            eventDate: today.add(Duration(
+                days: today.difference(a.appointmentPK.startDate).inDays,
+                hours: (a.appointmentPK.startDate.hour -
+                    a.appointmentPK.endDate.hour),
+                minutes: a.appointmentPK.startDate.minute -
+                    a.appointmentPK.endDate.minute)),
+            eventBackgroundColor: getAppointmentColor(
+                a.appointmentPK.startDate, a.appointmentPK.endDate)));
+      });
+    }
+
+
+
     print("RDVList");
     print(RDVList);
-
   }
+
   @override
-  void initState(){
+  void initState() {
+    fetchRDV();
     super.initState();
-    fetchRDV() ;
-
   }
 
-  insertAppointmentToCalendar(){
-    for(Appointment a in RDVList ){
-      setState(() {
-
-      });
+  insertAppointmentToCalendar() {
+    for (Appointment a in RDVList) {
+      setState(() {});
     }
   }
 
-  List<CalendarEvent> sampleEvents() {
-    final today = DateTime.now();
-    final sampleEvents = [];
+  getAppointmentColor(DateTime startDate, DateTime endDate) {
+    DateTime currentDate = DateTime.now();
 
-    for(Appointment a in RDVList ){
+    if (currentDate.compareTo(startDate) <= 0) return Colors.deepPurple;
+    if (currentDate.compareTo(endDate) >= 0) return Colors.redAccent;
+  }
+  List<CalendarEvent> sampleEvents = [];
+  List<CalendarEvent> sampleEventss() {
+    final today = DateTime.now();
+
+
+    for (Appointment a in RDVList) {
       setState(() {
-        sampleEvents.add(
-          new CalendarEvent(
-            eventName:a.title,
-            eventDate: today.add(Duration(days: today.day - a.appointmentPK.startDate.day)),
-            //  eventDate: today.add(Duration(days: 0,hours: getHoursBetween())),
-            eventBackgroundColor: Colors.green),
-        );
+        sampleEvents.add(CalendarEvent(
+            eventName: a.description,
+            eventDate: today.add(Duration(
+                days: today.difference(a.appointmentPK.startDate).inDays,
+                hours: (a.appointmentPK.startDate.hour -
+                    a.appointmentPK.endDate.hour),
+                minutes: a.appointmentPK.startDate.minute -
+                    a.appointmentPK.endDate.minute)),
+            eventBackgroundColor: getAppointmentColor(
+                a.appointmentPK.startDate, a.appointmentPK.endDate)));
       });
+    }
+    setState(() {
+      sampleEvents;
+      print("kfjvfkvjnfkvjnfkjv");
+      print(sampleEvents);
+    });
+    for (CalendarEvent c in sampleEvents) {
+      print("ggggggg ");
+      print(c.eventName);
     }
 
     return sampleEvents;
@@ -64,17 +99,17 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _sampleEvents = sampleEvents();
+    //final _sampleEvents = sampleEvents();
     final cellCalendarPageController = CellCalendarPageController();
     return Scaffold(
       appBar: AppBar(
-        title: Text("title"),
+        title: Text("Calendrier"),
       ),
       body: CellCalendar(
         cellCalendarPageController: cellCalendarPageController,
-        events: _sampleEvents,
+        events: sampleEvents,
         daysOfTheWeekBuilder: (dayIndex) {
-          final labels = ["S", "M", "T", "W", "T", "F", "S"];
+          final labels = ["DIM", "LUN", "MAR", "MER", "JEU", "VEN", "SAM"];
           return Padding(
             padding: const EdgeInsets.only(bottom: 4.0),
             child: Text(
@@ -118,7 +153,7 @@ class _CalendarPageState extends State<CalendarPage> {
           );
         },
         onCellTapped: (date) {
-          final eventsOnTheDate = _sampleEvents.where((event) {
+          final eventsOnTheDate = sampleEvents.where((event) {
             final eventDate = event.eventDate;
             return eventDate.year == date.year &&
                 eventDate.month == date.month &&
@@ -127,26 +162,27 @@ class _CalendarPageState extends State<CalendarPage> {
           showDialog(
               context: context,
               builder: (_) => AlertDialog(
-                title:
-                Text(date.month.monthName + " " + date.day.toString()),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: eventsOnTheDate
-                      .map(
-                        (event) => Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(4),
-                      margin: EdgeInsets.only(bottom: 12),
-                      color: event.eventBackgroundColor,
-                      child: Text(
-                        event.eventName,
-                        style: TextStyle(color: event.eventTextColor),
-                      ),
+                    title:
+                        Text(date.month.monthName.substring(0,2) + " " + date.day.toString()),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: eventsOnTheDate
+                          .map(
+                            (event) => Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(4),
+                              margin: EdgeInsets.only(bottom: 12),
+                              color: event.eventBackgroundColor,
+                              child: Text(
+                                event.eventName,
+                                style: TextStyle(color: event.eventTextColor),
+                              ),
+
+                            ),
+                          )
+                          .toList(),
                     ),
-                  )
-                      .toList(),
-                ),
-              ));
+                  ));
         },
         onPageChanged: (firstDate, lastDate) {
           /// Called when the page was changed
@@ -156,4 +192,3 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 }
-

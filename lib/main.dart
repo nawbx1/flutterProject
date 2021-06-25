@@ -2,6 +2,7 @@ import 'package:doctor_pro/appBehaviour/my_behaviour.dart';
 import 'package:doctor_pro/pages/screens.dart';
 import 'package:doctor_pro/ui/auth/login_page.dart';
 import 'package:doctor_pro/ui/auth/otp.dart';
+import 'package:doctor_pro/ui/rendez_vous/CalendarPage.dart';
 import 'package:doctor_pro/ui/setting/profile_setting_page.dart';
 import 'package:doctor_pro/ui/util/Competence_DraggableList.dart';
 import 'package:doctor_pro/ui/util/bottom_navigation_bar.dart';
@@ -45,14 +46,14 @@ class MyApp extends StatelessWidget {
 
         );
       },
-        home: LoginPage (),
+        home: CalendarPage (),
       //home: SpecialityPage(),
       //home:CompetanceList()
       //home: SpecialityPage(),
       //home:LoginPage()
       // home: LoginPage (),
        // home: SpecialityPage(),
-      //home: AppointmentPage(),//for client (client or profesiionel)
+     // home: AppointmentPage(),//for client (client or profesiionel)
       // home:CompetanceList()
      // home: OTPScreen(),
     );
