@@ -22,6 +22,7 @@ import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:doctor_pro/ui/util/SideMenu.dart';
+import 'package:intl/intl.dart';
 class AppointmentDetails extends StatefulWidget {
   final String  heurDebut,heurFin;
   final User professionel;
@@ -399,7 +400,7 @@ print(widget.date);
                             ),
                             widthSpace,
                             Text(
-                              widget.date.toString(),
+                              new DateFormat('yyyy-MM-dd').format( widget.date),
                               style: blackNormalTextStyle,
                             ),
                           ],

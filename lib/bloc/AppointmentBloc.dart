@@ -30,11 +30,31 @@ class AppointmentBloc{
     return result.statusCode==200? a : null;
   }
 
+
+
+  Future<Appointment> update(Appointment appointment) async{
+
+    var result = await appointmentRepository.update(appointment) ;
+    //User u = json.decode(result.body).map((tagJson) => User.fromJson(tagJson));
+    print(result.body);
+    String source = Utf8Decoder().convert(result.bodyBytes);
+    Appointment a = Appointment.fromJson(json.decode(source.toString())) ;
+    print("save user UserBloc "  + a.toString());
+
+
+    print("status code "  +  result.statusCode.toString() );
+
+    if(result.statusCode==200)
+      NotificationDialog( 'Success','ya3tik saida ','200');
+    else NotificationDialog( 'desole','marra o5ra ','500');
+    return result.statusCode==200? a : null;
+  }
+
   Future<List<Appointment>> getMyAppointment() async {
 
    int id = await TokenStorageBloc.getStoredUserId();
     print(id);
-    var result = await appointmentRepository.getMyAppointment(id) ;
+    var result = await appointmentRepository.getMyAppointment(7) ;
     print("result is");
     String source = Utf8Decoder().convert(result.bodyBytes);
     var  res = json.decode(source.toString()) as List;
@@ -50,6 +70,7 @@ class AppointmentBloc{
 
   Future<List<Appointment>> getProfessionelCalendar(int id) async {
 
+
     var result = await appointmentRepository.getProfessionelCalendar(id) ;
     String source = Utf8Decoder().convert(result.bodyBytes);
     var  res = json.decode(source.toString())as List;
@@ -63,7 +84,7 @@ class AppointmentBloc{
     int id = await TokenStorageBloc.getStoredUserId();
     print("id is");
     print(id);
-    var result = await appointmentRepository.getMyAppointmentAsClient(1) ;
+    var result = await appointmentRepository.getMyAppointmentAsClient(7) ;
     print("result is");
     String source = Utf8Decoder().convert(result.bodyBytes);
     var  res = json.decode(source.toString()) as List;

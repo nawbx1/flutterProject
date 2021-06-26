@@ -12,8 +12,10 @@ class AppointmentFrontCard extends StatefulWidget {
   final String appointmentDate;
   final String appointmentTime;
   final String imgLink;
+  final String appointmentTitle;
   const AppointmentFrontCard({
     Key key,
+    @required this.appointmentTitle,
     @required this.imgLink,
     @required this.onAccep,
     @required this.onDecline,
@@ -53,7 +55,7 @@ class _AppointmentFrontCardState extends State<AppointmentFrontCard> {
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              'Appointment Request',
+                              widget.appointmentTitle,
                               style: TextStyle(
                                   fontSize: SizeConfig.safeBlockHorizontal * 4.5,
                                   color: Colors.white),
@@ -219,7 +221,7 @@ class _AppointmentFrontCardState extends State<AppointmentFrontCard> {
                                   textColor: Colors.white,
                                   color: Colors.blue,
                                   child: Text(
-                                    'accept',
+                                    'Valider',
                                     style: TextStyle(
                                       fontSize:
                                           SizeConfig.safeBlockHorizontal * 5.5,
@@ -247,7 +249,7 @@ class _AppointmentFrontCardState extends State<AppointmentFrontCard> {
                                   textColor: Colors.black26,
                                   color: Color(0xffEBEFFB),
                                   child: Text(
-                                    'Decline',
+                                    'Refuser',
                                     style: TextStyle(
                                       color: Color(0xff878FA6) ,
                                       fontSize:

@@ -48,10 +48,10 @@ class MyApp extends StatelessWidget {
         );
       },
        // home: CalendarPage (),
-       home: LoginPage (),
+       //home: LoginPage (),
        // home: SpecialityPage(),
       //home: AppointmentPage(isProfessionnel: false,),//for client (client or profesiionel)
-      //home: AppointmentScreen(),
+      home: AppointmentPage(isProfessionnel:true),
 
     );
   }
