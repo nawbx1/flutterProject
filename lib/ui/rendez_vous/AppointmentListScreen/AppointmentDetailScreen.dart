@@ -4,10 +4,12 @@ import 'package:doctor_pro/model/Appointment.dart';
 import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/ActionButton.dart';
 import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/sizeConfig.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentDetailScreen extends StatefulWidget {
   final Appointment appointmentData;
-  const AppointmentDetailScreen({Key key, @required this.appointmentData})
+  final bool isFromAppointmentCard;
+  const AppointmentDetailScreen({Key key, @required this.appointmentData ,@required this.isFromAppointmentCard})
       : super(key: key);
   @override
   _AppointmentDetailScreenState createState() =>
@@ -84,14 +86,22 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen>
       bottomNavigationBar: AnimatedOpacity(
         duration: Duration(milliseconds: 230),
         opacity: isContainerCollapsed ? 0 : 1,
-        child: ActionButton(
+        child:
+
+          widget.isFromAppointmentCard ?
+        ActionButton(
           onAcceptPressed: () {
             print('Nothing Configured for it ');
           },
           onDecinePressed: () {
             reverseAnimation();
           },
-        ),
+        ) :
+          Container(
+            child: Text(
+              '' reverseAnimation();
+            ),
+          ),
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -130,19 +140,23 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen>
                               child: AnimatedOpacity(
                                 duration: Duration(milliseconds: 375),
                                 opacity: isDateAndTimeVisible ? 1 : 0,
-                                child: Text(widget.appointmentData.appointmentPK.startDate.day.toString()
-                                  +"/"
-                                  + widget.appointmentData.appointmentPK.startDate.month.toString()
-                                    +"/"
-                                    + widget.appointmentData.appointmentPK.startDate.year.toString()
-                                    +" \n Debut : "
-                                    + widget.appointmentData.appointmentPK.startDate.hour.toString()
-                                    +":"
-                                    + widget.appointmentData.appointmentPK.startDate.minute.toString()
-                                    +"\n Fin : "
-                                    + widget.appointmentData.appointmentPK.endDate.hour.toString()
-                                    +":"
-                                    + widget.appointmentData.appointmentPK.endDate.minute.toString()
+                                child: Text(
+
+
+                                widget.appointmentData != null &&
+                                    widget.appointmentData.appointmentPK != null &&
+                                    widget.appointmentData.appointmentPK.startDate != null
+                                    &&
+                                    widget.appointmentData.appointmentPK.startDate != null
+                                ? new DateFormat('dd-MM-yyyy')
+                                    .format(widget.appointmentData.appointmentPK.startDate) +'\n Debut :'+ new DateFormat('hh:mm')
+                                    .format(widget.appointmentData.appointmentPK.startDate)+'\n  Fin :'+ new DateFormat('hh:mm')
+                                    .format(widget.appointmentData.appointmentPK.endDate)
+                                      : '01/04/2021 \n Heure Debut : 08:30 \n Heure Fin : 11:00'
+
+
+
+
 
                                   /*widget.appointmentData.appoitmentDate +
                                       ', ' +
@@ -202,7 +216,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen>
                               alignment: Alignment.bottomLeft,
                               child: GestureDetector(
                                 onTap: () {
-                                  print('call button pressed');
+
                                 },
                                 child: AnimatedOpacity(
                                   opacity: isPhoneLogoVisible ? 1 : 0,

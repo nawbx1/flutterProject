@@ -198,6 +198,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
+
   tabItem(text, number) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -252,6 +253,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
         :showListFullAppointment(converAppointmentToLesssAppointment(RDVList));
 
   }
+
   enAttenteAppointments() {
     return (enattentelist  == null ||  enattentelist.length == 0)
         ?
@@ -377,6 +379,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         type: PageTransitionType.fade,
                         child: AppointmentDetailScreen(
                           appointmentData: anElement,
+                            isFromAppointmentCard: false
                         )));
               },
               appointmentData: anElement,
@@ -395,10 +398,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
       setState(() {
         list.add(
             appointmentCardWithButton(anElement, aController)
-
         );
       });
-
     }
     return list;
   }
@@ -410,11 +411,21 @@ class _AppointmentPageState extends State<AppointmentPage> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: AppointmentCard(
-              /*onActionDone:(){
+              onAppointmentAccepted:(){
                 setState(() {
+                  enattentelist.remove(anElement);
+                  acceptedlist.add(anElement);
 
                 });
-              },*/
+              },
+
+              onAppointmentRefused:(){
+                setState(() {
+                  enattentelist.remove(anElement);
+                  acceptedlist.add(anElement);
+
+                });
+              },
               onCardTapped: () {
                 Navigator.push(
                     context,
@@ -422,6 +433,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         type: PageTransitionType.fade,
                         child: AppointmentDetailScreen(
                           appointmentData: anElement,
+                            isFromAppointmentCard: true
                         )));
               },
               key: Key(Random().nextInt(4000).toString()),
