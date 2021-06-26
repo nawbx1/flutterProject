@@ -1,10 +1,23 @@
-import 'dart:convert';
+
 import 'package:doctor_pro/bloc/AppointmentBloc.dart';
 import 'package:doctor_pro/model/Appointment.dart';
+import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/AppointmentCard.dart';
+import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/AppointmentDetailScreen.dart';
+import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/MiniAppointmentCard.dart';
+import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/SlidingCard.dart';
+import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/sizeConfig.dart';
 import 'package:http/http.dart' as http;
 import 'package:doctor_pro/constant/constant.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+
+
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:page_transition/page_transition.dart';
+
+import 'package:flutter/material.dart';
+import 'dart:math';
+
 class AppointmentPage extends StatefulWidget {
   final bool isProfessionnel ;
   const AppointmentPage(
@@ -15,6 +28,8 @@ class AppointmentPage extends StatefulWidget {
 
 class _AppointmentPageState extends State<AppointmentPage> {
   //final String Url = apiUrl+"rendez-vous-service/rdv/all";
+
+  Widget listWidjet  ;
 
   List<Appointment> RDVList=[];
   List<Appointment> enattentelist=[];
@@ -140,6 +155,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -214,7 +230,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   AllAppointment() {
     return (RDVList  == null ||  RDVList.length == 0)
-        ? Center(
+        ?
+    Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -232,74 +249,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ],
       ),
     )
-        : ListView.builder(
-      itemCount: RDVList != null ?RDVList.length :0,
-      itemBuilder: (context, index) {
-        final item = RDVList[index];
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(fixPadding * 2.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 80.0,
-                    height: 80.0,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.0),
-                      border: Border.all(width: 1.0, color: primaryColor),
-                      color: primaryColor.withOpacity(0.15),
-                    ),
-                    child: Text(
-                      new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                      textAlign: TextAlign.center,
-                      style: primaryColorNormalTextStyle,
-                    ),
-                  ),
-                  widthSpace,
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                          style: blackHeadingTextStyle,
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
-                          ' ${item.professionnel.username}',
-                          style: blackNormalTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
+        :showListFullAppointment(converAppointmentToLesssAppointment(RDVList));
 
-                          '${item.professionnel !=null  && item.professionnel.speciality!=null ? item.professionnel.speciality[0].name :"mramaji"}',
-                          style: primaryColorsmallTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            divider(),
-          ],
-        );
-      },
-    );
   }
   enAttenteAppointments() {
     return (enattentelist  == null ||  enattentelist.length == 0)
-        ? Center(
+        ?
+    Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -317,88 +273,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ],
       ),
     )
-        : ListView.builder(
-      itemCount: enattentelist!=null ? enattentelist.length:0,
-      itemBuilder: (context, index) {
-        final item = enattentelist[index];
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(fixPadding * 2.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 80.0,
-                    height: 80.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.0),
-                      border: Border.all(width: 1.0, color: Colors.green),
-                      color: Colors.green[50],
-                    ),
-                    child: Text(
-                      //item['date'],
-                      new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                      textAlign: TextAlign.center,
-                      style: greenColorNormalTextStyle,
-                    ),
-                  ),
-                  widthSpace,
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                              style: blackHeadingTextStyle,
-                            ),
-                            InkWell(
-                              onTap: () => deleteAppointmentDialog(index),
-                              child: Icon(
-                                Icons.close,
-                                size: 18.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
-                          '${item.client !=null  ?item.client.username:"flen"}',
-                          style: blackNormalTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
-                          '${item.client !=null  ?item.client.phone:"000000"}',
-                          style: primaryColorsmallTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            divider(),
-          ],
-        );
-      },
-    );
+        :
+    showListFullAppointment(converAppointmentToFullAppointment(enattentelist));
   }
 
   acceptedAppointments() {
     return (acceptedlist == null || acceptedlist.length == 0)
-        ? Center(
+        ?
+    Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -416,75 +298,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ],
       ),
     )
-        : ListView.builder(
-      itemCount: acceptedlist != null ?acceptedlist.length :0,
-      itemBuilder: (context, index) {
-        final item = acceptedlist[index];
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(fixPadding * 2.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 80.0,
-                    height: 80.0,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.0),
-                      border: Border.all(width: 1.0, color: primaryColor),
-                      color: primaryColor.withOpacity(0.15),
-                    ),
-                    child: Text(
-                      new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                      textAlign: TextAlign.center,
-                      style: primaryColorNormalTextStyle,
-                    ),
-                  ),
-                  widthSpace,
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                          style: blackHeadingTextStyle,
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
-                          ' ${item.professionnel.username}',
-                          style: blackNormalTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
-
-                          '${item.professionnel !=null  && item.professionnel.speciality!=null ? item.professionnel.speciality[0].name :"mramaji"}',
-                          style: primaryColorsmallTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            divider(),
-          ],
-        );
-      },
-    );
+        :
+    showListFullAppointment(converAppointmentToLesssAppointment(acceptedlist));
   }
 
   acheavedAppointments() {
     return (acheavedlist==null || acheavedlist.length == 0)
-        ? Center(
+        ?
+    Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -502,71 +323,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ],
       ),
     )
-        : ListView.builder(
-      itemCount: acheavedlist.length,
-      itemBuilder: (context, index) {
-        final item = acheavedlist[index];
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(fixPadding * 2.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 80.0,
-                    height: 80.0,
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(3.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40.0),
-                      border: Border.all(width: 1.0, color: Colors.red),
-                      color: Colors.red[50],
-                    ),
-                    child: Text(
-                      new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                      textAlign: TextAlign.center,
-                      style: redColorNormalTextStyle,
-                    ),
-                  ),
-                  widthSpace,
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          new DateFormat('yyyy-MM-dd').format(item.appointmentPK.startDate) ,
-                          style: blackHeadingTextStyle,
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
-                          '${item.professionnel !=null   ? item.professionnel.username :"foulen"}',
-
-                          style: blackNormalTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 7.0),
-                        Text(
-                          '${item.professionnel !=null  && item.professionnel.speciality!=null ? item.professionnel.speciality[0].name :"mramaji"}',
-
-                          style: primaryColorsmallTextStyle,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            divider(),
-          ],
-        );
-      },
-    );
+        :  showListFullAppointment(converAppointmentToLesssAppointment(acheavedlist));
   }
 
   divider() {
@@ -577,4 +334,101 @@ class _AppointmentPageState extends State<AppointmentPage> {
       color: Colors.grey[200],
     );
   }
+
+
+
+  Widget showListFullAppointment(List<Widget> fullAppointment) {
+    return Container(
+      color: Color(0xffF3F6FF).withOpacity(0.134),
+      child: AnimationLimiter(
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: fullAppointment.length,
+          itemBuilder: (BuildContext context, int index) {
+
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: -20,
+                child: FadeInAnimation(child: fullAppointment[index]),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+  //now we create the card comming from the appointment manager
+  List<Widget> converAppointmentToLesssAppointment(List<Appointment> listAppointment) {
+    List<Widget> list=[];
+    print('list appppppointmennnnt');
+    print(listAppointment);
+    for (var anElement in listAppointment) {
+
+      print('adding mini card');
+      setState(() {
+        list.add(Center(
+            child: MiniAppointmentCard(
+              onCardTapped: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.fade,
+                        child: AppointmentDetailScreen(
+                          appointmentData: anElement,
+                        )));
+              },
+              appointmentData: anElement,
+            )));
+      });
+
+    }
+    return list;
+  }
+
+  List<Widget> converAppointmentToFullAppointment(List<Appointment> listAppointment) {
+    List<Widget> list=[];
+    for (var anElement in listAppointment) {
+      SlidingCardController aController = new SlidingCardController();
+      print('adding mini card');
+      setState(() {
+        list.add(
+            appointmentCardWithButton(anElement, aController)
+
+        );
+      });
+
+    }
+    return list;
+  }
+
+  Widget appointmentCardWithButton(Appointment anElement,
+      SlidingCardController aController) {
+    return
+      Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: AppointmentCard(
+              /*onActionDone:(){
+                setState(() {
+
+                });
+              },*/
+              onCardTapped: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.fade,
+                        child: AppointmentDetailScreen(
+                          appointmentData: anElement,
+                        )));
+              },
+              key: Key(Random().nextInt(4000).toString()),
+              slidingCardController: aController,
+              appointmentData: anElement,
+            ),
+          ));
+  }
+
 }

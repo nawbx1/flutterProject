@@ -3,7 +3,7 @@ import 'package:doctor_pro/constant/constant.dart';
 import 'package:doctor_pro/model/Appointment.dart';
 import 'package:doctor_pro/ui/rendez_vous/AppointmentListScreen/sizeConfig.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 class MiniAppointmentCard extends StatelessWidget {
   final Appointment appointmentData;
   final Function onCardTapped;
@@ -42,9 +42,12 @@ class MiniAppointmentCard extends StatelessWidget {
                             borderRadius:
                             const BorderRadius.all(Radius.circular(30.0)),
                           child: Image.network(
-                              (appointmentData.client.profile!=null && appointmentData.client.profile.profileImage !=null )?
-                              apiUrl+'user-service/uploads/'+appointmentData.client.profile.profileImage.mediaURL
-                                  :  apiUrl+'user-service/uploads/avatar.jpg',
+                              (appointmentData !=null && appointmentData.client !=null
+                                  && appointmentData.client.profile !=null && appointmentData.client.profile.profileImage !=null
+                                  && appointmentData.client.profile.profileImage.mediaURL !=null ) ?
+                              apiUrl+"user-service/uploads/"+ appointmentData.client.id.toString()+appointmentData.client.profile.profileImage.mediaURL:
+                              apiUrl+"user-service/uploads/avatar.jpg"
+                              ,
                               height: 100,
                               width: 100,
                               errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
@@ -101,7 +104,10 @@ class MiniAppointmentCard extends StatelessWidget {
                         height: SizeConfig.safeBlockVertical * 3,
                         width: SizeConfig.safeBlockHorizontal * 90,
                         //color: Colors.pink,
-                        child: Text(appointmentData.appointmentPK.startDate.toUtc().toString(),/*
+                        child: Text(appointmentData !=null && appointmentData.appointmentPK !=null
+                            && appointmentData.appointmentPK.startDate !=null ?new DateFormat('dd-MM-yyyy hh:mm').
+                        format(appointmentData.appointmentPK.startDate) : "01/04/2021 12:30",
+                          /*
                           appointmentData.appoitmentDate +
                               ', ' +
                               appointmentData.appoitmentTime,*/

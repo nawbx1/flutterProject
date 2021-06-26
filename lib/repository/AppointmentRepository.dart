@@ -22,6 +22,16 @@ class AppointmentRepository {
   }
 
 
+
+  Future<Response>  update(Appointment appointment) async {
+    print("saveUser  .....  UserRepository "+appointment.toJson().toString());
+    return await http.put(Uri.parse(urlRendezVous+'update'),
+        body: json.encode(appointment.toJson()),
+        headers: {'Content-Type': 'application/json'});
+  }
+
+
+
   Future<Response> getMyAppointment(int id) async {
     return await http.get(
         Uri.parse(urlRendezVous + 'appointmentbyprofessionnel/' + id.toString()),
